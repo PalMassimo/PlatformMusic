@@ -4,4 +4,8 @@
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
     <string name="login_label_button">login</string>
+    <string name="user_id">user_id</string>
+    <string name="home_bottom_navigation_menu_title">Home</string>
+    <string name="search_menu_item_title">Search</string>
+    <string name="profile_bottom_navigation_menu_title">Profile</string>
 </resources>

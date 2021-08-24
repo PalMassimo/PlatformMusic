@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "676837913269",
+    "firebase_url": "https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "sharemusic-99f8a",
+    "storage_bucket": "sharemusic-99f8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676837913269:android:c2006b00f4ae6dfef704fc",
+        "android_client_info": {
+          "package_name": "it.units.musicplatform"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676837913269-jd3cg92347vtaac3itnmi4s5andd6ke3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVsIidodmFLCYRFOHY_J5cJw3aRrNf5bI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676837913269-jd3cg92347vtaac3itnmi4s5andd6ke3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676837913269:android:32deb4698e9e709cf704fc",
+        "android_client_info": {
+          "package_name": "it.units.sharemusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676837913269-jd3cg92347vtaac3itnmi4s5andd6ke3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVsIidodmFLCYRFOHY_J5cJw3aRrNf5bI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676837913269-jd3cg92347vtaac3itnmi4s5andd6ke3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
