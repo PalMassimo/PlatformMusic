@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MusicPlatform</string>
+    <string name="music_platform_title">Music Platform</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="login_label_button">login</string>
+</resources>
