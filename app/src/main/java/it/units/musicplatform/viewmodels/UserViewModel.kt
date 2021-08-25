@@ -10,27 +10,23 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import it.units.musicplatform.entities.User
 
-class UserViewModel : ViewModel() {
+class UserViewModel(val userId : String) : ViewModel() {
 
-    //    var userViewModel = MutableLiveData<User>()
     private val user: MutableLiveData<User> by lazy {
         MutableLiveData<User>().also {
             loadUser()
         }
     }
 
-    private fun getUser() : LiveData<User>{
+    fun getUser() : LiveData<User>{
         return user
     }
 
     private fun loadUser(){
-        Firebase.database.getReference("https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app/")
-            .child("Users").get().addOnSuccessListener {
-
+        Firebase.database("https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app/").reference
+            .child("Users").child(userId).get().addOnSuccessListener {
+                user.value = it.getValue(User::class.java)!!
             }
-
-
-
     }
 
 

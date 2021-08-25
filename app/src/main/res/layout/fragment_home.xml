@@ -7,15 +7,10 @@
     tools:context=".fragments.HomeFragment">
 
     <TextView
-        android:id="@+id/userIdTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
-    <TextView
         android:id="@+id/fullName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
 </LinearLayout>

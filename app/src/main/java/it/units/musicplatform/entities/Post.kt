@@ -8,12 +8,12 @@ data class Post(
     val artistName: String,
     val uploaderId: String,
     val songExtension: String,
-    val numberOfSeconds: String,
-    val numberOfDownloads: String,
+    val numberOfSeconds: Int,
+    val numberOfDownloads: Int,
     val songFileDownloadString: String,
     val songPictureDownloadString: String,
 ) {
 
-
+    constructor() : this("", emptyMap(), emptyMap(), "", "", "", "", 0, 0, "", "")
 
 }
