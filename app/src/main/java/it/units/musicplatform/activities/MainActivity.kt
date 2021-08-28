@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        var userId = intent.getStringExtra(getString(R.string.user_id))
 
         if (savedInstanceState == null) {
             userId = intent.getStringExtra(getString(R.string.user_id))
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity() {
                     HomeFragment::class.java,
                     bundleOf(getString(R.string.user_id) to userId)
                 )
-//                replace<HomeFragment>(binding.fragmentContainer.id, args = bundleOf(getString(R.string.user_id) to userId))
             }
         }
 
@@ -47,13 +45,12 @@ class MainActivity : AppCompatActivity() {
                 HomeFragment::class.java,
                 bundleOf(getString(R.string.user_id) to userId)
             )
-//            add<HomeFragment>(binding.fragmentContainer.id, args = bundleOf(getString(R.string.user_id) to userId))
         }
-        item.isCheckable = true
+        item.isChecked = true
     }
 
     fun searchNavigationBarListener(item: MenuItem) {
-        item.isCheckable = true
+        item.isChecked = true
     }
 
     fun profileNavigationBarListener(item: MenuItem) {
@@ -64,8 +61,7 @@ class MainActivity : AppCompatActivity() {
                 ProfileFragment::class.java,
                 bundleOf(getString(R.string.user_id) to userId)
             )
-//            add<ProfileFragment>(binding.fragmentContainer.id, args = bundleOf(getString(R.string.user_id) to userId))
         }
-        item.isCheckable = true
+        item.isChecked = true
     }
 }

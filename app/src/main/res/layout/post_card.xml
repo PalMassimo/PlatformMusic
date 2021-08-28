@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="it.units.musicplatform.utilities.SongTime" />
+
+        <variable
+            name="post"
+            type="it.units.musicplatform.entities.Post" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/postCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/uploaderPictureImageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/uploader_picture"
+                    android:src="@drawable/ic_profile"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/uploaderFullNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/uploader"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/songPictureImageView"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/song_picture"
+                android:src="@drawable/ic_music_note" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/songTimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="@string/zero_time"
+                    app:layout_constraintStart_toStartOf="@+id/seekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                    app:layout_constraintVertical_bias="0.093" />
+
+                <ImageButton
+                    android:id="@+id/playPauseImageButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/play_pause_button"
+                    android:src="@drawable/ic_play"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+                <TextView
+                    android:id="@+id/songDurationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="@{SongTime.toString(post.numberOfSeconds/60, post.numberOfSeconds%60),
+                     default=@string/unknown_duration_time}"
+                    app:layout_constraintEnd_toEndOf="@+id/seekBar"
+                    app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                    app:layout_constraintVertical_bias="0.093" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/songTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@{post.songName, default=@string/song}"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/artistTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@{post.artistName, default=@string/artist}"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/albumTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/album"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/likeRadioButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_thumb_up"
+                        android:button="@android:color/transparent"
+                        android:padding="5dp" />
+
+                    <TextView
+                        android:id="@+id/numberOfLikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@{post.likes.keySet().size(), default=@string/likes}" />
+
+                    <RadioButton
+                        android:id="@+id/dislikeRadioButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_thumb_down"
+                        android:button="@android:color/transparent"
+                        android:padding="5dp" />
+
+                    <TextView
+                        android:id="@+id/numberOfDislikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@{post.dislikes.keySet().size(), default=@string/dislikes}"
+                        android:textSize="18sp" />
+
+                </RadioGroup>
+
+                <ImageButton
+                    android:id="@+id/downloadImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:contentDescription="@string/download"
+                    android:src="@drawable/ic_download" />
+
+                <TextView
+                    android:id="@+id/numberOfDownloadsTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@{post.numberOfDownloads, default=@string/download}"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>
+

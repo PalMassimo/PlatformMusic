@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.retrievers.StorageReferenceRetrievers
+import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
 
 private const val ARG_USER_ID = "user_id"
@@ -41,9 +42,7 @@ class ProfileFragment : Fragment() {
         binding.userviewmodel = userViewModel
         binding.lifecycleOwner = activity
 
-        StorageReferenceRetrievers.userImageReference(userId!!).downloadUrl.addOnSuccessListener {
-            Picasso.get().load(it).placeholder(R.drawable.ic_profile).rotate(90F).into(binding.profileImageView)
-        }
+        PictureLoader.setProfileImage(userId!!, binding.profileImageView)
 
     }
 

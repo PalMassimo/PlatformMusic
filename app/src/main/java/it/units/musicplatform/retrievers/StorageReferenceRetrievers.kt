@@ -9,8 +9,11 @@ class StorageReferenceRetrievers {
 
     companion object{
 
-        fun userImageReference(userId: String) = STORAGE_REFERENCE.child(userId).child(PROFILE_PICTURE)
+        fun userImageReference(userId: String) = userStorageReference(userId).child(PROFILE_PICTURE)
+        fun coverReference(userId: String, postId: String) = userCoversStorageReference(userId).child(postId)
 
+        private fun userStorageReference(userId: String) = STORAGE_REFERENCE.child(userId)
+        private fun userCoversStorageReference(userId: String) = userStorageReference(userId).child("song_pictures")
     }
 
 }

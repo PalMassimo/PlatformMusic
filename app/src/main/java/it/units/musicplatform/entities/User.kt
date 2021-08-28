@@ -2,9 +2,9 @@ package it.units.musicplatform.entities
 
 data class User(
     val id: String,
-    val age: Int,
+    var age: Int,
     val email: String,
-    val fullName: String,
+    var fullName: String,
     val imageUrl: String,
     val numberOfLikes: Int,
     val numberOfDislikes: Int,

@@ -17,8 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:minHeight="150dp"
+            android:layout_height="140dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -63,8 +62,8 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:lineSpacingExtra="5dp"
-                android:textAlignment="center"
                 android:text="@{@string/following_title+'\n'+userviewmodel.user.following.keySet().size()}"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

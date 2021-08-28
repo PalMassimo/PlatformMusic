@@ -10,5 +10,17 @@
     <string name="profile_bottom_navigation_menu_title">Profile</string>
     <string name="followers_title">Followers</string>
     <string name="following_title">Following</string>
+    <string name="uploader_picture">uploader picture</string>
+    <string name="uploader">uploader</string>
+    <string name="song_picture">song picture</string>
+    <string name="zero_time">00:00</string>
+    <string name="play_pause_button">play pause button</string>
+    <string name="unknown_duration_time">--:--</string>
+    <string name="song">song</string>
+    <string name="artist">artist</string>
+    <string name="album">album</string>
+    <string name="download">Download</string>
+    <string name="likes">Likes</string>
+    <string name="dislikes">Dislikes</string>
 
 </resources>
