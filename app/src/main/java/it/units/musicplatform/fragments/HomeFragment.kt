@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import it.units.musicplatform.R
@@ -22,7 +23,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private var userId: String? = null
 //    private val userViewModel = ViewModelProviders.of
-    private lateinit var user: User
+//    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +32,10 @@ class HomeFragment : Fragment() {
             userId = it.getString(getString(R.string.user_id))
         }
 
-        val userViewModel = UserViewModel(userId!!)
+//        val userViewModel = UserViewModel(userId!!)
 //        val userViewModel : UserViewModel by viewModels()
-        userViewModel.getUser().observe(this, { user -> binding.fullName.setText(user.fullName) })
+        val userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
+        userViewModel.getUser().observe(this, { user -> binding.fullName.text = user.fullName })
 
     }
 
@@ -43,10 +45,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
