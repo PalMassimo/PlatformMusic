@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.squareup.picasso.Picasso
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.viewmodels.UserViewModel
@@ -39,6 +40,8 @@ class ProfileFragment : Fragment() {
         val userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         binding.userviewmodel = userViewModel
         binding.lifecycleOwner = activity
+
+//        Picasso.get().load(userViewModel.getUser().value.)
 
     }
 
