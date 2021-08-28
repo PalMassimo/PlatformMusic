@@ -1,19 +1,13 @@
 package it.units.musicplatform.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.FragmentHomeBinding
-import it.units.musicplatform.entities.User
 import it.units.musicplatform.viewmodels.UserViewModel
 
 
@@ -22,8 +16,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var userId: String? = null
-//    private val userViewModel = ViewModelProviders.of
-//    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

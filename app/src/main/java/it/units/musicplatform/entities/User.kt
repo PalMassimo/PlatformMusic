@@ -5,6 +5,7 @@ data class User(
     val age: Int,
     val email: String,
     val fullName: String,
+    val imageUrl: String,
     val numberOfLikes: Int,
     val numberOfDislikes: Int,
     val posts: Map<String, Boolean>,
@@ -12,6 +13,6 @@ data class User(
     val following: Map<String, Boolean>,
 ) {
 
-    constructor() : this("", 0, "", "", 0, 0, emptyMap(), emptyMap(), emptyMap())
+    constructor() : this("", 0, "", "", "", 0, 0, emptyMap(), emptyMap(), emptyMap())
 
 }

@@ -17,7 +17,7 @@
     <item
         android:id="@+id/profile"
         android:enabled="true"
-        android:icon="@drawable/ic_person"
+        android:icon="@drawable/ic_profile"
         android:onClick="profileNavigationBarListener"
         android:title="@string/profile_bottom_navigation_menu_title" />
 </menu>
