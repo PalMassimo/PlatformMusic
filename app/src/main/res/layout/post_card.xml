@@ -109,8 +109,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:text="@{SongTime.toString(post.numberOfSeconds/60, post.numberOfSeconds%60),
-                     default=@string/unknown_duration_time}"
+                    android:text="@{SongTime.toString(post.numberOfSeconds/60, post.numberOfSeconds%60), default=@string/unknown_duration_time}"
                     app:layout_constraintEnd_toEndOf="@+id/seekBar"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="0.093" />
@@ -178,7 +177,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@{post.likes.keySet().size(), default=@string/likes}" />
+                        android:text="@{Integer.toString(post.likes.size()), default=@string/likes}" />
 
                     <RadioButton
                         android:id="@+id/dislikeRadioButton"
@@ -194,7 +193,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@{post.dislikes.keySet().size(), default=@string/dislikes}"
+                        android:text="@{Integer.toString(post.dislikes.size()), default=@string/dislikes}"
                         android:textSize="18sp" />
 
                 </RadioGroup>
@@ -214,7 +213,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@{post.numberOfDownloads, default=@string/download}"
+                    android:text="@{Integer.toString(post.numberOfDownloads), default=@string/download}"
                     android:textSize="18sp" />
 
             </LinearLayout>
