@@ -14,11 +14,6 @@ private var userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 class UserPostsAdapter(val profileFragment: ProfileFragment, var userPosts: List<Post>) : RecyclerView.Adapter<UserPostsAdapter.PostHolder>() {
 
-    fun updateUsersPost(updatedUserPosts: List<Post>){
-        userPosts = updatedUserPosts
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
         val binding = PostItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostHolder(binding)
@@ -32,6 +27,11 @@ class UserPostsAdapter(val profileFragment: ProfileFragment, var userPosts: List
     }
 
     override fun getItemCount() = userPosts.size
+
+    fun updateUsersPost(updatedUserPosts: List<Post>){
+        userPosts = updatedUserPosts
+        notifyDataSetChanged()
+    }
 
     class PostHolder(val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

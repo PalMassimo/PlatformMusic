@@ -13,7 +13,7 @@ import java.util.stream.StreamSupport
 private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
 
 //class UserViewModel(val userId : String) : ViewModel() {
-class UserViewModel() : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
@@ -42,7 +42,7 @@ class UserViewModel() : ViewModel() {
     private fun filterUserPosts(postsSnapshot: DataSnapshot, postsList: ArrayList<Post>){
         StreamSupport.stream(postsSnapshot.children.spliterator(), false)
             .map{it.getValue(Post::class.java)}
-            .filter{it!!.uploaderId.equals(USER_ID)}
+            .filter{ it!!.uploaderId == USER_ID }
             .forEach{ postsList.add(it!!) }
     }
 
