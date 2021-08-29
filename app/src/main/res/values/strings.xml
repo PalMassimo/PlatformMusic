@@ -22,5 +22,15 @@
     <string name="download">Download</string>
     <string name="likes">Likes</string>
     <string name="dislikes">Dislikes</string>
+    <string name="add_post_menu_item_title">Add Post</string>
+    <string name="logout_menu_item_title">Logout</string>
+    <string name="about_menu_title">About</string>
+    <string name="title_activity_add_post">AddPostActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="share">SHARE</string>
 
 </resources>

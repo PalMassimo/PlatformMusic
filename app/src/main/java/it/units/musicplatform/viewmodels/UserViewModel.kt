@@ -7,7 +7,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
+import it.units.musicplatform.repositories.UserRepository
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.stream.StreamSupport
 
 private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
@@ -15,6 +18,7 @@ private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
 //class UserViewModel(val userId : String) : ViewModel() {
 class UserViewModel : ViewModel() {
 
+    private val userRepository = UserRepository(USER_ID)
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
 
@@ -22,29 +26,13 @@ class UserViewModel : ViewModel() {
     val posts: LiveData<ArrayList<Post>> = _posts
 
 
-
     init {
-        loadUser()
-        loadPosts()
+        GlobalScope.launch {
+            _user.postValue(userRepository.getUser())
+            _posts.postValue(userRepository.getPosts())
+        }
     }
 
-    private fun loadUser() {
-        DatabaseReferenceRetriever.userReference(USER_ID).get().addOnSuccessListener { _user.value = it.getValue(User::class.java) }
-    }
-
-    private fun loadPosts(){
-        val posts = ArrayList<Post>()
-        DatabaseReferenceRetriever.postsReference().get().addOnSuccessListener {
-            filterUserPosts(it, posts)
-        }.addOnSuccessListener { _posts.value = posts }
-    }
-
-    private fun filterUserPosts(postsSnapshot: DataSnapshot, postsList: ArrayList<Post>){
-        StreamSupport.stream(postsSnapshot.children.spliterator(), false)
-            .map{it.getValue(Post::class.java)}
-            .filter{ it!!.uploaderId == USER_ID }
-            .forEach{ postsList.add(it!!) }
-    }
 
 
 }
