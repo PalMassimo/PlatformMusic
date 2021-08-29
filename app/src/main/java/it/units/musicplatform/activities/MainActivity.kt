@@ -3,21 +3,29 @@ package it.units.musicplatform.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.fragments.HomeFragment
 import it.units.musicplatform.fragments.ProfileFragment
+import it.units.musicplatform.viewmodels.UserViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var userViewModel: UserViewModel
+    private val addPostLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            userViewModel.refreshPosts()
+        }
+    }
+
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
@@ -26,21 +34,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             add(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf("user_id" to userId))
         }
-//        intent.getStringExtra("user_id")
-//        userId = intent.extras?.get("user_id") as String
-
-//        if (savedInstanceState == null) {
-//            userId = intent.getStringExtra(getString(R.string.user_id))
-//            supportFragmentManager.commit {
-//                setReorderingAllowed(true)
-//                replace(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf(getString(R.string.user_id) to userId))
-//            }
-//        }
-
 
     }
 
@@ -49,9 +48,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun addButtonListener(item: MenuItem) {
-        startActivity(Intent(this, AddPostActivity::class.java))
-    }
+    fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
+
 
     fun homeNavigationBarListener(item: MenuItem) {
         supportFragmentManager.commit {

@@ -8,12 +8,12 @@ import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
 class UserRepository(val userId: String) {
+
     suspend fun getUser() = DatabaseReferenceRetriever.userReference(userId).get().await().getValue(User::class.java)
-    suspend fun getPosts() : ArrayList<Post>{
+
+    suspend fun getPosts(): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        DatabaseReferenceRetriever.postsReference().get().addOnSuccessListener {
-            filterUserPosts(it, posts)
-        }.await()
+        DatabaseReferenceRetriever.postsReference().get().addOnSuccessListener { filterUserPosts(it, posts) }.await()
         return posts
     }
 

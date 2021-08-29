@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +14,7 @@ import it.units.musicplatform.databinding.ActivityAddPostBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.viewmodels.UserViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,7 +22,9 @@ import kotlinx.coroutines.launch
 
 class AddPostActivity : AppCompatActivity() {
 
+    //    private lateinit var userViewModel: UserViewModel
     private lateinit var binding: ActivityAddPostBinding
+
     private var userId: String? = null
     private var songName: String? = null
     private var artistName: String? = null
@@ -34,6 +38,8 @@ class AddPostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        userViewModel = ViewModelProviders.of(parent).get(UserViewModel::class.java)
 
         userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -64,35 +70,14 @@ class AddPostActivity : AppCompatActivity() {
         val songUploadTask = songReference.putFile(localSongUri!!).continueWithTask { songReference.downloadUrl }
         val coverUploadTask = coverReference.putFile(localCoverUri!!).continueWithTask { coverReference.downloadUrl }
 
-//        val songUriTask = songReference.putFile(localSongUri!!).continueWithTask { command: Task<UploadTask.TaskSnapshot?>? -> songReference.downloadUrl }
-//        val coverUriTask = coverReference.putFile(localCoverUri!!).continueWithTask { command: Task<UploadTask.TaskSnapshot?>? -> coverReference.downloadUrl }
-
-//        Tasks.whenAllSuccess<Any>(songUploadTask, coverUploadTask).addOnSuccessListener { uriList: List<Any> ->
-//            post.songFileDownloadString = uriList[0].toString()
-//            post.songPictureDownloadString = uriList[1].toString()
-//            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-//        }
-
         Tasks.whenAllSuccess<Any>(songUploadTask, coverUploadTask).addOnSuccessListener {
             post.songFileDownloadString = it[0].toString()
             post.songPictureDownloadString = it[1].toString()
             DatabaseReferenceRetriever.postReference(post.id).setValue(post)
             DatabaseReferenceRetriever.userPostReference(userId!!, post.id).setValue(true)
+            setResult(RESULT_OK)
+            this.finish()
         }
-
-//        GlobalScope.launch {
-//
-//            async { songUploadTask.getResult() }
-//
-//            Tasks.whenAll(songUploadTask, coverUploadTask).addOnCompleteListener {
-//                post.songFileDownloadString = songUploadTask.result!!.result.toString()
-//                post.songPictureDownloadString = coverUploadTask.result!!.toString()
-//                DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-//                DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
-//            }
-//        }
-
-        this.finish()
 
     }
 

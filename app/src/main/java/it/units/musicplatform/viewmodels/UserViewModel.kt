@@ -33,6 +33,10 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun refreshPosts(){
+        GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
+    }
+
 
 
 }
