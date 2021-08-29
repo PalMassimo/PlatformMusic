@@ -12,6 +12,7 @@ import it.units.musicplatform.entities.User
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.utilities.MediaPlayerManager
 import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.utilities.SongDownloader
 import it.units.musicplatform.utilities.SongTime
 
 class FollowersPostsAdapter(private val context: Context, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
@@ -33,10 +34,16 @@ class FollowersPostsAdapter(private val context: Context, private val recyclerVi
         val post = followersPostsList[position]
         holder.binding.post = post
 
-        holder.binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
-
         setUpCardView(post, holder.binding)
+        setUpCardListeners(post, holder.binding, position)
+    }
 
+    private fun setUpCardListeners(post: Post, binding: PostCardBinding, position: Int) {
+        binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
+        binding.downloadImageButton.setOnClickListener{
+            val songDownloader = SongDownloader(context, post)
+            songDownloader.download()
+        }
     }
 
     override fun getItemCount(): Int = followersPostsList.size
