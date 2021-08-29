@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
     private fun setUpRecyclerView() {
 
         adapter = FollowersPostsAdapter(requireContext(), binding.followersPostsRecyclerView, if (followersPostsViewModel.followersPosts.value == null) ArrayList() else followersPostsViewModel.followersPosts.value!!)
+        adapter.notifyDataSetChanged()
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
         followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(followersPostsViewModel.followersPosts.value!!) })

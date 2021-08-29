@@ -48,7 +48,7 @@ class FollowersPostsAdapter(private val context: Context, private val recyclerVi
 
     override fun getItemCount(): Int = followersPostsList.size
 
-    fun getPostHolder(position: Int) = recyclerView.findViewHolderForAdapterPosition(position) as PostHolder
+    private fun getPostHolder(position: Int) = recyclerView.findViewHolderForAdapterPosition(position) as PostHolder
 
     fun songStarted(positionOldSong: Int, positionNewSong: Int) {
         if (positionOldSong != -1) {

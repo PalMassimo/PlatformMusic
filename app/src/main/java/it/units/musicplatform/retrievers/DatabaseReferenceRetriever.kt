@@ -20,7 +20,8 @@ class DatabaseReferenceRetriever {
         fun followingReference(userId: String) = userReference(userId).child("following")
         fun userPostsReference(userId:String) = userReference(userId).child("posts")
 
-        fun postReference(postId: String) = POSTS_REFERENCE.child(postId)
+        fun postsReference() = POSTS_REFERENCE
+        fun postReference(postId: String) = postsReference().child(postId)
 
     }
 
