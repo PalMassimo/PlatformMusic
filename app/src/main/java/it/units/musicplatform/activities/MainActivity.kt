@@ -1,6 +1,7 @@
 package it.units.musicplatform.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
+import it.units.musicplatform.entities.Post
 import it.units.musicplatform.fragments.HomeFragment
 import it.units.musicplatform.fragments.ProfileFragment
 import it.units.musicplatform.viewmodels.UserViewModel
@@ -21,8 +23,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userViewModel: UserViewModel
     private val addPostLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            userViewModel.refreshPosts()
+        if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
+                val post = it.data!!.extras!!.get("post") as Post
+//                val localUriSong = it.data!!.extras!!.get("localUriSong") as Uri
+//                val localCoverSong = it.data!!.extras!!.get("localUriCover") as Uri
+                userViewModel.addPost(post)
         }
     }
 

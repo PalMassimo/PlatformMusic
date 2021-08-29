@@ -1,5 +1,6 @@
 package it.units.musicplatform.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,10 +34,17 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun refreshPosts(){
+    private fun refreshPosts() {
         GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
     }
 
+    fun addPost(post: Post) {
+        GlobalScope.launch {
+            userRepository.addPost(post)
+            //improve: I should add the post to the LiveData and notify it
+            refreshPosts()
+        }
+    }
 
 
 }

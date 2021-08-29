@@ -1,23 +1,17 @@
 package it.units.musicplatform.activities
 
+import android.content.Intent
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.UploadTask
 import it.units.musicplatform.databinding.ActivityAddPostBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.viewmodels.UserViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 
 class AddPostActivity : AppCompatActivity() {
@@ -28,8 +22,8 @@ class AddPostActivity : AppCompatActivity() {
     private var userId: String? = null
     private var songName: String? = null
     private var artistName: String? = null
-    private var localSongUri: Uri? = null
-    private var localCoverUri: Uri? = null
+    private var localUriSong: Uri? = null
+    private var localUriCover: Uri? = null
     private var milliseconds: Long? = null
     private var fileExtension: String? = null
 
@@ -67,22 +61,28 @@ class AddPostActivity : AppCompatActivity() {
         val songReference = StorageReferenceRetriever.songReference(userId!!, post.id)
         val coverReference = StorageReferenceRetriever.coverReference(userId!!, post.id)
 
-        val songUploadTask = songReference.putFile(localSongUri!!).continueWithTask { songReference.downloadUrl }
-        val coverUploadTask = coverReference.putFile(localCoverUri!!).continueWithTask { coverReference.downloadUrl }
-
+        val songUploadTask = songReference.putFile(localUriSong!!).continueWithTask { songReference.downloadUrl }
+        val coverUploadTask = coverReference.putFile(localUriCover!!).continueWithTask { coverReference.downloadUrl }
         Tasks.whenAllSuccess<Any>(songUploadTask, coverUploadTask).addOnSuccessListener {
             post.songFileDownloadString = it[0].toString()
             post.songPictureDownloadString = it[1].toString()
-            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-            DatabaseReferenceRetriever.userPostReference(userId!!, post.id).setValue(true)
-            setResult(RESULT_OK)
+
+            val intent = Intent()
+            intent.putExtra("post", post)
+//        intent.putExtra("localUriSong", localUriSong)
+//        intent.putExtra("localUriCover", localUriCover)
+            setResult(RESULT_OK, intent)
+
             this.finish()
         }
+//            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
+//            DatabaseReferenceRetriever.userPostReference(userId!!, post.id).setValue(true)
 
     }
 
+
     private fun getSongInfoLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        localSongUri = it
+        localUriSong = it
         val mediaDataRetriever = MediaMetadataRetriever()
         mediaDataRetriever.setDataSource(this, it)
         milliseconds = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
@@ -96,7 +96,7 @@ class AddPostActivity : AppCompatActivity() {
     }
 
     private fun getCoverLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        localCoverUri = it
+        localUriCover = it
         binding.songPictureImageView.setImageURI(it)
     }
 
