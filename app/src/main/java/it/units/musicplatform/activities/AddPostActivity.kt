@@ -16,7 +16,6 @@ import it.units.musicplatform.retrievers.StorageReferenceRetriever
 
 class AddPostActivity : AppCompatActivity() {
 
-    //    private lateinit var userViewModel: UserViewModel
     private lateinit var binding: ActivityAddPostBinding
 
     private var userId: String? = null
@@ -32,8 +31,6 @@ class AddPostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        userViewModel = ViewModelProviders.of(parent).get(UserViewModel::class.java)
 
         userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -69,14 +66,10 @@ class AddPostActivity : AppCompatActivity() {
 
             val intent = Intent()
             intent.putExtra("post", post)
-//        intent.putExtra("localUriSong", localUriSong)
-//        intent.putExtra("localUriCover", localUriCover)
             setResult(RESULT_OK, intent)
 
             this.finish()
         }
-//            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-//            DatabaseReferenceRetriever.userPostReference(userId!!, post.id).setValue(true)
 
     }
 

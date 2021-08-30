@@ -18,14 +18,17 @@
         android:orderInCategory="2"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.widget.SearchView" />
+<!--        android:onClick="searchButtonListener"-->
 
     <item
         android:id="@+id/logoutMenuItem"
         android:title="@string/logout_menu_item_title"
+        android:onClick="logoutButtonListener"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/aboutMenuItem"
+        android:onClick="aboutButtonListener"
         android:title="@string/about_menu_title"
         app:showAsAction="never"/>
 

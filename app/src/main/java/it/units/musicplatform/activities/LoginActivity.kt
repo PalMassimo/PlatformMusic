@@ -11,7 +11,6 @@ import it.units.musicplatform.databinding.ActivityLoginBinding
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityLoginBinding
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,10 +18,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        auth = FirebaseAuth.getInstance()
-
         binding.loginButton.setOnClickListener {
-            auth.signInWithEmailAndPassword(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString().trim()).addOnCompleteListener(this) { task ->
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString().trim()).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val intent = Intent(this, MainActivity::class.java)//.apply { put(getString(R.string.user_id), auth.currentUser?.uid) }
                     startActivity(intent)

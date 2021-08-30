@@ -21,7 +21,6 @@ class HomeFragment : Fragment() {
     private var userId: String? = null
     private lateinit var adapter: FollowersPostsAdapter
     private lateinit var userViewModel: UserViewModel
-
     private lateinit var followersPostsViewModel: FollowersPostsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
