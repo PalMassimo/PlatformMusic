@@ -7,7 +7,7 @@ import it.units.musicplatform.databinding.UserListItemBinding
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.utilities.PictureLoader
 
-class UsersAdapter(var users: ArrayList<User>, var following: Set<String>/*, var searchFragment: SearchFragment*/) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+class UsersAdapter(var users: ArrayList<User>, var following: Set<String>) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {

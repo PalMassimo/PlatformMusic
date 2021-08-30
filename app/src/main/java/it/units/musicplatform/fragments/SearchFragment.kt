@@ -15,21 +15,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-//private const val ARG_USER_ID = "user_id"
 
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    //    private var _userId: String? = null
-//    private val userId get() = _userId!!
     private lateinit var adapter: UsersAdapter
     private lateinit var usersSearchedViewModel: UsersSearchedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        arguments?.let { _userId = it.getString(ARG_USER_ID) }
 
         usersSearchedViewModel = ViewModelProviders.of(this).get(UsersSearchedViewModel::class.java)
     }
@@ -42,52 +38,41 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (isSearchRequired()) {
-            adapter = UsersAdapter(ArrayList(), HashSet())
-            binding.usersRecyclerView.adapter = adapter
-            binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
-            GlobalScope.launch (Dispatchers.Main){
-                val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
-
-                adapter.users = resultUsers
-                adapter.notifyDataSetChanged()
-//            setUpRecyclerView2()
-            }
-        } else {
-            setUpRecyclerView()
-        }
-
+        setUpRecyclerView()
 
     }
 
-    fun isSearchRequired(): Boolean {
-        val bundle = arguments
-        return bundle != null && bundle.get("query") != null
+    private fun isSearchRequired(): Boolean {
+        return arguments?.get("query") != null
     }
-
-//    private fun setUpRecyclerView2(users: ArrayList<User>) {
-//
-//        adapter = UsersAdapter(users, HashSet())
-//
-//        usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
-//            adapter.users = usersSearchedViewModel.popularUsers.value!!
-//            adapter.notifyDataSetChanged()
-//        })
-
-//    }
 
     private fun setUpRecyclerView() {
 
-        adapter = UsersAdapter(if (usersSearchedViewModel.popularUsers.value == null) ArrayList() else usersSearchedViewModel.popularUsers.value!!, HashSet())
+        if (isSearchRequired()) performSearch() else showMostPopular()
+
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.usersRecyclerView.adapter = adapter
+
+    }
+
+    private fun performSearch() {
+        adapter = UsersAdapter(ArrayList(), HashSet())
+        GlobalScope.launch(Dispatchers.Main) {
+            val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
+            adapter.users = resultUsers
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun showMostPopular() {
+        adapter = UsersAdapter(if (usersSearchedViewModel.popularUsers.value == null) ArrayList() else usersSearchedViewModel.popularUsers.value!!, HashSet())
 
         usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
             adapter.users = usersSearchedViewModel.popularUsers.value!!
             adapter.notifyDataSetChanged()
         })
-
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

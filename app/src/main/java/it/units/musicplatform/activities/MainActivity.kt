@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,13 +45,9 @@ class MainActivity : AppCompatActivity() {
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        if (intent.action != null) {
-            handleIntentAction(intent)
-        } else {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf("user_id" to userId))
-            }
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf("user_id" to userId))
         }
 
 
@@ -70,42 +67,22 @@ class MainActivity : AppCompatActivity() {
 
     fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
 
-//    fun searchButtonListener(searchItem: MenuItem) {
-
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        (searchItem.actionView as SearchView).apply {
-//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-//            isIconifiedByDefault = false
-//        }
-
-
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        val searchView = searchItem.actionView as SearchView
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-//        searchView.isSubmitButtonEnabled = true
-//        searchView.isIconifiedByDefault = false
-//    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent != null) {
-            handleIntentAction(intent)
-        }
-    }
 
-    private fun handleIntentAction(intent: Intent) {
-//        val intent2 = intent
-//        val action = intent2.action
-        if (intent.action.equals(Intent.ACTION_SEARCH)) {
-            val subName = intent.getStringExtra("query")
+        if (intent?.action.equals(Intent.ACTION_SEARCH)) {
+            val subName = intent!!.getStringExtra("query")
             subName?.let { startSearch(it.trim()) }
         }
     }
+
 
     private fun startSearch(subName: String) {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(binding.fragmentContainer.id, SearchFragment::class.java, bundleOf("query" to subName))
+            binding.bottomNavigationView.menu.findItem(R.id.search).isChecked = true
         }
     }
 
