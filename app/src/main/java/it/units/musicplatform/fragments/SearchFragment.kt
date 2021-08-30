@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import it.units.musicplatform.adapters.UsersAdapter
 import it.units.musicplatform.databinding.FragmentSearchBinding
 import it.units.musicplatform.entities.User
+import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.UsersSearchedViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,11 +24,13 @@ class SearchFragment : Fragment() {
 
     private lateinit var adapter: UsersAdapter
     private lateinit var usersSearchedViewModel: UsersSearchedViewModel
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         usersSearchedViewModel = ViewModelProviders.of(this).get(UsersSearchedViewModel::class.java)
+        userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -53,10 +56,15 @@ class SearchFragment : Fragment() {
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.usersRecyclerView.adapter = adapter
 
+        userViewModel.user.observe(viewLifecycleOwner, {
+          adapter.following = userViewModel.user.value!!.following.keys
+//            adapter.following = userViewModel.following.value
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun performSearch() {
-        adapter = UsersAdapter(ArrayList(), HashSet())
+        adapter = UsersAdapter(ArrayList(), userViewModel.following.value)
         GlobalScope.launch(Dispatchers.Main) {
             val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
             adapter.users = resultUsers
@@ -65,7 +73,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showMostPopular() {
-        adapter = UsersAdapter(if (usersSearchedViewModel.popularUsers.value == null) ArrayList() else usersSearchedViewModel.popularUsers.value!!, HashSet())
+        adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.following.value)
 
         usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
             adapter.users = usersSearchedViewModel.popularUsers.value!!

@@ -1,18 +1,16 @@
 package it.units.musicplatform.viewmodels
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Tasks.await
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UserRepository
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.util.stream.StreamSupport
 
 private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -22,15 +20,18 @@ class UserViewModel : ViewModel() {
     private val userRepository = UserRepository(USER_ID)
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
+    private val _following = MutableLiveData<Set<String>>()
 
     val user: LiveData<User> = _user
     val posts: LiveData<ArrayList<Post>> = _posts
+//    val following:LiveData<Set<String>> = _following
 
 
     init {
         GlobalScope.launch {
             _user.postValue(userRepository.getUser())
             _posts.postValue(userRepository.getPosts())
+//            _following.postValue(userRepository.getFollowing())
         }
     }
 

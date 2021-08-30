@@ -7,7 +7,15 @@ import it.units.musicplatform.databinding.UserListItemBinding
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.utilities.PictureLoader
 
-class UsersAdapter(var users: ArrayList<User>, var following: Set<String>) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+class UsersAdapter(users: ArrayList<User>?, following: Set<String>?) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+
+    var users: ArrayList<User> = arrayListOf()
+    var following : Set<String> = setOf()
+
+    init {
+        if(users != null) this.users = users
+        if(following != null) this.following = following
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
@@ -22,10 +30,6 @@ class UsersAdapter(var users: ArrayList<User>, var following: Set<String>) : Rec
 
         holder.binding.switchElement.isChecked = following.contains(user.id)
 
-//        holder.binding.switchElement.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if (isChecked) searchFragment.addFollowing(user.id)
-//            else searchFragment.removeFollowing(user.id)
-//        }
 
     }
 

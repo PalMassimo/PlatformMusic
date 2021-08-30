@@ -34,5 +34,6 @@ class UserRepository(val userId: String) {
         val addUserPostTask = DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
         Tasks.whenAll(addPostTask, addUserPostTask).await()
     }
+
 }
 
