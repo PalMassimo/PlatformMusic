@@ -1,13 +1,10 @@
 package it.units.musicplatform.repositories
 
-import android.net.Uri
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
@@ -29,11 +26,20 @@ class UserRepository(val userId: String) {
     }
 
     suspend fun addPost(post: Post) {
-
         val addPostTask = DatabaseReferenceRetriever.postReference(post.id).setValue(post)
         val addUserPostTask = DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
         Tasks.whenAll(addPostTask, addUserPostTask).await()
     }
+
+    fun addFollowing(followingId: String) {
+        DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).setValue(true)
+        DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).setValue(true)
+    }
+    fun removeFollowing(followingId: String) {
+        DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).removeValue()
+        DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).removeValue()
+    }
+
 
 }
 

@@ -35,9 +35,8 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    private fun refreshPosts() {
-        GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
-    }
+    private fun refreshPosts() =  GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
+    private fun refreshUser() = GlobalScope.launch { _user.postValue(userRepository.getUser()) }
 
     fun addPost(post: Post) {
         GlobalScope.launch {
@@ -45,6 +44,16 @@ class UserViewModel : ViewModel() {
             //improve: I should add the post to the LiveData and notify it
             refreshPosts()
         }
+    }
+
+    fun addFollowing(followingId: String) {
+        userRepository.addFollowing(followingId)
+        refreshUser()
+    }
+
+    fun removeFollowing(followingId: String){
+        userRepository.removeFollowing(followingId)
+        refreshUser()
     }
 
 

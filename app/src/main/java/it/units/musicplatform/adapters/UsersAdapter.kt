@@ -5,16 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import it.units.musicplatform.databinding.UserListItemBinding
 import it.units.musicplatform.entities.User
+import it.units.musicplatform.fragments.SearchFragment
 import it.units.musicplatform.utilities.PictureLoader
 
-class UsersAdapter(users: ArrayList<User>?, following: Set<String>?) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, val searchFragment: SearchFragment) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
 
     var users: ArrayList<User> = arrayListOf()
-    var following : Set<String> = setOf()
+    var following: Set<String> = setOf()
 
     init {
-        if(users != null) this.users = users
-        if(following != null) this.following = following
+        if (users != null) this.users = users
+        if (following != null) this.following = following
     }
 
 
@@ -30,6 +31,9 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?) : RecyclerV
 
         holder.binding.switchElement.isChecked = following.contains(user.id)
 
+        holder.binding.switchElement.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) searchFragment.addFollowing(user.id) else searchFragment.removeFollowing(user.id)
+        }
 
     }
 

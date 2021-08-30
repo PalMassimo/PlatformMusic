@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.units.musicplatform.adapters.UsersAdapter
 import it.units.musicplatform.databinding.FragmentSearchBinding
-import it.units.musicplatform.entities.User
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.UsersSearchedViewModel
 import kotlinx.coroutines.Dispatchers
@@ -57,14 +56,14 @@ class SearchFragment : Fragment() {
         binding.usersRecyclerView.adapter = adapter
 
         userViewModel.user.observe(viewLifecycleOwner, {
-          adapter.following = userViewModel.user.value!!.following.keys
+            adapter.following = userViewModel.user.value!!.following.keys
 //            adapter.following = userViewModel.following.value
             adapter.notifyDataSetChanged()
         })
     }
 
     private fun performSearch() {
-        adapter = UsersAdapter(ArrayList(), userViewModel.following.value)
+        adapter = UsersAdapter(ArrayList(), userViewModel.user.value?.following?.keys, this)
         GlobalScope.launch(Dispatchers.Main) {
             val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
             adapter.users = resultUsers
@@ -73,13 +72,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun showMostPopular() {
-        adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.following.value)
+        adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.user.value?.following?.keys, this)
 
         usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
             adapter.users = usersSearchedViewModel.popularUsers.value!!
             adapter.notifyDataSetChanged()
         })
     }
+
+    fun addFollowing(followingId: String) = userViewModel.addFollowing(followingId)
+
+
+    fun removeFollowing(followingId: String) = userViewModel.removeFollowing(followingId)
 
 
     override fun onDestroyView() {
