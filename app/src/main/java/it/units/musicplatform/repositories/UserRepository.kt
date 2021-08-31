@@ -35,9 +35,30 @@ class UserRepository(val userId: String) {
         DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).setValue(true)
         DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).setValue(true)
     }
+
     fun removeFollowing(followingId: String) {
         DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).removeValue()
         DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).removeValue()
+    }
+
+    fun addLike(postId: String, numberOfLikes: Int) {
+        DatabaseReferenceRetriever.userLikeReference(userId, postId).setValue(true)
+        DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
+    }
+
+    fun removeLike(postId: String, numberOfLikes: Int){
+        DatabaseReferenceRetriever.userLikeReference(userId, postId).removeValue()
+        DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
+    }
+
+    fun addDislike(postId: String, numberOfDislikes: Int){
+        DatabaseReferenceRetriever.userDislikeReference(userId, postId).setValue(true)
+        DatabaseReferenceRetriever.postNumberOfDislikesReference(postId).setValue(numberOfDislikes)
+    }
+
+    fun removeDislike(postId:String, numberOfDislikes: Int){
+        DatabaseReferenceRetriever.userDislikeReference(userId, postId).removeValue()
+        DatabaseReferenceRetriever.postNumberOfDislikesReference(postId).setValue(numberOfDislikes)
     }
 
 

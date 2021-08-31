@@ -20,15 +20,13 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private var userId: String? = null
     private lateinit var adapter: FollowersPostsAdapter
-    private lateinit var userViewModel: UserViewModel
+    lateinit var userViewModel: UserViewModel
     private lateinit var followersPostsViewModel: FollowersPostsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            userId = it.getString(getString(R.string.user_id))
-        }
+        arguments?.let { userId = it.getString(getString(R.string.user_id)) }
 
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         followersPostsViewModel = ViewModelProviders.of(this).get(FollowersPostsViewModel::class.java)
@@ -49,7 +47,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpRecyclerView() {
 
-        adapter = FollowersPostsAdapter(requireContext(), binding.followersPostsRecyclerView, if (followersPostsViewModel.followersPosts.value == null) ArrayList() else followersPostsViewModel.followersPosts.value!!)
+        adapter = FollowersPostsAdapter(this, binding.followersPostsRecyclerView, if (followersPostsViewModel.followersPosts.value == null) ArrayList() else followersPostsViewModel.followersPosts.value!!)
         adapter.notifyDataSetChanged()
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)

@@ -8,10 +8,14 @@ import it.units.musicplatform.entities.User
 import it.units.musicplatform.fragments.SearchFragment
 import it.units.musicplatform.utilities.PictureLoader
 
-class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, val searchFragment: SearchFragment) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val searchFragment: SearchFragment) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
 
-    var users: ArrayList<User> = arrayListOf()
     var following: Set<String> = setOf()
+    var users: ArrayList<User> = arrayListOf()
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
 
     init {
         if (users != null) this.users = users
@@ -26,14 +30,15 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, val searchF
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         val user = users[position]
+
         holder.binding.fullNameTextView.text = user.fullName
         PictureLoader.setProfileImage(user.id, holder.binding.profileImageView)
 
         holder.binding.switchElement.isChecked = following.contains(user.id)
-
         holder.binding.switchElement.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) searchFragment.addFollowing(user.id) else searchFragment.removeFollowing(user.id)
         }
+
 
     }
 

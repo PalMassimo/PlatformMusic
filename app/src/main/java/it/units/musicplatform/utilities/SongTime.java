@@ -37,7 +37,11 @@ public class SongTime {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    public static String toString(long minutes, long seconds){
+    public static String toString(long minutes, long seconds) {
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    public static String toString(long numberOfSeconds) {
+        return String.format(toString(numberOfSeconds / 60, numberOfSeconds % 60));
     }
 }

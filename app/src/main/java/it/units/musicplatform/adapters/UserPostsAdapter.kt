@@ -24,6 +24,7 @@ class UserPostsAdapter(val profileFragment: ProfileFragment, var userPosts: List
         holder.binding.songTextView.text = post.songName
         holder.binding.artistTextView.text = post.artistName
         PictureLoader.setSongCover(userId, post.id, holder.binding.songPictureImageView)
+
     }
 
     override fun getItemCount() = userPosts.size

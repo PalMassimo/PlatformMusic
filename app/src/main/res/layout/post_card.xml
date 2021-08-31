@@ -6,14 +6,6 @@
 
         <import type="it.units.musicplatform.utilities.SongTime" />
 
-        <variable
-            name="post"
-            type="it.units.musicplatform.entities.Post" />
-
-        <variable
-            name="isPlaying"
-            type="boolean" />
-
     </data>
 
     <androidx.cardview.widget.CardView
@@ -113,10 +105,10 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:text="@{SongTime.toString(post.numberOfSeconds/60, post.numberOfSeconds%60), default=@string/unknown_duration_time}"
                     app:layout_constraintEnd_toEndOf="@+id/seekBar"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="0.093" />
+                <!--                    android:text="@{SongTime.toString(post.numberOfSeconds/60, post.numberOfSeconds%60), default=@string/unknown_duration_time}"-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -128,97 +120,88 @@
                     android:id="@+id/songTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="@{post.songName, default=@string/song}"
+                    android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+                <!--                    android:text="@{post.songName, default=@string/song}"-->
 
                 <TextView
                     android:id="@+id/artistTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="@{post.artistName, default=@string/artist}"
+                    android:textAlignment="center"
                     android:textSize="20sp" />
+                <!--                    android:text="@{post.artistName, default=@string/artist}"-->
 
                 <TextView
                     android:id="@+id/albumTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:padding="10dp"
                     android:text="@string/album"
+                    android:textAlignment="center"
                     android:textSize="20sp" />
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <RadioGroup
-                    android:id="@+id/radioGroup"
+                <ImageButton
+                    android:id="@+id/likeImageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/likes"
+                    android:src="@drawable/ic_thumb_up" />
+
+                <TextView
+                    android:id="@+id/numberOfLikesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:gravity="center_vertical"
+                    android:textAlignment="textStart" />
 
-                    <RadioButton
-                        android:id="@+id/likeRadioButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/ic_thumb_up"
-                        android:button="@android:color/transparent"
-                        android:padding="5dp" />
+                <!--                    android:text="@{Integer.toString(post.numberOfLikes), default=@string/likes}"-->
+                <ImageButton
+                    android:id="@+id/dislikeImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/dislikes"
+                    android:src="@drawable/ic_thumb_down" />
 
-                    <TextView
-                        android:id="@+id/numberOfLikes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@{Integer.toString(post.likes.size()), default=@string/likes}" />
-
-                    <RadioButton
-                        android:id="@+id/dislikeRadioButton"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/ic_thumb_down"
-                        android:button="@android:color/transparent"
-                        android:padding="5dp" />
-
-                    <TextView
-                        android:id="@+id/numberOfDislikes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@{Integer.toString(post.dislikes.size()), default=@string/dislikes}"
-                        android:textSize="18sp" />
-
-                </RadioGroup>
+                <TextView
+                    android:id="@+id/numberOfDislikesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textAlignment="textStart" />
+                <!--                    android:text="@{Integer.toString(post.numberOfDislikes), default=@string/dislikes}"-->
 
                 <ImageButton
                     android:id="@+id/downloadImageButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:button="@android:color/transparent"
                     android:contentDescription="@string/download"
                     android:src="@drawable/ic_download" />
 
                 <TextView
                     android:id="@+id/numberOfDownloadsTextView"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@{Integer.toString(post.numberOfDownloads), default=@string/download}"
-                    android:textSize="18sp" />
+                    android:textAlignment="textStart" />
+                <!--                    android:text="@{Integer.toString(post.numberOfDownloads), default=@string/download}"-->
 
             </LinearLayout>
 

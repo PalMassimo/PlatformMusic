@@ -35,7 +35,7 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    private fun refreshPosts() =  GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
+    private fun refreshPosts() = GlobalScope.launch { _posts.postValue(userRepository.getPosts()) }
     private fun refreshUser() = GlobalScope.launch { _user.postValue(userRepository.getUser()) }
 
     fun addPost(post: Post) {
@@ -51,10 +51,41 @@ class UserViewModel : ViewModel() {
         refreshUser()
     }
 
-    fun removeFollowing(followingId: String){
+    fun removeFollowing(followingId: String) {
         userRepository.removeFollowing(followingId)
         refreshUser()
     }
 
+    fun addLike(postId: String, numberOfLikes: Int) {
+        _user.value!!.likes[postId] = true
+        userRepository.addLike(postId, numberOfLikes)
+    }
+
+    fun addDislike(postId: String, numberOfDislikes: Int) {
+        _user.value!!.dislikes[postId] = true
+        userRepository.addDislike(postId, numberOfDislikes)
+    }
+
+    fun removeLike(postId: String, numberOfLikes: Int) {
+        _user.value!!.likes.remove(postId)
+        userRepository.removeLike(postId, numberOfLikes)
+    }
+
+    fun removeDislike(postId: String, numberOfDislikes: Int) {
+        _user.value!!.dislikes.remove(postId)
+        userRepository.removeDislike(postId, numberOfDislikes)
+    }
+
+    fun fromLikeToDislike(postId: String, numberOfLikes: Int, numberOfDislikes: Int) {
+        removeLike(postId, numberOfLikes)
+        addDislike(postId, numberOfDislikes)
+    }
+
+    fun fromDislikeToLike(postId: String, numberOfLikes: Int, numberOfDislikes: Int) {
+        addLike(postId, numberOfLikes)
+        removeDislike(postId, numberOfDislikes)
+    }
 
 }
+
+

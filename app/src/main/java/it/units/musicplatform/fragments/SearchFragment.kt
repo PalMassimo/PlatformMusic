@@ -44,9 +44,8 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun isSearchRequired(): Boolean {
-        return arguments?.get("query") != null
-    }
+    private fun isSearchRequired() = arguments?.get("query") != null
+
 
     private fun setUpRecyclerView() {
 
@@ -55,11 +54,7 @@ class SearchFragment : Fragment() {
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.usersRecyclerView.adapter = adapter
 
-        userViewModel.user.observe(viewLifecycleOwner, {
-            adapter.following = userViewModel.user.value!!.following.keys
-//            adapter.following = userViewModel.following.value
-            adapter.notifyDataSetChanged()
-        })
+        userViewModel.user.observe(viewLifecycleOwner, { adapter.following = userViewModel.user.value!!.following.keys })
     }
 
     private fun performSearch() {
@@ -67,17 +62,12 @@ class SearchFragment : Fragment() {
         GlobalScope.launch(Dispatchers.Main) {
             val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
             adapter.users = resultUsers
-            adapter.notifyDataSetChanged()
         }
     }
 
     private fun showMostPopular() {
         adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.user.value?.following?.keys, this)
-
-        usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
-            adapter.users = usersSearchedViewModel.popularUsers.value!!
-            adapter.notifyDataSetChanged()
-        })
+        usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, { adapter.users = usersSearchedViewModel.popularUsers.value!! })
     }
 
     fun addFollowing(followingId: String) = userViewModel.addFollowing(followingId)
