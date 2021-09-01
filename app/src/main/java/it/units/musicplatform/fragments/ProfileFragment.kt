@@ -1,19 +1,15 @@
 package it.units.musicplatform.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import it.units.musicplatform.R
 import it.units.musicplatform.adapters.UserPostsAdapter
-import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
@@ -69,10 +65,11 @@ class ProfileFragment : Fragment() {
 
             val elementPosition = bundle.getInt("element_position")
 
-            val post = adapter.userPosts[elementPosition]
-            bundle.getString("songName")?.let { post.songName = it }
-            bundle.getString("artistName")?.let { post.artistName = it }
-            bundle.getString("coverDownloadString")?.let { post.songPictureDownloadString = it }
+            val post = adapter.userPosts[elementPosition].apply {
+                bundle.getString("songName")?.let { songName = it }
+                bundle.getString("artistName")?.let { artistName = it }
+                bundle.getString("coverDownloadString")?.let { songPictureDownloadString = it }
+            }
 
             adapter.notifyItemChanged(elementPosition)
             userViewModel.updatePost(post)

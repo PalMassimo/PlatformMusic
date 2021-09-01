@@ -46,14 +46,15 @@ class AddPostActivity : AppCompatActivity() {
     }
 
     private fun addPost() {
-        val post = Post()
-        post.id = DatabaseReferenceRetriever.postsReference().push().key!!
-        post.uploaderId = userId!!
-        post.artistName = binding.artistNameEditText.text.toString()
-        post.songName = binding.songNameEditText.text.toString()
-        post.numberOfSeconds = (milliseconds!! / 1000).toInt()
-        post.numberOfDownloads = 0
-        post.songExtension = fileExtension!!
+        val post = Post().apply {
+            id = DatabaseReferenceRetriever.postsReference().push().key!!
+            uploaderId = userId!!
+            artistName = binding.artistNameEditText.text.toString()
+            songName = binding.songNameEditText.text.toString()
+            numberOfSeconds = (milliseconds!! / 1000).toInt()
+            numberOfDownloads = 0
+            songExtension = fileExtension!!
+        }
 
         val songReference = StorageReferenceRetriever.songReference(userId!!, post.id)
         val coverReference = StorageReferenceRetriever.coverReference(userId!!, post.id)
@@ -64,8 +65,7 @@ class AddPostActivity : AppCompatActivity() {
             post.songFileDownloadString = it[0].toString()
             post.songPictureDownloadString = it[1].toString()
 
-            val intent = Intent()
-            intent.putExtra("post", post)
+            val intent = Intent().apply { putExtra("post", post) }
             setResult(RESULT_OK, intent)
 
             this.finish()

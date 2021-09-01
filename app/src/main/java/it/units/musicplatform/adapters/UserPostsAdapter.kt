@@ -1,12 +1,7 @@
 package it.units.musicplatform.adapters
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.databinding.PostItemBinding
@@ -30,23 +25,20 @@ class UserPostsAdapter(private val profileFragment: ProfileFragment, var userPos
 
         setUpHolderView(holder.binding, post)
 
-        holder.itemView.setOnLongClickListener{
-
-            val bottomSheetFragment = BottomSheetFragment.newInstance(position)
-            bottomSheetFragment.show(profileFragment.parentFragmentManager, bottomSheetFragment.tag)
-
+        holder.itemView.setOnLongClickListener {
+            BottomSheetFragment.newInstance(position).run { show(profileFragment.parentFragmentManager, tag) }
             return@setOnLongClickListener true
         }
 
     }
 
-    private fun setUpHolderView(binding: PostItemBinding, post: Post){
+    private fun setUpHolderView(binding: PostItemBinding, post: Post) {
         binding.songTextView.text = post.songName
         binding.artistTextView.text = post.artistName
         PictureLoader.setSongCover(userId, post.id, binding.songPictureImageView)
     }
 
-    fun removeElementAtPosition(position : Int){
+    fun removeElementAtPosition(position: Int) {
         userPosts.removeAt(position)
         notifyItemRemoved(position)
     }

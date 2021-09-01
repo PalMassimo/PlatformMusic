@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userId = FirebaseAuth.getInstance().currentUser!!.uid
+//        userId = FirebaseAuth.getInstance().currentUser!!.uid
+        userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 

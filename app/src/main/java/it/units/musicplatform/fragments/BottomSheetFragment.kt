@@ -33,8 +33,6 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.editLayout.setOnClickListener { setFragmentResult(POST_OPERATION, bundleOf(OPERATION to "edit", POSITION to elementPosition)) }
-//        binding.deleteLayout.setOnClickListener { setFragmentResult(POST_OPERATION, bundleOf(OPERATION to "delete", POSITION to elementPosition)) }
         binding.editLayout.setOnClickListener { postOperationListener("edit", elementPosition!!) }
         binding.deleteLayout.setOnClickListener { postOperationListener("delete", elementPosition!!) }
     }
