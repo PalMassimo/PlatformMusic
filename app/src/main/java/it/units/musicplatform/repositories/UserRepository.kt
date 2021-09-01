@@ -5,6 +5,7 @@ import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
@@ -59,6 +60,14 @@ class UserRepository(val userId: String) {
     fun removeDislike(postId:String, numberOfDislikes: Int){
         DatabaseReferenceRetriever.userDislikeReference(userId, postId).removeValue()
         DatabaseReferenceRetriever.postNumberOfDislikesReference(postId).setValue(numberOfDislikes)
+    }
+
+    fun deletePost(postId: String) {
+        DatabaseReferenceRetriever.userPostReference(userId, postId).removeValue()
+        DatabaseReferenceRetriever.postReference(postId).removeValue()
+
+        StorageReferenceRetriever.songReference(userId, postId)
+        StorageReferenceRetriever.coverReference(userId, postId)
     }
 
 

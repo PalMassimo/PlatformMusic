@@ -3,13 +3,11 @@ package it.units.musicplatform.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.Tasks.await
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UserRepository
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
@@ -20,7 +18,7 @@ class UserViewModel : ViewModel() {
     private val userRepository = UserRepository(USER_ID)
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
-    private val _following = MutableLiveData<Set<String>>()
+//    private val _following = MutableLiveData<Set<String>>()
 
     val user: LiveData<User> = _user
     val posts: LiveData<ArrayList<Post>> = _posts
@@ -84,6 +82,10 @@ class UserViewModel : ViewModel() {
     fun fromDislikeToLike(postId: String, numberOfLikes: Int, numberOfDislikes: Int) {
         addLike(postId, numberOfLikes)
         removeDislike(postId, numberOfDislikes)
+    }
+
+    fun deletePost(postId: String) {
+        userRepository.deletePost(postId)
     }
 
 }

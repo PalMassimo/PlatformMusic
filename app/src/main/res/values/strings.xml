@@ -28,5 +28,11 @@
     <string name="title_activity_add_post">AddPostActivity</string>
     <string name="share">SHARE</string>
     <string name="hint_searchable">search user…</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_post">edit post</string>
+    <string name="bin_icon">bin</string>
+    <string name="delete_post">delete post</string>
+    <string name="edit_icon">edit</string>
 
 </resources>
