@@ -30,38 +30,9 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            userId = it.getString(ARG_USER_ID)
-        }
+        userId = arguments?.getString(ARG_USER_ID)
 
-        setFragmentResultListener("post_operation") { _, bundle ->
-
-            val elementPosition = bundle.get("position") as Int
-
-            when (bundle.get("operation")) {
-                "edit" -> showEditPostDialog(elementPosition)
-                "delete" -> deletePost(elementPosition)
-                else -> Toast.makeText(context, "Asked for unknown operation", Toast.LENGTH_LONG).show()
-            }
-
-        }
-
-        setFragmentResultListener("updated_post") { _, bundle ->
-            val songName = bundle.get("songName") as String
-            val artistName = bundle.get("artistName") as String
-            val coverDownloadUrl = bundle.get("coverDownloadString") as String
-
-            val elementPosition = bundle.get("element_position") as Int
-
-            val post = adapter.userPosts[elementPosition]
-            post.songName = songName
-            post.artistName = artistName
-            post.songPictureDownloadString = coverDownloadUrl
-
-            adapter.notifyItemChanged(elementPosition)
-            userViewModel.updatePost(post)
-
-        }
+        setFragmentResultListeners()
 
     }
 
@@ -74,13 +45,41 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         binding.userviewmodel = userViewModel
-        binding.lifecycleOwner = activity
 
         PictureLoader.setProfileImage(userId!!, binding.profileImageView)
 
         setUpRecyclerView()
 
     }
+
+    private fun setFragmentResultListeners() {
+        setFragmentResultListener("post_operation") { _, bundle ->
+
+            val elementPosition = bundle.getInt("position")
+
+            when (bundle.get("operation")) {
+                "edit" -> EditPostDialogFragment.newInstance(adapter.userPosts[elementPosition], elementPosition).run { show(parentFragmentManager, tag) }
+                "delete" -> deletePost(elementPosition)
+                else -> Toast.makeText(context, "Asked for unknown operation", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
+        setFragmentResultListener("updated_post") { _, bundle ->
+
+            val elementPosition = bundle.getInt("element_position")
+
+            val post = adapter.userPosts[elementPosition]
+            bundle.getString("songName")?.let { post.songName = it }
+            bundle.getString("artistName")?.let { post.artistName = it }
+            bundle.getString("coverDownloadString")?.let { post.songPictureDownloadString = it }
+
+            adapter.notifyItemChanged(elementPosition)
+            userViewModel.updatePost(post)
+
+        }
+    }
+
 
     private fun setUpRecyclerView() {
         adapter = if (userViewModel.posts.value != null) UserPostsAdapter(this, userViewModel.posts.value!!) else UserPostsAdapter(this, ArrayList())
@@ -93,27 +92,6 @@ class ProfileFragment : Fragment() {
         adapter.removeElementAtPosition(elementPosition)
         userViewModel.deletePost(adapter.userPosts[elementPosition].id)
     }
-
-    private fun showEditPostDialog(elementPosition: Int) {
-        val editPostDialogFragment = EditPostDialogFragment.newInstance(adapter.userPosts[elementPosition], elementPosition)
-        editPostDialogFragment.show(parentFragmentManager, editPostDialogFragment.tag)
-//        val builder = AlertDialog.Builder(requireContext())
-//        builder.setTitle("Edit Post Dialog")
-//            .setMessage("A message")
-//            .setView(R.layout.fragment_editpost_dialog)
-//            .setNegativeButton("Cancel") { _, _ -> }
-//            .setPositiveButton("Confirm") { _, _ ->  editPost()}
-////            .setPositiveButton("Confirm") { _, _ -> Toast.makeText(context, "Positive button clicked", Toast.LENGTH_SHORT).show() }
-//            .create()
-//        builder.show()
-
-    }
-
-//    private fun editPost(){
-////        val binding = FragmentEditpostDialogBinding.bind(R.layout.fragment_editpost_dialog.)
-//
-//        requireActivity().findViewById<View>(R.id.coverImageView) as ImageView
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

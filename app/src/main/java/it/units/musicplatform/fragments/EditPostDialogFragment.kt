@@ -45,21 +45,20 @@ class EditPostDialogFragment : DialogFragment() {
         binding.artistNameEditText.setText(post.artistName)
         PictureLoader.setSongCover(FirebaseAuth.getInstance().currentUser!!.uid, post.id, binding.coverImageView)
 
-        val dialog = AlertDialog.Builder(requireContext()).create()
-        dialog.setTitle("Title")
-        dialog.setView(binding.root)
-        dialog.setMessage("Message")
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { _, _ -> }
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirm") { _, _ ->
-            lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
+        return AlertDialog.Builder(requireContext()).create().apply {
+            setView(binding.root)
+            setTitle("Title")
+            setMessage("Message")
+            setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { _, _ -> }
+            setButton(AlertDialog.BUTTON_POSITIVE, "Confirm") { _, _ ->
+                lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
+            }
+            show()
+            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
+            }
         }
-        dialog.show()
 
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
-        }
-
-        return dialog
     }
 
 
@@ -73,13 +72,16 @@ class EditPostDialogFragment : DialogFragment() {
                 post.songPictureDownloadString = uriTask.result.toString()
             }.await()
         }
-        val bundle = Bundle()
-        bundle.putString("songName", post.songName)
-        bundle.putString("artistName", post.artistName)
-        bundle.putString("coverDownloadString", post.songPictureDownloadString)
-        bundle.putInt("element_position", elementPosition!!)
-        setFragmentResult("updated_post", bundle)
-        dismiss()
+
+        Bundle().run {
+            putString("songName", post.songName)
+            putString("artistName", post.artistName)
+            putString("coverDownloadString", post.songPictureDownloadString)
+            putInt("element_position", elementPosition!!)
+            setFragmentResult("updated_post", this)
+            dismiss()
+        }
+
 
     }
 
