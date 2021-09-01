@@ -47,8 +47,7 @@ class EditPostDialogFragment : DialogFragment() {
 
         return AlertDialog.Builder(requireContext()).create().apply {
             setView(binding.root)
-            setTitle("Title")
-            setMessage("Message")
+            setTitle("Edit Post Dialog")
             setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { _, _ -> }
             setButton(AlertDialog.BUTTON_POSITIVE, "Confirm") { _, _ ->
                 lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }

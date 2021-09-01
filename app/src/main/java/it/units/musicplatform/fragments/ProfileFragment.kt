@@ -58,7 +58,7 @@ class ProfileFragment : Fragment() {
             val elementPosition = bundle.getInt("position")
 
             when (bundle.get("operation")) {
-                "edit" -> EditPostDialogFragment.newInstance(adapter.userPosts[elementPosition], elementPosition).run { show(parentFragmentManager, tag) }
+                "edit" -> EditPostDialogFragment.newInstance(adapter.userPosts[elementPosition], elementPosition).run { show(this@ProfileFragment.parentFragmentManager, tag) }
                 "delete" -> deletePost(elementPosition)
                 else -> Toast.makeText(context, "Asked for unknown operation", Toast.LENGTH_LONG).show()
             }
