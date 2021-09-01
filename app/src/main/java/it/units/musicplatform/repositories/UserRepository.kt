@@ -70,6 +70,10 @@ class UserRepository(val userId: String) {
         StorageReferenceRetriever.coverReference(userId, postId)
     }
 
+    fun updatePost(post: Post) {
+        DatabaseReferenceRetriever.postReference(post.id).setValue(post)
+    }
+
 
 }
 

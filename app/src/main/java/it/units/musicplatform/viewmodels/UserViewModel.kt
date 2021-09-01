@@ -88,6 +88,10 @@ class UserViewModel : ViewModel() {
         userRepository.deletePost(postId)
     }
 
+    fun updatePost(post: Post) {
+        userRepository.updatePost(post)
+    }
+
 }
 
 

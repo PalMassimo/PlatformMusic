@@ -35,7 +35,6 @@ class UserPostsAdapter(private val profileFragment: ProfileFragment, var userPos
             val bottomSheetFragment = BottomSheetFragment.newInstance(position)
             bottomSheetFragment.show(profileFragment.parentFragmentManager, bottomSheetFragment.tag)
 
-
             return@setOnLongClickListener true
         }
 
