@@ -17,8 +17,6 @@ import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.utilities.PreferenceOperationParser
 import it.units.musicplatform.utilities.SongTime
 
-//private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
-
 class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
     RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
 

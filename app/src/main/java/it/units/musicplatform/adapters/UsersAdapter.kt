@@ -12,10 +12,10 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val
 
     var following: Set<String> = setOf()
     var users: ArrayList<User> = arrayListOf()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     init {
         if (users != null) this.users = users
@@ -34,8 +34,8 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val
         holder.binding.fullNameTextView.text = user.fullName
         PictureLoader.setProfileImage(user.id, holder.binding.profileImageView)
 
-        holder.binding.switchElement.isChecked = following.contains(user.id)
-        holder.binding.switchElement.setOnCheckedChangeListener { _, isChecked ->
+        holder.binding.followToggleButton.isChecked = following.contains(user.id)
+        holder.binding.followToggleButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) searchFragment.addFollowing(user.id) else searchFragment.removeFollowing(user.id)
         }
 

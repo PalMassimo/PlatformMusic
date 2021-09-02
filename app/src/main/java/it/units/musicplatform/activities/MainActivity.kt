@@ -27,12 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var userId: String
     private lateinit var navigationController: NavController
-    private val addPostLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
-            val post = it.data!!.extras!!.get("post") as Post
-            userViewModel.addPost(post)
-        }
-    }
+    private val addPostLauncher = registerAddPostLauncher()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +61,13 @@ class MainActivity : AppCompatActivity() {
         if (intent?.action.equals(Intent.ACTION_SEARCH))
             intent!!.getStringExtra("query")?.let { navigationController.navigate(R.id.searchFragment, bundleOf("query" to it.trim())) }
 
+    }
+
+    private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
+            val post = it.data!!.extras!!.get("post") as Post
+            userViewModel.addPost(post)
+        }
     }
 
     fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))

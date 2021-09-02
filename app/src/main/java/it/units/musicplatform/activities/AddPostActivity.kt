@@ -34,7 +34,9 @@ class AddPostActivity : AppCompatActivity() {
 
         userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        binding.songPictureImageView.setOnClickListener { coverLauncher().launch("image/*") }
+        val coverLauncher = registerCoverLauncher()
+
+        binding.songPictureImageView.setOnClickListener { coverLauncher.launch("image/*") }
         binding.shareButton.setOnClickListener { addPost() }
 
         songInfoLauncher().launch("audio/*")
@@ -71,23 +73,22 @@ class AddPostActivity : AppCompatActivity() {
     }
 
 
-    private fun songInfoLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        localUriSong = it
-        val mediaDataRetriever = MediaMetadataRetriever().apply { setDataSource(this@AddPostActivity, it) }
-//        mediaDataRetriever.setDataSource(this, it)
+    private fun songInfoLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        localUriSong = uri
+        val mediaDataRetriever = MediaMetadataRetriever().apply { setDataSource(this@AddPostActivity, uri) }
         milliseconds = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
         artistName = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
         songName = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-        fileExtension = it.lastPathSegment!!.substring(it.lastPathSegment!!.lastIndexOf(".") + 1)
+        fileExtension = uri.lastPathSegment!!.substring(uri.lastPathSegment!!.lastIndexOf(".") + 1)
 
         binding.artistNameEditText.setText(artistName)
         binding.songNameEditText.setText(songName)
 
     }
 
-    private fun coverLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        localUriCover = it
-        binding.songPictureImageView.setImageURI(it)
+    private fun registerCoverLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        localUriCover = uri
+        binding.songPictureImageView.setImageURI(uri)
     }
 
 }

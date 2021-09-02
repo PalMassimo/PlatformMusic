@@ -34,5 +34,7 @@
     <string name="bin_icon">bin</string>
     <string name="delete_post">delete post</string>
     <string name="edit_icon">edit</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follow">Follow</string>
 
 </resources>

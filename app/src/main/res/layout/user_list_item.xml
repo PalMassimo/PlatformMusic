@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,31 +13,37 @@
         android:layout_height="100dp"
         android:src="@drawable/ic_profile"
         app:civ_border_color="#FF000000"
-        app:civ_border_width="2dp"
+        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/followersTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_weight="0"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/fullNameTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:text="Placeholder"
+        android:text="@string/uploader"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profileImageView"
-        android:layout_weight="0"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchElement"
+    <!--    <androidx.appcompat.widget.SwitchCompat-->
+    <!--        android:id="@+id/switchElement"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        />-->
+
+    <ToggleButton
+        android:id="@+id/followToggleButton"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textOff="@string/follow"
+        android:textOn="@string/unfollow" />
 
 </LinearLayout>
