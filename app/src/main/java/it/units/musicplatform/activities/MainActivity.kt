@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -20,9 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.fragments.HomeFragment
-import it.units.musicplatform.fragments.ProfileFragment
-import it.units.musicplatform.fragments.SearchFragment
 import it.units.musicplatform.viewmodels.UserViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -64,21 +60,15 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
-
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        if (intent?.action.equals(Intent.ACTION_SEARCH)) {
-            val subName = intent!!.getStringExtra("query")
-            subName?.let { startSearch(it.trim()) }
-        }
+        if (intent?.action.equals(Intent.ACTION_SEARCH))
+            intent!!.getStringExtra("query")?.let { navigationController.navigate(R.id.searchFragment, bundleOf("query" to it.trim())) }
+
     }
 
-
-    private fun startSearch(subName: String) = navigationController.navigate(R.id.searchFragment, bundleOf("query" to subName))
-
+    fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
 
     fun logoutButtonListener(item: MenuItem) {
         FirebaseAuth.getInstance().signOut()
