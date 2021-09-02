@@ -34,13 +34,10 @@ class AddPostActivity : AppCompatActivity() {
 
         userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-        val songInfoLauncher = getSongInfoLauncher()
-        val coverLauncher = getCoverLauncher()
-
-        binding.songPictureImageView.setOnClickListener { coverLauncher.launch("image/*") }
+        binding.songPictureImageView.setOnClickListener { coverLauncher().launch("image/*") }
         binding.shareButton.setOnClickListener { addPost() }
 
-        songInfoLauncher.launch("audio/*")
+        songInfoLauncher().launch("audio/*")
 
 
     }
@@ -74,10 +71,10 @@ class AddPostActivity : AppCompatActivity() {
     }
 
 
-    private fun getSongInfoLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
+    private fun songInfoLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
         localUriSong = it
-        val mediaDataRetriever = MediaMetadataRetriever()
-        mediaDataRetriever.setDataSource(this, it)
+        val mediaDataRetriever = MediaMetadataRetriever().apply { setDataSource(this@AddPostActivity, it) }
+//        mediaDataRetriever.setDataSource(this, it)
         milliseconds = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
         artistName = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
         songName = mediaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
@@ -88,7 +85,7 @@ class AddPostActivity : AppCompatActivity() {
 
     }
 
-    private fun getCoverLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
+    private fun coverLauncher() = registerForActivityResult(ActivityResultContracts.GetContent()) {
         localUriCover = it
         binding.songPictureImageView.setImageURI(it)
     }

@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userViewModel: UserViewModel
     private lateinit var userId: String
+    private lateinit var navigationController: NavController
     private val addPostLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
             val post = it.data!!.extras!!.get("post") as Post
@@ -40,16 +44,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        userId = FirebaseAuth.getInstance().currentUser!!.uid
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            add(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf("user_id" to userId))
-        }
-
+        navigationController = findNavController(R.id.fragment).also { binding.bottomNavigationView.setupWithNavController(it) }
 
     }
 
@@ -78,13 +77,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun startSearch(subName: String) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(binding.fragmentContainer.id, SearchFragment::class.java, bundleOf("query" to subName))
-            binding.bottomNavigationView.menu.findItem(R.id.search).isChecked = true
-        }
-    }
+    private fun startSearch(subName: String) = navigationController.navigate(R.id.searchFragment, bundleOf("query" to subName))
+
 
     fun logoutButtonListener(item: MenuItem) {
         FirebaseAuth.getInstance().signOut()
@@ -94,27 +88,4 @@ class MainActivity : AppCompatActivity() {
     fun aboutButtonListener(item: MenuItem) = Toast.makeText(this, "About window not implemented yet", Toast.LENGTH_SHORT).show()
 
 
-    fun homeNavigationBarListener(item: MenuItem) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(binding.fragmentContainer.id, HomeFragment::class.java, bundleOf(getString(R.string.user_id) to userId))
-        }
-        item.isChecked = true
-    }
-
-    fun searchNavigationBarListener(item: MenuItem) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(binding.fragmentContainer.id, SearchFragment::class.java, bundleOf(getString(R.string.user_id) to userId))
-        }
-        item.isChecked = true
-    }
-
-    fun profileNavigationBarListener(item: MenuItem) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(binding.fragmentContainer.id, ProfileFragment::class.java, bundleOf(getString(R.string.user_id) to userId))
-        }
-        item.isChecked = true
-    }
 }

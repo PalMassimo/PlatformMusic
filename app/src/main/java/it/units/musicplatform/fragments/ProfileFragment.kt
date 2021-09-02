@@ -9,24 +9,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import it.units.musicplatform.R
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
 
-private const val ARG_USER_ID = "user_id"
-
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private var userId: String? = null
+    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var adapter: UserPostsAdapter
     private lateinit var userViewModel: UserViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userId = arguments?.getString(ARG_USER_ID)
 
         setFragmentResultListeners()
 
@@ -42,7 +41,7 @@ class ProfileFragment : Fragment() {
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         binding.userviewmodel = userViewModel
 
-        PictureLoader.setProfileImage(userId!!, binding.profileImageView)
+        PictureLoader.setProfileImage(userId, binding.profileImageView)
 
         setUpRecyclerView()
 
