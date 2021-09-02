@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,7 +43,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.upper_bar_menu, menu)
+        menuInflater.inflate(R.menu.up_navigation_menu, menu)
+
+        menu?.let {
+            it.findItem(R.id.addPostMenuItem).setOnMenuItemClickListener {
+                addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
+                return@setOnMenuItemClickListener true
+            }
+            it.findItem(R.id.logoutMenuItem).setOnMenuItemClickListener {
+                FirebaseAuth.getInstance().signOut()
+                finish()
+                return@setOnMenuItemClickListener  true
+            }
+            it.findItem(R.id.aboutMenuItem).setOnMenuItemClickListener {
+                Toast.makeText(this, "About window not implemented yet", Toast.LENGTH_SHORT).show()
+                return@setOnMenuItemClickListener true
+            }
+        }
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu!!.findItem(R.id.searchMenuItem).actionView as SearchView).apply {
@@ -69,15 +84,6 @@ class MainActivity : AppCompatActivity() {
             userViewModel.addPost(post)
         }
     }
-
-    fun addButtonListener(item: MenuItem) = addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
-
-    fun logoutButtonListener(item: MenuItem) {
-        FirebaseAuth.getInstance().signOut()
-        finish()
-    }
-
-    fun aboutButtonListener(item: MenuItem) = Toast.makeText(this, "About window not implemented yet", Toast.LENGTH_SHORT).show()
 
 
 }
