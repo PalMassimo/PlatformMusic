@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -19,6 +20,7 @@ import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.viewmodels.UserViewModel
+import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         userId = intent.getStringExtra(getString(R.string.user_id))!!
 
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this, UserViewModelFactory(userId)).get(UserViewModel::class.java)
 
         navigationController = findNavController(R.id.fragment).also { binding.bottomNavigationView.setupWithNavController(it) }
 

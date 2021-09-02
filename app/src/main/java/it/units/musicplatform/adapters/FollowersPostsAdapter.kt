@@ -61,11 +61,11 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         binding.dislikeImageButton.setOnClickListener { likeAndDislikeImagesButtonListenersCallback(binding, post, Preference.DISLIKE) }
 
 
-//        binding.dow.setOnClickListener{
-//            val songDownloader = SongDownloader(context, post)
-//            songDownloader.download()
-//            //TODO: set numberOf Downloads
-//        }
+        binding.downloadImageButton.setOnClickListener{ downloadView ->
+            val songDownloader = SongDownloader(downloadView.context, post)
+            songDownloader.download()
+            //TODO: set numberOf Downloads
+        }
     }
 
     override fun getItemCount() = followersPostsList.size
