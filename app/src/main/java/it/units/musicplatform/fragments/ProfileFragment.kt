@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
-import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.viewmodels.UserViewModel
 
 class ProfileFragment : Fragment() {
@@ -40,7 +41,7 @@ class ProfileFragment : Fragment() {
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         binding.userviewmodel = userViewModel
 
-        PictureLoader.setProfileImage(userId, binding.profileImageView)
+        GlideApp.with(requireContext()).load(StorageReferenceRetriever.userImageReference(userId)).into(binding.profileImageView)
 
         setUpRecyclerView()
 

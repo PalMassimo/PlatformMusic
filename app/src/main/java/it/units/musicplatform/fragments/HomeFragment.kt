@@ -17,7 +17,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-//    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var adapter: FollowersPostsAdapter
     lateinit var userViewModel: UserViewModel

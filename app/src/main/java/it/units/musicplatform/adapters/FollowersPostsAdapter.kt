@@ -12,10 +12,8 @@ import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.enumerations.PreferenceOperation.*
 import it.units.musicplatform.fragments.HomeFragment
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.utilities.MediaPlayerManager
-import it.units.musicplatform.utilities.PictureLoader
-import it.units.musicplatform.utilities.PreferenceOperationParser
-import it.units.musicplatform.utilities.SongTime
+import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.utilities.*
 
 class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
     RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
@@ -110,8 +108,9 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         binding.numberOfDownloadsTextView.text = post.numberOfDownloads.toString()
         binding.songDurationTextView.text = SongTime.toString(post.numberOfSeconds.toLong())
 
-        PictureLoader.setSongCover(post.uploaderId, post.id, binding.songPictureImageView)
-        PictureLoader.setProfileImage(post.uploaderId, binding.uploaderPictureImageView)
+        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id)).into(binding.songPictureImageView)
+        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(post.uploaderId)).into(binding.uploaderPictureImageView)
+
         binding.seekBar.max = post.numberOfSeconds
     }
 

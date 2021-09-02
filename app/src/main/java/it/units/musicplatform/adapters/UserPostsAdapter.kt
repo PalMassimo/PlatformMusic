@@ -3,15 +3,13 @@ package it.units.musicplatform.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.databinding.PostItemBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.fragments.BottomSheetFragment
 import it.units.musicplatform.fragments.ProfileFragment
-import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.utilities.GlideApp
 
-
-private var userId = FirebaseAuth.getInstance().currentUser!!.uid
 
 class UserPostsAdapter(private val profileFragment: ProfileFragment, var userPosts: ArrayList<Post>) : RecyclerView.Adapter<UserPostsAdapter.PostHolder>() {
 
@@ -35,7 +33,7 @@ class UserPostsAdapter(private val profileFragment: ProfileFragment, var userPos
     private fun setUpHolderView(binding: PostItemBinding, post: Post) {
         binding.songTextView.text = post.songName
         binding.artistTextView.text = post.artistName
-        PictureLoader.setSongCover(userId, post.id, binding.songPictureImageView)
+        GlideApp.with(profileFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id)).into(binding.songPictureImageView)
     }
 
     fun removeElementAtPosition(position: Int) {

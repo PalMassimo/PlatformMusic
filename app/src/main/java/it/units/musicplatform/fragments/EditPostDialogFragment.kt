@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.utilities.GlideApp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -24,6 +24,7 @@ class EditPostDialogFragment : DialogFragment() {
     private var localImageUri: Uri? = null
     private var _binding: FragmentEditpostDialogBinding? = null
     private val binding get() = _binding!!
+    private val userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) {
         binding.coverImageView.setImageURI(it)
         localImageUri = it
@@ -43,7 +44,7 @@ class EditPostDialogFragment : DialogFragment() {
         binding.coverImageView.setOnClickListener { uriLauncherActivity.launch("image/*") }
         binding.songNameEditText.setText(post.songName)
         binding.artistNameEditText.setText(post.artistName)
-        PictureLoader.setSongCover(FirebaseAuth.getInstance().currentUser!!.uid, post.id, binding.coverImageView)
+        GlideApp.with(requireContext()).load(StorageReferenceRetriever.coverReference(userId, post.id)).into(binding.coverImageView)
 
         return AlertDialog.Builder(requireContext()).create().apply {
             setView(binding.root)
@@ -65,8 +66,8 @@ class EditPostDialogFragment : DialogFragment() {
         post.songName = songName
         post.artistName = artistName
         localImageUri?.let {
-            StorageReferenceRetriever.coverReference(FirebaseAuth.getInstance().currentUser!!.uid, post.id).putFile(it).continueWithTask {
-                StorageReferenceRetriever.coverReference(FirebaseAuth.getInstance().currentUser!!.uid, post.id).downloadUrl
+            StorageReferenceRetriever.coverReference(userId, post.id).putFile(it).continueWithTask {
+                StorageReferenceRetriever.coverReference(userId, post.id).downloadUrl
             }.continueWith { uriTask ->
                 post.songPictureDownloadString = uriTask.result.toString()
             }.await()
