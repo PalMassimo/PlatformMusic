@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             it.findItem(R.id.logoutMenuItem).setOnMenuItemClickListener {
                 FirebaseAuth.getInstance().signOut()
                 finish()
-                return@setOnMenuItemClickListener  true
+                return@setOnMenuItemClickListener true
             }
             it.findItem(R.id.aboutMenuItem).setOnMenuItemClickListener {
                 Toast.makeText(this, "About window not implemented yet", Toast.LENGTH_SHORT).show()

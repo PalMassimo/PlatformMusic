@@ -4,12 +4,6 @@
 
     <data>
 
-        <variable
-            name="postViewModel"
-            type="it.units.musicplatform.viewmodels.PostsViewModel" />
-
-        <import type="it.units.musicplatform.utilities.SongTime" />
-
     </data>
 
     <androidx.cardview.widget.CardView
