@@ -83,9 +83,6 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
             binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.fullName
         }
 
-        binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(post.id)) R.color.white else R.color.black)
-        binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(post.id)) R.color.white else R.color.black)
-        binding.playPauseImageButton.setImageResource(if(mediaPlayerManager.currentSong==position) R.drawable.ic_pause else R.drawable.ic_play)
         binding.post = post
 
         GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
@@ -93,6 +90,9 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(post.uploaderId))
             .into(binding.uploaderPictureImageView)
 
+        binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(post.id)) R.color.white else R.color.black)
+        binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(post.id)) R.color.white else R.color.black)
+        binding.playPauseImageButton.setImageResource(if (mediaPlayerManager.currentSong == position) R.drawable.ic_pause else R.drawable.ic_play)
         binding.seekBar.max = post.numberOfSeconds
     }
 
