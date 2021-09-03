@@ -54,24 +54,25 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
     override fun getItemCount() = followersPostsList.size
 
-    private fun getPostHolder(position: Int) = recyclerView.findViewHolderForAdapterPosition(position) as PostHolder
+    private fun getPostHolder(position: Int) = recyclerView.findViewHolderForAdapterPosition(position) as PostHolder?
+
 
     fun songStarted(positionOldSong: Int, positionNewSong: Int) {
         if (positionOldSong != -1) {
-            getPostHolder(positionOldSong).songStopped()
+            getPostHolder(positionOldSong)?.songStopped()
         }
-        getPostHolder(positionNewSong).songPlayed()
+        getPostHolder(positionNewSong)?.songPlayed()
     }
 
-    fun songResumed(songPosition: Int) = getPostHolder(songPosition).songResumed()
+    fun songResumed(songPosition: Int) = getPostHolder(songPosition)?.songResumed()
 
-    fun songPaused(songPosition: Int) = getPostHolder(songPosition).songPaused()
+    fun songPaused(songPosition: Int) = getPostHolder(songPosition)?.songPaused()
 
-    fun songStopped(songPosition: Int) = getPostHolder(songPosition).songStopped()
+    fun songStopped(songPosition: Int) = getPostHolder(songPosition)?.songStopped()
 
-    fun updateProgressBar(position: Int, progress: Int) = getPostHolder(position).updateSeekBar(progress)
+    fun updateProgressBar(position: Int, progress: Int) = getPostHolder(position)?.updateSeekBar(progress)
 
-    fun resetPost(currentSong: Int) = getPostHolder(currentSong).songStopped()
+    fun resetPost(currentSong: Int) = getPostHolder(currentSong)?.songStopped()
 
     private fun setUpCardView(position: Int, binding: PostCardBinding) {
 
@@ -84,6 +85,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(post.id)) R.color.white else R.color.black)
         binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(post.id)) R.color.white else R.color.black)
+        binding.playPauseImageButton.setImageResource(if(mediaPlayerManager.currentSong==position) R.drawable.ic_pause else R.drawable.ic_play)
         binding.post = post
 
         GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
@@ -94,8 +96,8 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         binding.seekBar.max = post.numberOfSeconds
     }
 
-    fun setLike(isLiked: Boolean, position: Int) = getPostHolder(position).binding.likeImageButton.setColorFilter(if (isLiked) R.color.white else R.color.black)
-    fun setDislike(isDisliked: Boolean, position: Int) = getPostHolder(position).binding.dislikeImageButton.setColorFilter((if (isDisliked) R.color.white else R.color.black))
+    fun setLike(isLiked: Boolean, position: Int) = getPostHolder(position)!!.binding.likeImageButton.setColorFilter(if (isLiked) R.color.white else R.color.black)
+    fun setDislike(isDisliked: Boolean, position: Int) = getPostHolder(position)!!.binding.dislikeImageButton.setColorFilter((if (isDisliked) R.color.white else R.color.black))
 
 
     inner class PostHolder(val binding: PostCardBinding) : RecyclerView.ViewHolder(binding.root) {

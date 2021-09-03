@@ -11,7 +11,7 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
 
     val mediaPlayer = MediaPlayer()
 
-    private var currentSong = -1
+    var currentSong = -1
     private val handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             if (msg.what == 1 && mediaPlayer.isPlaying) {
@@ -38,7 +38,7 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
         }
     }
 
-    fun playAnotherSong(postIndex: Int){
+    private fun playAnotherSong(postIndex: Int){
         if(currentSong != -1) mediaPlayer.reset()
 
         try {
@@ -55,19 +55,19 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
         }
     }
 
-    fun pauseSong(postIndex: Int){
+    private fun pauseSong(postIndex: Int){
         mediaPlayer.pause()
         handler.removeMessages(1)
         adapter.songPaused(postIndex)
     }
 
-    fun resumeSong(postIndex: Int){
+    private fun resumeSong(postIndex: Int){
         mediaPlayer.start()
         handler.sendEmptyMessageAtTime(1, 1000)
         adapter.songResumed(postIndex)
     }
 
-    fun stopSong(postIndex: Int){
+    private fun stopSong(postIndex: Int){
         if (postIndex == -1) return
         mediaPlayer.pause()
         handler.removeMessages(1)
