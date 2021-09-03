@@ -2,6 +2,8 @@ package it.units.musicplatform.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import it.units.musicplatform.R
@@ -35,34 +37,15 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         setUpCardListeners(holder.binding, position)
     }
 
-    private fun onPreferenceChange(binding: PostCardBinding, post: Post, preference: Preference) {
-        when (PreferenceOperationParser.changePreference(preference, post.id, homeFragment.userViewModel.user.value!!.likes, homeFragment.userViewModel.user.value!!.dislikes)) {
-            ADD_LIKE -> homeFragment.userViewModel.addLike(post.id, ++post.numberOfLikes)
-            REMOVE_LIKE -> homeFragment.userViewModel.removeLike(post.id, --post.numberOfLikes)
-            ADD_DISLIKE -> homeFragment.userViewModel.addDislike(post.id, ++post.numberOfDislikes)
-            REMOVE_DISLIKE -> homeFragment.userViewModel.removeDislike(post.id, --post.numberOfDislikes)
-            FROM_LIKE_TO_DISLIKE -> homeFragment.userViewModel.fromLikeToDislike(post.id, --post.numberOfLikes, ++post.numberOfDislikes)
-            FROM_DISLIKE_TO_LIKE -> homeFragment.userViewModel.fromDislikeToLike(post.id, ++post.numberOfLikes, --post.numberOfDislikes)
-        }
-
-        binding.numberOfLikesTextView.text = post.numberOfLikes.toString()
-        binding.numberOfDislikesTextView.text = post.numberOfDislikes.toString()
-        setLikeAndDislikeButton(binding, post.id)
-    }
-
-
     private fun setUpCardListeners(binding: PostCardBinding, position: Int) {
 
         val post = followersPostsList[position]
 
+        binding.likeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.LIKE) }
+        binding.dislikeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.DISLIKE) }
         binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
 
-        binding.likeImageButton.setOnClickListener { onPreferenceChange(binding, post, Preference.LIKE) }
-
-        binding.dislikeImageButton.setOnClickListener { onPreferenceChange(binding, post, Preference.DISLIKE) }
-
-
-        binding.downloadImageButton.setOnClickListener{ downloadView ->
+        binding.downloadImageButton.setOnClickListener { downloadView ->
             val songDownloader = SongDownloader(downloadView.context, post)
             songDownloader.download()
             homeFragment.updateNumberOfDownloads(position)
@@ -90,11 +73,6 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
     fun resetPost(currentSong: Int) = getPostHolder(currentSong).songStopped()
 
-    private fun setLikeAndDislikeButton(binding: PostCardBinding, postId: String) {
-        binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(postId)) R.color.white else R.color.black)
-        binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(postId)) R.color.white else R.color.black)
-    }
-
     private fun setUpCardView(position: Int, binding: PostCardBinding) {
 
         val post = followersPostsList[position]
@@ -104,7 +82,8 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
             binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.fullName
         }
 
-        setLikeAndDislikeButton(binding, post.id)
+        binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(post.id)) R.color.white else R.color.black)
+        binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(post.id)) R.color.white else R.color.black)
         binding.post = post
 
         GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
@@ -114,6 +93,10 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         binding.seekBar.max = post.numberOfSeconds
     }
+
+    fun setLike(isLiked: Boolean, position: Int) = getPostHolder(position).binding.likeImageButton.setColorFilter(if (isLiked) R.color.white else R.color.black)
+    fun setDislike(isDisliked: Boolean, position: Int) = getPostHolder(position).binding.dislikeImageButton.setColorFilter((if (isDisliked) R.color.white else R.color.black))
+
 
     inner class PostHolder(val binding: PostCardBinding) : RecyclerView.ViewHolder(binding.root) {
 

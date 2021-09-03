@@ -48,9 +48,9 @@ class UserRepository(private val userId: String) {
         DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).removeValue()
     }
 
-    fun addLike(postId: String, numberOfLikes: Int) {
+    fun addLike(postId: String/*, numberOfLikes: Int*/) {
         DatabaseReferenceRetriever.userLikeReference(userId, postId).setValue(true)
-        DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
+//        DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
     }
 
     fun removeLike(postId: String, numberOfLikes: Int){

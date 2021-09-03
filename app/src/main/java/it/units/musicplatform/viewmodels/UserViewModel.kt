@@ -8,7 +8,6 @@ import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UserRepository
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 class UserViewModel(val userId: String) : ViewModel() {
@@ -48,9 +47,9 @@ class UserViewModel(val userId: String) : ViewModel() {
         refreshUser()
     }
 
-    fun addLike(postId: String, numberOfLikes: Int) {
+    fun addLike(postId: String) {
         _user.value!!.likes[postId] = true
-        userRepository.addLike(postId, numberOfLikes)
+        userRepository.addLike(postId)
     }
 
     fun addDislike(postId: String, numberOfDislikes: Int) {
@@ -66,16 +65,6 @@ class UserViewModel(val userId: String) : ViewModel() {
     fun removeDislike(postId: String, numberOfDislikes: Int) {
         _user.value!!.dislikes.remove(postId)
         userRepository.removeDislike(postId, numberOfDislikes)
-    }
-
-    fun fromLikeToDislike(postId: String, numberOfLikes: Int, numberOfDislikes: Int) {
-        removeLike(postId, numberOfLikes)
-        addDislike(postId, numberOfDislikes)
-    }
-
-    fun fromDislikeToLike(postId: String, numberOfLikes: Int, numberOfDislikes: Int) {
-        addLike(postId, numberOfLikes)
-        removeDislike(postId, numberOfDislikes)
     }
 
     fun addPost(post: Post) {
