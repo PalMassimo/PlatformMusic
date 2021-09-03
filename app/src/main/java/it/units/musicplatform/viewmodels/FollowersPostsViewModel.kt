@@ -3,21 +3,19 @@ package it.units.musicplatform.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
-import it.units.musicplatform.enumerations.Preference
+import it.units.musicplatform.repositories.PostsRepository
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import java.util.stream.StreamSupport
 
-private val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
-class FollowersPostsViewModel : ViewModel() {
+class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
     private val postsList = ArrayList<Post>()
     private val _followersPosts = MutableLiveData<List<Post>>()
     val followersPosts: LiveData<List<Post>> = _followersPosts
+    private val postsRepository = PostsRepository()
 
     init {
         _followersPosts.value = ArrayList()
@@ -27,12 +25,11 @@ class FollowersPostsViewModel : ViewModel() {
     private fun loadPosts() {
 
         //TODO: replace addOnSuccessListener with continueWith
-        DatabaseReferenceRetriever.userReference(userId).get()
-            .addOnSuccessListener {
-                it.getValue(User::class.java)?.following?.keys?.stream()
-                    ?.map { followingId -> DatabaseReferenceRetriever.userPostsReference(followingId).get() }
-                    ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
-            }
+        DatabaseReferenceRetriever.userReference(userId).get().addOnSuccessListener {
+            it.getValue(User::class.java)?.following?.keys?.stream()
+                ?.map { followingId -> DatabaseReferenceRetriever.userPostsReference(followingId).get() }
+                ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
+        }
     }
 
     private fun fromFollowersPostsToPost(postsSnapshot: DataSnapshot) {
@@ -51,34 +48,32 @@ class FollowersPostsViewModel : ViewModel() {
 
     fun incrementNumberOfDownloads(position: Int) {
         val post = followersPosts.value!![position]
-        DatabaseReferenceRetriever.postNumberOfDownloads(post.id).setValue(++post.numberOfDownloads)
+        post.numberOfDownloads++
+        postsRepository.setNumberOfDownloads(post.id, post.numberOfDownloads)
     }
 
-//    fun addLike(position: Int) = DatabaseReferenceRetriever.postNumberOfLikesReference(followersPosts.value!![position].id).setValue(++followersPosts.value!![position].numberOfLikes)
-//    fun addDislike(position: Int) = DatabaseReferenceRetriever.postNumberOfDislikesReference(followersPosts.value!![position].id).setValue(++followersPosts.value!![position].numberOfDislikes)
-//    fun removeLike(position:Int) = DatabaseReferenceRetriever.postNumberOfLikesReference(followersPosts.value!![position].id).setValue(--followersPosts.value!![position].numberOfLikes)
-    fun addLike(position: Int){
+    fun addLike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfLikes++
-        DatabaseReferenceRetriever.postNumberOfLikesReference(post.id).setValue(post.numberOfLikes)
+        postsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
     }
 
     fun addDislike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfDislikes++
-        DatabaseReferenceRetriever.postNumberOfDislikesReference(post.id).setValue(post.numberOfDislikes)
+        postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
     }
 
     fun removeLike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfLikes--
-        DatabaseReferenceRetriever.postNumberOfLikesReference(post.id).setValue(post.numberOfLikes)
+        postsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
     }
 
-    fun removeDislike(position:Int){
+    fun removeDislike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfDislikes--
-        DatabaseReferenceRetriever.postNumberOfDislikesReference(post.id).setValue(post.numberOfDislikes)
+        postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
     }
 
 

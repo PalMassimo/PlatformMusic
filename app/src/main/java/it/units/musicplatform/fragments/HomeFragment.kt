@@ -17,6 +17,7 @@ import it.units.musicplatform.enumerations.PreferenceOperation
 import it.units.musicplatform.utilities.PreferenceOperationParser
 import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
+import it.units.musicplatform.viewmodels.factories.FollowersPostsViewModelFactory
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
 
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         userViewModel = ViewModelProvider(requireActivity(), UserViewModelFactory(userId)).get(UserViewModel::class.java)
-        followersPostsViewModel = ViewModelProviders.of(requireActivity()).get(FollowersPostsViewModel::class.java)
+        followersPostsViewModel = ViewModelProviders.of(requireActivity(), FollowersPostsViewModelFactory(userId)).get(FollowersPostsViewModel::class.java)
 
     }
 
