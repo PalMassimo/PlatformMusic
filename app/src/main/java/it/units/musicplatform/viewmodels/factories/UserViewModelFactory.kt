@@ -13,7 +13,7 @@ class UserViewModelFactory(private val userId: String): ViewModelProvider.Factor
         if(modelClass.isAssignableFrom(UserViewModel::class.java)){
             return UserViewModel(userId) as T
         }
-        throw IllegalArgumentException("View model class not found")
+        throw IllegalArgumentException("User View model class not found")
     }
 
 }

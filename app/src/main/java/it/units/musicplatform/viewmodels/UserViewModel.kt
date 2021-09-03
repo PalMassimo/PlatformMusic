@@ -1,20 +1,18 @@
 package it.units.musicplatform.viewmodels
 
-import androidx.lifecycle.*
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UserRepository
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
-private val USER_ID = FirebaseAuth.getInstance().currentUser!!.uid
-
-//class UserViewModel(val userId : String) : ViewModel() {
-//class UserViewModel : ViewModel() {
-
-class UserViewModel(val userId: String): ViewModel(){
-    private val userRepository = UserRepository(USER_ID)
+class UserViewModel(val userId: String) : ViewModel() {
+    private val userRepository = UserRepository(userId)
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
 //    private val _following = MutableLiveData<Set<String>>()
@@ -26,6 +24,8 @@ class UserViewModel(val userId: String): ViewModel(){
 
 
     init {
+//        _user.value = User()
+//        _posts.value = ArrayList()
         viewModelScope.launch {
             _user.postValue(userRepository.getUser())
             _posts.postValue(userRepository.getPosts())
@@ -33,16 +33,10 @@ class UserViewModel(val userId: String): ViewModel(){
         }
     }
 
-    private fun refreshPosts() = viewModelScope.launch { _posts.postValue(userRepository.getPosts()) }
+
     private fun refreshUser() = viewModelScope.launch { _user.postValue(userRepository.getUser()) }
 
-    fun addPost(post: Post) {
-        viewModelScope.launch {
-            userRepository.addPost(post)
-            //improve: I should add the post to the LiveData and notify it
-            refreshPosts()
-        }
-    }
+
 
     fun addFollowing(followingId: String) {
         userRepository.addFollowing(followingId)
@@ -84,12 +78,27 @@ class UserViewModel(val userId: String): ViewModel(){
         removeDislike(postId, numberOfDislikes)
     }
 
-    fun deletePost(postId: String) {
-        userRepository.deletePost(postId)
+    fun addPost(post: Post) {
+        viewModelScope.launch {
+            userRepository.addPost(post)
+            posts.value!!.add(post)
+            //improve: I should add the post to the LiveData and notify it
+            _posts.value = _posts.value
+        }
     }
 
-    fun updatePost(post: Post) {
-        userRepository.updatePost(post)
+    fun updatePost(position: Int, songName: String?, artistName: String?, coverDownloadString: String?) {
+
+        songName?.let { posts.value!!.get(position).songName = it }
+        artistName?.let { posts.value!!.get(position).artistName = it }
+        coverDownloadString?.let { posts.value!!.get(position).songPictureDownloadString = it }
+
+        userRepository.updatePost(posts.value!!.get(position).id, songName, artistName, coverDownloadString)
+    }
+
+    fun deletePost(id: String) {
+        userRepository.deletePost(id)
+        posts.value!!.removeIf { post -> post.id == id }
     }
 
 

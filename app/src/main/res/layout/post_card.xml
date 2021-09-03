@@ -4,6 +4,10 @@
 
     <data>
 
+        <variable
+            name="postViewModel"
+            type="it.units.musicplatform.viewmodels.PostsViewModel" />
+
         <import type="it.units.musicplatform.utilities.SongTime" />
 
     </data>
@@ -123,6 +127,7 @@
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+<!--                    android:text="@{postViewModel.posts.songName}"-->
 
                 <TextView
                     android:id="@+id/artistTextView"
@@ -131,6 +136,7 @@
                     android:padding="10dp"
                     android:textAlignment="center"
                     android:textSize="20sp" />
+<!--                    android:text="@{postViewModel.posts.artistName}"-->
 
 
             </LinearLayout>
@@ -156,6 +162,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:textAlignment="textStart" />
+<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfLikes)}"-->
 
                 <ImageButton
                     android:id="@+id/dislikeImageButton"
@@ -172,6 +179,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:textAlignment="textStart" />
+<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfDislikes)}"-->
 
                 <ImageButton
                     android:id="@+id/downloadImageButton"
@@ -188,6 +196,7 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:textAlignment="textStart" />
+<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfDownloads)}"-->
 
             </LinearLayout>
 

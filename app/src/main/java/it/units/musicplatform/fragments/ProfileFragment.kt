@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -53,8 +52,8 @@ class ProfileFragment : Fragment() {
             StorageReferenceRetriever.userImageReference(userId).putFile(uri)
             requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
         }
-
         binding.profileImageView.setOnClickListener { newProfileImageLauncher.launch("image/*") }
+
         GlideApp.with(requireContext()).load(StorageReferenceRetriever.userImageReference(userId)).skipMemoryCache(true).into(binding.profileImageView)
 
         setUpRecyclerView()
@@ -64,43 +63,39 @@ class ProfileFragment : Fragment() {
     private fun setFragmentResultListeners() {
         setFragmentResultListener("post_operation") { _, bundle ->
 
-            val elementPosition = bundle.getInt("position")
+            val position = bundle.getInt("position")
 
             when (bundle.get("operation")) {
-                "edit" -> EditPostDialogFragment.newInstance(adapter.userPosts[elementPosition], elementPosition).run { show(this@ProfileFragment.parentFragmentManager, tag) }
-                "delete" -> deletePost(elementPosition)
+                "edit" -> EditPostDialogFragment.newInstance(userViewModel.posts.value!![position], position).run { show(this@ProfileFragment.parentFragmentManager, tag) }
+                "delete" -> deletePost(position)
                 else -> Toast.makeText(context, "Asked for unknown operation", Toast.LENGTH_LONG).show()
             }
 
         }
 
         setFragmentResultListener("updated_post") { _, bundle ->
-
-            val elementPosition = bundle.getInt("element_position")
-
-            val post = adapter.userPosts[elementPosition].apply {
-                bundle.getString("songName")?.let { songName = it }
-                bundle.getString("artistName")?.let { artistName = it }
-                bundle.getString("coverDownloadString")?.let { songPictureDownloadString = it }
-            }
-
-            adapter.notifyItemChanged(elementPosition)
-            userViewModel.updatePost(post)
-
+            val postPosition = bundle.getInt("element_position")
+            userViewModel.updatePost(postPosition, bundle.getString("songName"), bundle.getString("artistName"), bundle.getString("coverDownloadString"))
+            adapter.notifyItemChanged(postPosition)
         }
     }
 
-
     private fun setUpRecyclerView() {
-        adapter = if (userViewModel.posts.value != null) UserPostsAdapter(this, userViewModel.posts.value!!) else UserPostsAdapter(this, ArrayList())
+
+        adapter = UserPostsAdapter(this, userViewModel.user.value!!.posts.keys.toList(), userViewModel.posts.value!!)
         binding.userPostsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.userPostsRecyclerView.adapter = adapter
-        userViewModel.posts.observe(viewLifecycleOwner, { adapter.userPosts = userViewModel.posts.value!! })
+        userViewModel.posts.observe(requireActivity(), {
+            adapter.posts = userViewModel.posts.value!!
+            adapter.postsIds = userViewModel.user.value!!.posts.keys.toList()
+            adapter.notifyDataSetChanged()
+        })
+
     }
 
-    private fun deletePost(elementPosition: Int) {
-        adapter.removeElementAtPosition(elementPosition)
-        userViewModel.deletePost(adapter.userPosts[elementPosition].id)
+    private fun deletePost(position: Int) {
+        userViewModel.deletePost(adapter.posts[position].id)
+        adapter.notifyItemRemoved(position)
     }
 
     override fun onDestroyView() {

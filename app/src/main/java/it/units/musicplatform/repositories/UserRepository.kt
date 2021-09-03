@@ -9,7 +9,7 @@ import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
-class UserRepository(val userId: String) {
+class UserRepository(private val userId: String) {
 
     suspend fun getUser() = DatabaseReferenceRetriever.userReference(userId).get().await().getValue(User::class.java)
 
@@ -30,6 +30,12 @@ class UserRepository(val userId: String) {
         val addPostTask = DatabaseReferenceRetriever.postReference(post.id).setValue(post)
         val addUserPostTask = DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
         Tasks.whenAll(addPostTask, addUserPostTask).await()
+    }
+
+    fun updatePost(id: String, songName: String?, artistName: String?, coverDownloadString: String?) {
+        songName?.let { DatabaseReferenceRetriever.postSongNameReference(id).setValue(it) }
+        artistName?.let { DatabaseReferenceRetriever.postArtistNameReference(id).setValue(it) }
+        coverDownloadString?.let { DatabaseReferenceRetriever.postCoverDownloadString(id).setValue(it) }
     }
 
     fun addFollowing(followingId: String) {
@@ -66,12 +72,8 @@ class UserRepository(val userId: String) {
         DatabaseReferenceRetriever.userPostReference(userId, postId).removeValue()
         DatabaseReferenceRetriever.postReference(postId).removeValue()
 
-        StorageReferenceRetriever.songReference(userId, postId)
-        StorageReferenceRetriever.coverReference(userId, postId)
-    }
-
-    fun updatePost(post: Post) {
-        DatabaseReferenceRetriever.postReference(post.id).setValue(post)
+        StorageReferenceRetriever.songReference(userId, postId).delete()
+        StorageReferenceRetriever.coverReference(userId, postId).delete()
     }
 
 

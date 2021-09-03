@@ -29,6 +29,9 @@ class DatabaseReferenceRetriever {
 
         fun postsReference() = POSTS_REFERENCE
         fun postReference(postId: String) = postsReference().child(postId)
+        fun postSongNameReference(postId: String) = postReference(postId).child("songName")
+        fun postArtistNameReference(postId: String) = postReference(postId).child("artistName")
+        fun postCoverDownloadString(postId: String) = postReference(postId).child("songPictureDownloadString")
         fun postNumberOfLikesReference(postId: String) = postReference(postId).child("numberOfLikes")
         fun postNumberOfDislikesReference(postId: String) = postReference(postId).child("numberOfDislikes")
         fun postNumberOfDownloads(postId: String) = postReference(postId).child("numberOfDownloads")

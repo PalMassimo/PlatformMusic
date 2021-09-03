@@ -42,9 +42,10 @@ class FollowersPostsViewModel : ViewModel() {
     }
 
     private fun fromPostSnapshotToPost(postsSnapshot: DataSnapshot) {
-        val post = postsSnapshot.getValue(Post::class.java)!!
-        postsList.add(post)
-        _followersPosts.value = postsList
+        postsSnapshot.getValue(Post::class.java)?.let {
+            postsList.add(it)
+            _followersPosts.value = postsList
+        }
     }
 
 
