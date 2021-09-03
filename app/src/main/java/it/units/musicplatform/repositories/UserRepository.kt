@@ -1,5 +1,7 @@
 package it.units.musicplatform.repositories
 
+import android.net.Uri
+import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
@@ -26,10 +28,22 @@ class UserRepository(private val userId: String) {
             .forEach { postsList.add(it!!) }
     }
 
-    suspend fun addPost(post: Post) {
-        val addPostTask = DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-        val addUserPostTask = DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
-        Tasks.whenAll(addPostTask, addUserPostTask).await()
+    suspend fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri): Post {
+
+        val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(localUriCover).continueWithTask {
+            it.result!!.storage.downloadUrl
+        }.continueWith { uriTask -> post.songFileDownloadString = uriTask.result.toString() }
+
+        val addSongTask = StorageReferenceRetriever.songReference(userId, post.id).putFile(localUriSong).continueWithTask {
+            it.result!!.storage.downloadUrl
+        }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.result.toString() }
+
+        Tasks.whenAllComplete(addCoverTask, addSongTask).continueWith {
+            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
+            DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
+        }.await()
+
+        return post
     }
 
     fun updatePost(id: String, songName: String?, artistName: String?, coverDownloadString: String?) {
@@ -53,17 +67,17 @@ class UserRepository(private val userId: String) {
 //        DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
     }
 
-    fun removeLike(postId: String, numberOfLikes: Int){
+    fun removeLike(postId: String, numberOfLikes: Int) {
         DatabaseReferenceRetriever.userLikeReference(userId, postId).removeValue()
         DatabaseReferenceRetriever.postNumberOfLikesReference(postId).setValue(numberOfLikes)
     }
 
-    fun addDislike(postId: String, numberOfDislikes: Int){
+    fun addDislike(postId: String, numberOfDislikes: Int) {
         DatabaseReferenceRetriever.userDislikeReference(userId, postId).setValue(true)
         DatabaseReferenceRetriever.postNumberOfDislikesReference(postId).setValue(numberOfDislikes)
     }
 
-    fun removeDislike(postId:String, numberOfDislikes: Int){
+    fun removeDislike(postId: String, numberOfDislikes: Int) {
         DatabaseReferenceRetriever.userDislikeReference(userId, postId).removeValue()
         DatabaseReferenceRetriever.postNumberOfDislikesReference(postId).setValue(numberOfDislikes)
     }

@@ -32,7 +32,7 @@ class AddPostActivity : AppCompatActivity() {
         binding = ActivityAddPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userId = FirebaseAuth.getInstance().currentUser!!.uid
+        userId = intent.getStringExtra("user_id")!!
 
         val coverLauncher = registerCoverLauncher()
 
@@ -40,7 +40,6 @@ class AddPostActivity : AppCompatActivity() {
         binding.shareButton.setOnClickListener { addPost() }
 
         songInfoLauncher().launch("audio/*")
-
 
     }
 
@@ -52,23 +51,17 @@ class AddPostActivity : AppCompatActivity() {
             songName = binding.songNameEditText.text.toString()
             numberOfSeconds = (milliseconds!! / 1000).toInt()
             numberOfDownloads = 0
-            songExtension = fileExtension!!
         }
 
-        val songReference = StorageReferenceRetriever.songReference(userId!!, post.id)
-        val coverReference = StorageReferenceRetriever.coverReference(userId!!, post.id)
+            val intent = Intent().apply {
+                putExtra("post", post)
+                putExtra("localUriCover", localUriCover.toString())
+                putExtra("localUriSong", localUriSong.toString())
+            }
 
-        val songUploadTask = songReference.putFile(localUriSong!!).continueWithTask { songReference.downloadUrl }
-        val coverUploadTask = coverReference.putFile(localUriCover!!).continueWithTask { coverReference.downloadUrl }
-        Tasks.whenAllSuccess<Any>(songUploadTask, coverUploadTask).addOnSuccessListener {
-            post.songFileDownloadString = it[0].toString()
-            post.songPictureDownloadString = it[1].toString()
-
-            val intent = Intent().apply { putExtra("post", post) }
             setResult(RESULT_OK, intent)
 
             this.finish()
-        }
 
     }
 

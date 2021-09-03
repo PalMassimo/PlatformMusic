@@ -3,6 +3,7 @@ package it.units.musicplatform.activities
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
+import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
@@ -48,7 +50,8 @@ class MainActivity : AppCompatActivity() {
 
         menu?.let {
             it.findItem(R.id.addPostMenuItem).setOnMenuItemClickListener {
-                addPostLauncher.launch(Intent(this, AddPostActivity::class.java))
+                val intent = Intent(this, AddPostActivity::class.java).putExtra("user_id", userId)
+                addPostLauncher.launch(intent)
                 return@setOnMenuItemClickListener true
             }
             it.findItem(R.id.logoutMenuItem).setOnMenuItemClickListener {
@@ -82,7 +85,9 @@ class MainActivity : AppCompatActivity() {
     private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
             val post = it.data!!.extras!!.get("post") as Post
-            userViewModel.addPost(post)
+            val localUriCover = it.data!!.extras!!.get("localUriCover") as String
+            val localUriSong = it.data!!.extras!!.get("localUriSong") as String
+            userViewModel.addPost(post, Uri.parse(localUriSong), Uri.parse(localUriCover))
         }
     }
 

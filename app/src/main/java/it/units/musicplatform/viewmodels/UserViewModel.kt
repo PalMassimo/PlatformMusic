@@ -1,5 +1,6 @@
 package it.units.musicplatform.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,8 +24,8 @@ class UserViewModel(val userId: String) : ViewModel() {
 
 
     init {
-//        _user.value = User()
-//        _posts.value = ArrayList()
+        _user.value = User()
+        _posts.value = ArrayList()
         viewModelScope.launch {
             _user.postValue(userRepository.getUser())
             _posts.postValue(userRepository.getPosts())
@@ -32,19 +33,16 @@ class UserViewModel(val userId: String) : ViewModel() {
         }
     }
 
-
-    private fun refreshUser() = viewModelScope.launch { _user.postValue(userRepository.getUser()) }
-
-
+//    private fun refreshUser() = viewModelScope.launch { _user.postValue(userRepository.getUser()) }
 
     fun addFollowing(followingId: String) {
         userRepository.addFollowing(followingId)
-        refreshUser()
+        _user.value = _user.value
     }
 
     fun removeFollowing(followingId: String) {
         userRepository.removeFollowing(followingId)
-        refreshUser()
+        _user.value = _user.value
     }
 
     fun addLike(postId: String) {
@@ -67,11 +65,10 @@ class UserViewModel(val userId: String) : ViewModel() {
         userRepository.removeDislike(postId, numberOfDislikes)
     }
 
-    fun addPost(post: Post) {
+    fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri) {
         viewModelScope.launch {
-            userRepository.addPost(post)
+            userRepository.addPost(post, localUriSong, localUriCover)
             posts.value!!.add(post)
-            //improve: I should add the post to the LiveData and notify it
             _posts.value = _posts.value
         }
     }
@@ -89,7 +86,6 @@ class UserViewModel(val userId: String) : ViewModel() {
         userRepository.deletePost(id)
         posts.value!!.removeIf { post -> post.id == id }
     }
-
 
 
 }

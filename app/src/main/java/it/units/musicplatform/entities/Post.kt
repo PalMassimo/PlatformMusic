@@ -10,7 +10,6 @@ data class Post (
     var songName: String = "",
     var artistName: String = "",
     var uploaderId: String = "",
-    var songExtension: String = "",
     var numberOfLikes: Int = 0,
     var numberOfSeconds: Int = 0,
     var numberOfDislikes: Int = 0,
