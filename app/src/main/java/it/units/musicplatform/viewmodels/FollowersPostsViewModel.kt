@@ -19,18 +19,18 @@ class FollowersPostsViewModel : ViewModel() {
     val followersPosts: LiveData<List<Post>> = _followersPosts
 
     init {
+        _followersPosts.value = ArrayList()
         loadPosts()
     }
 
     private fun loadPosts() {
+
+        //TODO: replace addOnSuccessListener with continueWith
         DatabaseReferenceRetriever.userReference(userId).get()
             .addOnSuccessListener {
                 it.getValue(User::class.java)?.following?.keys?.stream()
-                    ?.map {
-                        DatabaseReferenceRetriever.userPostsReference(it).get()
-                    }?.forEach {
-                        it.addOnSuccessListener { fromFollowersPostsToPost(it) }
-                    }
+                    ?.map { followingId -> DatabaseReferenceRetriever.userPostsReference(followingId).get() }
+                    ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
             }
     }
 
@@ -42,10 +42,15 @@ class FollowersPostsViewModel : ViewModel() {
     }
 
     private fun fromPostSnapshotToPost(postsSnapshot: DataSnapshot) {
-        postsSnapshot.getValue(Post::class.java)?.let {
-            postsList.add(it)
+        postsSnapshot.getValue(Post::class.java)?.let { post ->
+            postsList.add(post)
             _followersPosts.value = postsList
         }
+    }
+
+    fun incrementNumberOfDownloads(position: Int) {
+        val post = followersPosts.value!![position]
+        DatabaseReferenceRetriever.postNumberOfDownloads(post.id).setValue(++post.numberOfDownloads)
     }
 
 

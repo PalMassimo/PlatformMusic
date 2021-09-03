@@ -31,13 +31,11 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
     }
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
-        val post = followersPostsList[position]
-
-        setUpCardView(post, holder.binding)
-        setUpCardListeners(post, holder.binding, position)
+        setUpCardView(position, holder.binding)
+        setUpCardListeners(holder.binding, position)
     }
 
-    private fun likeAndDislikeImagesButtonListenersCallback(binding: PostCardBinding, post: Post, preference: Preference) {
+    private fun onPreferenceChange(binding: PostCardBinding, post: Post, preference: Preference) {
         when (PreferenceOperationParser.changePreference(preference, post.id, homeFragment.userViewModel.user.value!!.likes, homeFragment.userViewModel.user.value!!.dislikes)) {
             ADD_LIKE -> homeFragment.userViewModel.addLike(post.id, ++post.numberOfLikes)
             REMOVE_LIKE -> homeFragment.userViewModel.removeLike(post.id, --post.numberOfLikes)
@@ -46,25 +44,28 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
             FROM_LIKE_TO_DISLIKE -> homeFragment.userViewModel.fromLikeToDislike(post.id, --post.numberOfLikes, ++post.numberOfDislikes)
             FROM_DISLIKE_TO_LIKE -> homeFragment.userViewModel.fromDislikeToLike(post.id, ++post.numberOfLikes, --post.numberOfDislikes)
         }
+
         binding.numberOfLikesTextView.text = post.numberOfLikes.toString()
         binding.numberOfDislikesTextView.text = post.numberOfDislikes.toString()
         setLikeAndDislikeButton(binding, post.id)
     }
 
 
-    private fun setUpCardListeners(post: Post, binding: PostCardBinding, position: Int) {
+    private fun setUpCardListeners(binding: PostCardBinding, position: Int) {
+
+        val post = followersPostsList[position]
 
         binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
 
-        binding.likeImageButton.setOnClickListener { likeAndDislikeImagesButtonListenersCallback(binding, post, Preference.LIKE) }
+        binding.likeImageButton.setOnClickListener { onPreferenceChange(binding, post, Preference.LIKE) }
 
-        binding.dislikeImageButton.setOnClickListener { likeAndDislikeImagesButtonListenersCallback(binding, post, Preference.DISLIKE) }
+        binding.dislikeImageButton.setOnClickListener { onPreferenceChange(binding, post, Preference.DISLIKE) }
 
 
         binding.downloadImageButton.setOnClickListener{ downloadView ->
             val songDownloader = SongDownloader(downloadView.context, post)
             songDownloader.download()
-            //TODO: set numberOf Downloads
+            homeFragment.updateNumberOfDownloads(position)
         }
     }
 
@@ -94,22 +95,22 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(postId)) R.color.white else R.color.black)
     }
 
-    private fun setUpCardView(post: Post, binding: PostCardBinding) {
+    private fun setUpCardView(position: Int, binding: PostCardBinding) {
+
+        val post = followersPostsList[position]
+
         //TODO: questo non dovrebbe stare qui...
         DatabaseReferenceRetriever.userReference(post.uploaderId).get().addOnSuccessListener {
             binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.fullName
         }
 
         setLikeAndDislikeButton(binding, post.id)
-        binding.songTextView.text = post.songName
-        binding.artistTextView.text = post.artistName
-        binding.numberOfLikesTextView.text = post.numberOfLikes.toString()
-        binding.numberOfDislikesTextView.text = post.numberOfDislikes.toString()
-        binding.numberOfDownloadsTextView.text = post.numberOfDownloads.toString()
-        binding.songDurationTextView.text = SongTime.toString(post.numberOfSeconds.toLong())
+        binding.post = post
 
-        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id)).into(binding.songPictureImageView)
-        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(post.uploaderId)).into(binding.uploaderPictureImageView)
+        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
+            .into(binding.songPictureImageView)
+        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(post.uploaderId))
+            .into(binding.uploaderPictureImageView)
 
         binding.seekBar.max = post.numberOfSeconds
     }
@@ -125,7 +126,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
                 override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     if (fromUser) {
-                        mediaPlayerManager.mediaPlayer.seekTo(progress * 1000);
+                        mediaPlayerManager.mediaPlayer.seekTo(progress * 1000)
                         songTime.setSongTime(progress)
                         binding.songTimeTextView.text = songTime.toString()
                     }

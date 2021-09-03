@@ -4,6 +4,11 @@
 
     <data>
 
+        <import type="it.units.musicplatform.utilities.SongTime" />
+
+        <variable
+            name="post"
+            type="it.units.musicplatform.entities.Post" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -102,6 +107,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
+                    android:text="@{SongTime.toString(post.numberOfSeconds)}"
                     android:gravity="center_horizontal"
                     app:layout_constraintEnd_toEndOf="@+id/seekBar"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar"
@@ -118,19 +124,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:text="@{post.songName}"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-<!--                    android:text="@{postViewModel.posts.songName}"-->
 
                 <TextView
                     android:id="@+id/artistTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:text="@{post.artistName}"
                     android:textAlignment="center"
                     android:textSize="20sp" />
-<!--                    android:text="@{postViewModel.posts.artistName}"-->
 
 
             </LinearLayout>
@@ -155,8 +161,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="@{Integer.toString(post.numberOfLikes)}"
                     android:textAlignment="textStart" />
-<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfLikes)}"-->
 
                 <ImageButton
                     android:id="@+id/dislikeImageButton"
@@ -172,8 +178,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="@{Integer.toString(post.numberOfDislikes)}"
                     android:textAlignment="textStart" />
-<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfDislikes)}"-->
 
                 <ImageButton
                     android:id="@+id/downloadImageButton"
@@ -189,8 +195,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
+                    android:text="@{Integer.toString(post.numberOfDownloads)}"
                     android:textAlignment="textStart" />
-<!--                    android:text="@{Integer.toString(postViewModel.posts.numberOfDownloads)}"-->
 
             </LinearLayout>
 

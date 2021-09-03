@@ -24,13 +24,13 @@ class HomeFragment : Fragment() {
 
     private lateinit var adapter: FollowersPostsAdapter
     lateinit var userViewModel: UserViewModel
-    private lateinit var followersPostsViewModel: FollowersPostsViewModel
+    lateinit var followersPostsViewModel: FollowersPostsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         userViewModel = ViewModelProvider(requireActivity(), UserViewModelFactory(userId)).get(UserViewModel::class.java)
-        followersPostsViewModel = ViewModelProviders.of(this).get(FollowersPostsViewModel::class.java)
+        followersPostsViewModel = ViewModelProviders.of(requireActivity()).get(FollowersPostsViewModel::class.java)
 
     }
 
@@ -48,8 +48,8 @@ class HomeFragment : Fragment() {
 
     private fun setUpRecyclerView() {
 
-        adapter = FollowersPostsAdapter(this, binding.followersPostsRecyclerView, if (followersPostsViewModel.followersPosts.value == null) ArrayList() else followersPostsViewModel.followersPosts.value!!)
-        adapter.notifyDataSetChanged()
+        adapter = FollowersPostsAdapter(this, binding.followersPostsRecyclerView, followersPostsViewModel.followersPosts.value!!)
+//        adapter.notifyDataSetChanged()
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
         followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(followersPostsViewModel.followersPosts.value!!) })
@@ -58,6 +58,11 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun updateNumberOfDownloads(position: Int) {
+        followersPostsViewModel.incrementNumberOfDownloads(position)
+        adapter.notifyItemChanged(position)
     }
 
 }
