@@ -8,14 +8,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class EditPostDialogFragment : DialogFragment() {
 
@@ -46,42 +43,32 @@ class EditPostDialogFragment : DialogFragment() {
         binding.artistNameEditText.setText(post.artistName)
         GlideApp.with(requireContext()).load(StorageReferenceRetriever.coverReference(userId, post.id)).into(binding.coverImageView)
 
-        return AlertDialog.Builder(requireContext()).create().apply {
+        val builder = AlertDialog.Builder(requireContext()).apply {
             setView(binding.root)
-            setTitle("Edit Post Dialog")
-            setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel") { _, _ -> }
-            setButton(AlertDialog.BUTTON_POSITIVE, "Confirm") { _, _ ->
-                lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
-            }
-            show()
-            getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                lifecycleScope.launch { editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString()) }
+            setTitle("Edit your post")
+            setNegativeButton("Cancel") { _, _ -> }
+            setPositiveButton("Confirm") { _, _ ->
+                editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString())
             }
         }
+
+        return builder.create()
 
     }
 
 
-    private suspend fun editPost(songName: String, artistName: String) {
+    private fun editPost(songName: String, artistName: String) {
         post.songName = songName
         post.artistName = artistName
-        localImageUri?.let {
-            StorageReferenceRetriever.coverReference(userId, post.id).putFile(it).continueWithTask {
-                StorageReferenceRetriever.coverReference(userId, post.id).downloadUrl
-            }.continueWith { uriTask ->
-                post.songPictureDownloadString = uriTask.result.toString()
-            }.await()
-        }
 
         Bundle().run {
             putString("songName", post.songName)
             putString("artistName", post.artistName)
-            putString("coverDownloadString", post.songPictureDownloadString)
+            putString("localUriCover", localImageUri?.toString())
             putInt("element_position", elementPosition!!)
             setFragmentResult("updated_post", this)
             dismiss()
         }
-
 
     }
 

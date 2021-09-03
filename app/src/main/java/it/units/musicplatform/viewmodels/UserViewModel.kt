@@ -33,8 +33,6 @@ class UserViewModel(val userId: String) : ViewModel() {
         }
     }
 
-//    private fun refreshUser() = viewModelScope.launch { _user.postValue(userRepository.getUser()) }
-
     fun addFollowing(followingId: String) {
         userRepository.addFollowing(followingId)
         _user.value = _user.value
@@ -73,13 +71,12 @@ class UserViewModel(val userId: String) : ViewModel() {
         }
     }
 
-    fun updatePost(position: Int, songName: String?, artistName: String?, coverDownloadString: String?) {
+    fun updatePost(position: Int, songName: String?, artistName: String?, localUriCover: String?) {
 
-        songName?.let { posts.value!!.get(position).songName = it }
-        artistName?.let { posts.value!!.get(position).artistName = it }
-        coverDownloadString?.let { posts.value!!.get(position).songPictureDownloadString = it }
-
-        userRepository.updatePost(posts.value!!.get(position).id, songName, artistName, coverDownloadString)
+        var post = posts.value!!.get(position)
+        viewModelScope.launch {
+            post = userRepository.updatePost(post, songName, artistName, localUriCover)
+        }
     }
 
     fun deletePost(id: String) {

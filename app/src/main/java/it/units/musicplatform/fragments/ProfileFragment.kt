@@ -75,8 +75,8 @@ class ProfileFragment : Fragment() {
 
         setFragmentResultListener("updated_post") { _, bundle ->
             val postPosition = bundle.getInt("element_position")
-            userViewModel.updatePost(postPosition, bundle.getString("songName"), bundle.getString("artistName"), bundle.getString("coverDownloadString"))
-            adapter.notifyItemChanged(postPosition)
+            userViewModel.updatePost(postPosition, bundle.getString("songName"), bundle.getString("artistName"), bundle.getString("localUriCover"))
+            adapter.notifyItemChanged(postPosition) //useless?
         }
     }
 

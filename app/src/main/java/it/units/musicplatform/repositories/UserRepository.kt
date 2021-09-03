@@ -46,10 +46,21 @@ class UserRepository(private val userId: String) {
         return post
     }
 
-    fun updatePost(id: String, songName: String?, artistName: String?, coverDownloadString: String?) {
-        songName?.let { DatabaseReferenceRetriever.postSongNameReference(id).setValue(it) }
-        artistName?.let { DatabaseReferenceRetriever.postArtistNameReference(id).setValue(it) }
-        coverDownloadString?.let { DatabaseReferenceRetriever.postCoverDownloadString(id).setValue(it) }
+    //    fun updatePost(id: String, songName: String?, artistName: String?, coverDownloadString: String?) {
+    suspend fun updatePost(post: Post, songName: String?, artistName: String?, localUriCover: String?): Post {
+
+        localUriCover?.let { localUri ->
+            StorageReferenceRetriever.coverReference(post.uploaderId, post.id).putFile(Uri.parse(localUri)).continueWithTask {
+                it.result!!.storage.downloadUrl
+            }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.toString() }.await()
+        }
+
+        songName?.let { DatabaseReferenceRetriever.postSongNameReference(post.id).setValue(it) }
+        artistName?.let { DatabaseReferenceRetriever.postArtistNameReference(post.id).setValue(it) }
+
+        return post
+//        coverDownloadString?.let { DatabaseReferenceRetriever.postCoverDownloadString(id).setValue(it) }
+
     }
 
     fun addFollowing(followingId: String) {
