@@ -21,7 +21,6 @@ import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.fragments.AboutDialogFragment
 import it.units.musicplatform.viewmodels.UserViewModel
-import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,9 +36,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userId = intent.getStringExtra(getString(R.string.user_id))!!
-
-        userViewModel = ViewModelProvider(this, UserViewModelFactory(userId)).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        userId = userViewModel.userId
 
         navigationController = findNavController(R.id.fragment).also { binding.bottomNavigationView.setupWithNavController(it) }
 
@@ -50,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         menu?.let {
             it.findItem(R.id.addPostMenuItem).setOnMenuItemClickListener {
-                val intent = Intent(this, AddPostActivity::class.java).putExtra("user_id", userId)
+                val intent = Intent(this, AddPostActivity::class.java)//.putExtra("user_id", userId)
                 addPostLauncher.launch(intent)
                 return@setOnMenuItemClickListener true
             }

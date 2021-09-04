@@ -5,13 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UserRepository
 import kotlinx.coroutines.launch
 import kotlin.collections.set
 
-class UserViewModel(val userId: String) : ViewModel() {
+class UserViewModel : ViewModel() {
+    val userId = FirebaseAuth.getInstance().currentUser!!.uid
     private val userRepository = UserRepository(userId)
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()

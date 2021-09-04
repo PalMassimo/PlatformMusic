@@ -28,9 +28,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login(email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Intent(this, MainActivity::class.java)
-                    .apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), FirebaseAuth.getInstance().currentUser!!.uid) }) }
-                    .run { startActivity(this) }
+                startActivity(Intent(this, MainActivity::class.java))
             } else {
                 Toast.makeText(this, "Login failed, check credentials", Toast.LENGTH_SHORT).show()
             }

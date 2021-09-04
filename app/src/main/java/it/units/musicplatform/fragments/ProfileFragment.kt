@@ -11,17 +11,16 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
-import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private var userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+    private lateinit var userId: String
     private lateinit var adapter: UserPostsAdapter
     private lateinit var userViewModel: UserViewModel
 
@@ -40,7 +39,9 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userViewModel = ViewModelProvider(requireActivity(), UserViewModelFactory(userId)).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        userId = userViewModel.userId
+
         binding.userviewmodel = userViewModel
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->

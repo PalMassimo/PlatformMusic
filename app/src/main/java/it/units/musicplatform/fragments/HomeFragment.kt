@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.adapters.FollowersPostsAdapter
 import it.units.musicplatform.databinding.FragmentHomeBinding
 import it.units.musicplatform.entities.Post
@@ -18,14 +17,14 @@ import it.units.musicplatform.utilities.PreferenceOperationParser
 import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.FollowersPostsViewModelFactory
-import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+    private lateinit var userId: String
 
     private lateinit var adapter: FollowersPostsAdapter
     lateinit var userViewModel: UserViewModel
@@ -34,7 +33,8 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userViewModel = ViewModelProvider(requireActivity(), UserViewModelFactory(userId)).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        userId = userViewModel.userId
         followersPostsViewModel = ViewModelProviders.of(requireActivity(), FollowersPostsViewModelFactory(userId)).get(FollowersPostsViewModel::class.java)
 
     }
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
 
         val post = followersPostsViewModel.followersPosts.value!![position]
 
-        when (PreferenceOperationParser.changePreference(preference, post.id, userViewModel.user.value!!.likes,userViewModel.user.value!!.dislikes)) {
+        when (PreferenceOperationParser.changePreference(preference, post.id, userViewModel.user.value!!.likes, userViewModel.user.value!!.dislikes)) {
             PreferenceOperation.ADD_LIKE -> addLike(post, position)
             PreferenceOperation.REMOVE_LIKE -> removeLike(post, position)
             PreferenceOperation.ADD_DISLIKE -> addDislike(post, position)
