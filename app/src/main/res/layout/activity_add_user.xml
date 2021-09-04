@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="30dp"
+    android:padding="30dp"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".activities.AddUserActivity">
@@ -15,7 +15,7 @@
         android:fontFamily="sans-serif-black"
         android:text="@string/app_name"
         android:textAlignment="center"
-        android:textSize="50sp"
+        android:textSize="45sp"
         android:textStyle="bold" />
 
     <TextView
