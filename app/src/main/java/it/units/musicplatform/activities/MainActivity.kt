@@ -81,12 +81,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK && it.data?.extras?.get("post") != null) {
-            val post = it.data!!.extras!!.get("post") as Post
-            val localUriCover = it.data!!.extras!!.get("localUriCover") as String
-            val localUriSong = it.data!!.extras!!.get("localUriSong") as String
-            userViewModel.addPost(post, Uri.parse(localUriSong), Uri.parse(localUriCover))
+    private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult.resultCode == RESULT_OK /*&& it.data?.extras?.get("post") != null*/) {
+            activityResult.data?.extras?.let { bundle ->
+                val post = bundle.get("post") as Post
+                val localUriCover = bundle.get("localUriCover") as String?
+                val localUriSong = bundle.get("localUriSong") as String
+                userViewModel.addPost(post, Uri.parse(localUriSong), Uri.parse(localUriCover))
+            }
+        } else if (activityResult.resultCode == RESULT_CANCELED) {
+            activityResult.data?.extras?.getString("message")?.let { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
