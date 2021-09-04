@@ -98,8 +98,6 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
     inner class PostHolder(val binding: PostCardBinding) : RecyclerView.ViewHolder(binding.root) {
 
-//        fun formatSongTime(seconds: Int) = String.format("%02d:%02d", seconds / 60, seconds % 60)
-
         init {
             binding.seekBar.setOnSeekBarChangeListener(object :
                 SeekBar.OnSeekBarChangeListener {

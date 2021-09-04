@@ -53,7 +53,6 @@ class ProfileFragment : Fragment() {
         binding.profileImageView.setOnClickListener { newProfileImageLauncher.launch("image/*") }
         PictureLoader.loadProfilePicture(requireContext(), binding.profileImageView, userId)
 
-
         setUpRecyclerView()
 
     }
@@ -72,8 +71,10 @@ class ProfileFragment : Fragment() {
         }
 
         setFragmentResultListener("updated_post") { _, bundle ->
-            val postPosition = bundle.getInt("element_position")
-            userViewModel.updatePost(postPosition, bundle.getString("songName"), bundle.getString("artistName"), bundle.getString("localUriCover"))
+            bundle.let {
+                val postPosition = it.getInt("element_position")
+                userViewModel.updatePost(postPosition, it.getString("songName"), it.getString("artistName"), it.getString("localUriCover"))
+            }
         }
     }
 

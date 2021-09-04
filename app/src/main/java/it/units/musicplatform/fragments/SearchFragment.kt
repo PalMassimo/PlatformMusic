@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.adapters.UsersAdapter
 import it.units.musicplatform.databinding.FragmentSearchBinding
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.UsersSearchedViewModel
+import it.units.musicplatform.viewmodels.factories.UsersSearchedViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -26,10 +28,12 @@ class SearchFragment : Fragment() {
     private lateinit var usersSearchedViewModel: UsersSearchedViewModel
     private lateinit var userViewModel: UserViewModel
 
+    private val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        usersSearchedViewModel = ViewModelProviders.of(this).get(UsersSearchedViewModel::class.java)
+        usersSearchedViewModel = ViewModelProviders.of(this, UsersSearchedViewModelFactory(userId)).get(UsersSearchedViewModel::class.java)
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
     }
 
