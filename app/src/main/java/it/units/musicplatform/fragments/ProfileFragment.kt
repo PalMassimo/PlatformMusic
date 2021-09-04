@@ -12,11 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import it.units.musicplatform.R
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
+import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +48,7 @@ class ProfileFragment : Fragment() {
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
+                //TODO: maybe one line of code?
                 binding.profileImageView.setImageURI(uri)
                 userViewModel.updateProfilePicture(it)
                 requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
@@ -56,12 +56,8 @@ class ProfileFragment : Fragment() {
         }
 
         binding.profileImageView.setOnClickListener { newProfileImageLauncher.launch("image/*") }
+        PictureLoader.loadProfilePicture(requireContext(), binding.profileImageView, userId)
 
-        GlideApp.with(requireContext())
-            .load(StorageReferenceRetriever.userImageReference(userId))
-            .skipMemoryCache(true)
-            .error(R.drawable.ic_profile)
-            .into(binding.profileImageView)
 
         setUpRecyclerView()
 
