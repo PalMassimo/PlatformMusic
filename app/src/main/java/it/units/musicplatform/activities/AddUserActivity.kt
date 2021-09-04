@@ -48,7 +48,7 @@ class AddUserActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val user = User(id = task.result!!.user!!.uid, email = email, fullName = username)
 
-                DatabaseReferenceRetriever.userReference(user.id).setValue(user).addOnCompleteListener { registerUserTask ->
+                DatabaseReferenceRetriever.user(user.id).setValue(user).addOnCompleteListener { registerUserTask ->
                     if (registerUserTask.isSuccessful) {
                         Toast.makeText(this@AddUserActivity, "User has been registered successfully", Toast.LENGTH_SHORT).show()
                         binding.progressBar.visibility = View.GONE

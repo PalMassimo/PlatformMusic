@@ -13,7 +13,7 @@ class UsersSearchedRepository(val userId: String) {
 
     suspend fun loadPopularUsers(): ArrayList<User> {
         val popularUsers = ArrayList<User>()
-        DatabaseReferenceRetriever.usersReference().orderByChild("numberOfLikes").limitToLast(5).get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
+        DatabaseReferenceRetriever.users().orderByChild("numberOfLikes").limitToLast(5).get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
             val usersDataSnapshot = usersDataSnapshotTask.result
             StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), false)
                 .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
@@ -29,7 +29,7 @@ class UsersSearchedRepository(val userId: String) {
 
         val resultUsers = ArrayList<User>()
 
-        DatabaseReferenceRetriever.usersReference().get().continueWith {usersDataSnapshotTask :Task<DataSnapshot> ->
+        DatabaseReferenceRetriever.users().get().continueWith { usersDataSnapshotTask :Task<DataSnapshot> ->
             StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), false)
                 .map{ userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
                 .filter { user: User? -> user?.fullName!!.toLowerCase(Locale.ROOT).contains(subName.toLowerCase(Locale.ROOT)) && user.id != userId }

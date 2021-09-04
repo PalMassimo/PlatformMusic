@@ -25,9 +25,9 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     private fun loadPosts() {
 
         //TODO: replace addOnSuccessListener with continueWith
-        DatabaseReferenceRetriever.userReference(userId).get().addOnSuccessListener {
+        DatabaseReferenceRetriever.user(userId).get().addOnSuccessListener {
             it.getValue(User::class.java)?.following?.keys?.stream()
-                ?.map { followingId -> DatabaseReferenceRetriever.userPostsReference(followingId).get() }
+                ?.map { followingId -> DatabaseReferenceRetriever.userPosts(followingId).get() }
                 ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
         }
     }
@@ -35,7 +35,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     private fun fromFollowersPostsToPost(postsSnapshot: DataSnapshot) {
         StreamSupport.stream(postsSnapshot.children.spliterator(), false)
             .map { it.key }
-            .map { DatabaseReferenceRetriever.postReference(it!!).get() }
+            .map { DatabaseReferenceRetriever.post(it!!).get() }
             .forEach { it.addOnSuccessListener { fromPostSnapshotToPost(it) } }
     }
 

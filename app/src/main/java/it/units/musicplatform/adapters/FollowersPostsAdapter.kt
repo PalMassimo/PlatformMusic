@@ -78,7 +78,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         val post = followersPostsList[position]
 
         //TODO: questo non dovrebbe stare qui...
-        DatabaseReferenceRetriever.userReference(post.uploaderId).get().addOnSuccessListener {
+        DatabaseReferenceRetriever.user(post.uploaderId).get().addOnSuccessListener {
             binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.fullName
         }
 

@@ -12,11 +12,11 @@ import java.util.stream.StreamSupport
 
 class UserRepository(private val userId: String) {
 
-    suspend fun getUser() = DatabaseReferenceRetriever.userReference(userId).get().await().getValue(User::class.java)
+    suspend fun getUser() = DatabaseReferenceRetriever.user(userId).get().await().getValue(User::class.java)
 
     suspend fun getPosts(): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        DatabaseReferenceRetriever.postsReference().get().continueWith { postsSnapshotTask ->
+        DatabaseReferenceRetriever.posts().get().continueWith { postsSnapshotTask ->
             StreamSupport.stream(postsSnapshotTask.result!!.children.spliterator(), false)
                 .map { it.getValue(Post::class.java) }
                 .filter { it!!.uploaderId == userId }
@@ -43,8 +43,8 @@ class UserRepository(private val userId: String) {
         tasks.add(addSongTask)
 
         Tasks.whenAllComplete(tasks).continueWith {
-            DatabaseReferenceRetriever.postReference(post.id).setValue(post)
-            DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
+            DatabaseReferenceRetriever.post(post.id).setValue(post)
+            DatabaseReferenceRetriever.userPost(post.uploaderId, post.id).setValue(true)
         }.await()
 
         return post
@@ -58,31 +58,31 @@ class UserRepository(private val userId: String) {
             }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.toString() }.await()
         }
 
-        songName?.let { DatabaseReferenceRetriever.postSongNameReference(post.id).setValue(it) }
-        artistName?.let { DatabaseReferenceRetriever.postArtistNameReference(post.id).setValue(it) }
+        songName?.let { DatabaseReferenceRetriever.postSongName(post.id).setValue(it) }
+        artistName?.let { DatabaseReferenceRetriever.postArtistName(post.id).setValue(it) }
 
         return post
 
     }
 
     fun addFollowing(followingId: String) {
-        DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).setValue(true)
-        DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).setValue(true)
+        DatabaseReferenceRetriever.userFollowing(userId).child(followingId).setValue(true)
+        DatabaseReferenceRetriever.userFollowers(followingId).child(userId).setValue(true)
     }
 
     fun removeFollowing(followingId: String) {
-        DatabaseReferenceRetriever.userFollowingReference(userId).child(followingId).removeValue()
-        DatabaseReferenceRetriever.userFollowersReference(followingId).child(userId).removeValue()
+        DatabaseReferenceRetriever.userFollowing(userId).child(followingId).removeValue()
+        DatabaseReferenceRetriever.userFollowers(followingId).child(userId).removeValue()
     }
 
-    fun addLike(postId: String) = DatabaseReferenceRetriever.userLikeReference(userId, postId).setValue(true)
-    fun removeLike(postId: String) = DatabaseReferenceRetriever.userLikeReference(userId, postId).removeValue()
-    fun addDislike(postId: String) = DatabaseReferenceRetriever.userDislikeReference(userId, postId).setValue(true)
-    fun removeDislike(postId: String) = DatabaseReferenceRetriever.userDislikeReference(userId, postId).removeValue()
+    fun addLike(postId: String) = DatabaseReferenceRetriever.userLike(userId, postId).setValue(true)
+    fun removeLike(postId: String) = DatabaseReferenceRetriever.userLike(userId, postId).removeValue()
+    fun addDislike(postId: String) = DatabaseReferenceRetriever.userDislike(userId, postId).setValue(true)
+    fun removeDislike(postId: String) = DatabaseReferenceRetriever.userDislike(userId, postId).removeValue()
 
     fun deletePost(postId: String) {
-        DatabaseReferenceRetriever.userPostReference(userId, postId).removeValue()
-        DatabaseReferenceRetriever.postReference(postId).removeValue()
+        DatabaseReferenceRetriever.userPost(userId, postId).removeValue()
+        DatabaseReferenceRetriever.post(postId).removeValue()
 
         StorageReferenceRetriever.songReference(userId, postId).delete()
         StorageReferenceRetriever.coverReference(userId, postId).delete()

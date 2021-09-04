@@ -53,7 +53,7 @@ class AddPostActivity : AppCompatActivity() {
 
     private fun addPost() {
         val post = Post().apply {
-            id = DatabaseReferenceRetriever.postsReference().push().key!!
+            id = DatabaseReferenceRetriever.posts().push().key!!
             uploaderId = userId!!
             artistName = binding.artistNameEditText.text.toString()
             songName = binding.songNameEditText.text.toString()

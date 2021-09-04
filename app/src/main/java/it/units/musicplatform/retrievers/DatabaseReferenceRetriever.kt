@@ -1,40 +1,49 @@
 package it.units.musicplatform.retrievers
 
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import it.units.musicplatform.entities.User
-import java.lang.ref.Reference
 
 private const val DATABASE_URL = "https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app/"
+private const val SONG_NAME_CHILD = "songName"
+private const val ARTIST_NAME_CHILD = "artistName"
+private const val FOLLOWERS_CHILD = "followers"
+private const val FOLLOWING_CHILD = "following"
+private const val LIKES_CHILD = "likes"
+private const val DISLIKES_CHILD = "dislikes"
+
+
+private const val POSTS_CHILD = "posts"
+private const val NUMBER_OF_LIKES = "numberOfLikes"
+private const val NUMBER_OF_DISLIKES = "numberOfDislikes"
+private const val NUMBER_OF_DOWNLOADS = "numberOfDownloads"
+
 private val DATABASE_REFERENCE = Firebase.database(DATABASE_URL).reference
-//private val USERS_REFERENCE = DATABASE_REFERENCE.child("Users")
+private val USERS_REFERENCE = DATABASE_REFERENCE.child("Users")
 private val POSTS_REFERENCE = DATABASE_REFERENCE.child("posts")
 
 
 class DatabaseReferenceRetriever {
 
-    companion object{
+    companion object {
 
-        fun usersReference() = DATABASE_REFERENCE.child("Users")
-        fun userReference(userId: String) = usersReference().child(userId)
-        fun userFollowersReference(userId: String) = userReference(userId).child("followers")
-        fun userFollowingReference(userId: String) = userReference(userId).child("following")
-        fun userLikesReference(userId: String) = userReference(userId).child("likes")
-        fun userLikeReference(userId: String, postId: String) = userLikesReference(userId).child(postId)
-        fun userDislikesReference(userId: String) = userReference(userId).child("dislikes")
-        fun userDislikeReference(userId: String, postId:String) = userDislikesReference(userId).child(postId)
-        fun userPostsReference(userId:String) = userReference(userId).child("posts")
-        fun userPostReference(userId: String, postId: String) = userPostsReference(userId).child(postId)
+        fun users() = USERS_REFERENCE
+        fun user(userId: String) = users().child(userId)
+        fun userFollowers(userId: String) = user(userId).child(FOLLOWERS_CHILD)
+        fun userFollowing(userId: String) = user(userId).child(FOLLOWING_CHILD)
+        fun userLikes(userId: String) = user(userId).child(LIKES_CHILD)
+        fun userLike(userId: String, postId: String) = userLikes(userId).child(postId)
+        fun userDislikes(userId: String) = user(userId).child(DISLIKES_CHILD)
+        fun userDislike(userId: String, postId: String) = userDislikes(userId).child(postId)
+        fun userPosts(userId: String) = user(userId).child(POSTS_CHILD)
+        fun userPost(userId: String, postId: String) = userPosts(userId).child(postId)
 
-        fun postsReference() = POSTS_REFERENCE
-        fun postReference(postId: String) = postsReference().child(postId)
-        fun postSongNameReference(postId: String) = postReference(postId).child("songName")
-        fun postArtistNameReference(postId: String) = postReference(postId).child("artistName")
-        fun postCoverDownloadString(postId: String) = postReference(postId).child("songPictureDownloadString")
-        fun postNumberOfLikesReference(postId: String) = postReference(postId).child("numberOfLikes")
-        fun postNumberOfDislikesReference(postId: String) = postReference(postId).child("numberOfDislikes")
-        fun postNumberOfDownloads(postId: String) = postReference(postId).child("numberOfDownloads")
+        fun posts() = POSTS_REFERENCE
+        fun post(postId: String) = posts().child(postId)
+        fun postSongName(postId: String) = post(postId).child(SONG_NAME_CHILD)
+        fun postArtistName(postId: String) = post(postId).child(ARTIST_NAME_CHILD)
+        fun postNumberOfLikes(postId: String) = post(postId).child(NUMBER_OF_LIKES)
+        fun postNumberOfDislikes(postId: String) = post(postId).child(NUMBER_OF_DISLIKES)
+        fun postNumberOfDownloads(postId: String) = post(postId).child(NUMBER_OF_DOWNLOADS)
 
 
     }
