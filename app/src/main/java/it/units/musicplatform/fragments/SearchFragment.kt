@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.units.musicplatform.adapters.UsersAdapter
 import it.units.musicplatform.databinding.FragmentSearchBinding
@@ -59,7 +60,7 @@ class SearchFragment : Fragment() {
 
     private fun performSearch() {
         adapter = UsersAdapter(ArrayList(), userViewModel.user.value?.following?.keys, this)
-        GlobalScope.launch(Dispatchers.Main) {
+        usersSearchedViewModel.viewModelScope.launch(Dispatchers.Main) {
             val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
             adapter.users = resultUsers
         }

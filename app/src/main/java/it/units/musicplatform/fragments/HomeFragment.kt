@@ -65,7 +65,9 @@ class HomeFragment : Fragment() {
     }
 
     fun changePreference(position: Int, preference: Preference) {
+
         val post = followersPostsViewModel.followersPosts.value!![position]
+
         when (PreferenceOperationParser.changePreference(preference, post.id, userViewModel.user.value!!.likes,userViewModel.user.value!!.dislikes)) {
             PreferenceOperation.ADD_LIKE -> addLike(post, position)
             PreferenceOperation.REMOVE_LIKE -> removeLike(post, position)
@@ -74,7 +76,9 @@ class HomeFragment : Fragment() {
             PreferenceOperation.FROM_LIKE_TO_DISLIKE -> fromLikeToDislike(post, position)
             PreferenceOperation.FROM_DISLIKE_TO_LIKE -> fromDislikeToLike(post, position)
         }
+
         adapter.notifyItemChanged(position)
+
     }
 
     fun updateNumberOfDownloads(position: Int) {

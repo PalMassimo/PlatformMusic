@@ -17,7 +17,6 @@ class SongDownloader(val context: Context, private val post: Post) {
         request.setTitle("Download song " + post.songName)
         request.setMimeType("audio")
         request.setDescription("downloading song...")
-//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS, post.songName)
         downloadManager.enqueue(request)

@@ -84,10 +84,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
         if (activityResult.resultCode == RESULT_OK) {
-            activityResult.data?.extras?.let { bundle ->
-                val post = bundle.get("post") as Post
-                val localUriCover = bundle.getString("localUriCover")
-                val localUriSong = bundle.getString("localUriSong")
+            activityResult.data?.extras?.let {
+                val post = it.get("post") as Post
+                val localUriCover = it.getString("localUriCover")
+                val localUriSong = it.getString("localUriSong")
                 userViewModel.addPost(post, Uri.parse(localUriSong), if(localUriCover == null) null else Uri.parse(localUriCover))
             }
         } else if (activityResult.resultCode == RESULT_CANCELED) {

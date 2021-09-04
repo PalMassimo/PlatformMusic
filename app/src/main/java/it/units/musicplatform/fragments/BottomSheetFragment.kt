@@ -15,16 +15,19 @@ private const val OPERATION = "operation"
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
+    private var _binding: FragmentBottomSheetBinding? = null
+    private val binding get() = _binding!!
+
+    private var _elementPosition: Int? = null
+    private val elementPosition get() = _elementPosition!!
+
     companion object {
         @JvmStatic
         fun newInstance(position: Int) = BottomSheetFragment().apply {
-            elementPosition = position
+            _elementPosition = position
         }
     }
 
-    private var _binding: FragmentBottomSheetBinding? = null
-    private val binding get() = _binding!!
-    private var elementPosition: Int? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
@@ -33,8 +36,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.editLayout.setOnClickListener { postOperationListener("edit", elementPosition!!) }
-        binding.deleteLayout.setOnClickListener { postOperationListener("delete", elementPosition!!) }
+        binding.editLayout.setOnClickListener { postOperationListener("edit", elementPosition) }
+        binding.deleteLayout.setOnClickListener { postOperationListener("delete", elementPosition) }
     }
 
     override fun onDestroy() {

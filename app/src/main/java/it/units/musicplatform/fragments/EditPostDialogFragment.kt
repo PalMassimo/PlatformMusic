@@ -8,11 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.utilities.PictureLoader
 
 class EditPostDialogFragment : DialogFragment() {
@@ -22,8 +19,11 @@ class EditPostDialogFragment : DialogFragment() {
     private var localImageUri: Uri? = null
     private var _binding: FragmentEditpostDialogBinding? = null
     private val binding get() = _binding!!
-    private val userId = FirebaseAuth.getInstance().currentUser!!.uid
-    private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) {uri->
+
+    private var _userId: String? = null
+    private val userId get() = _userId!!
+
+    private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             binding.coverImageView.setImageURI(uri)
             localImageUri = uri
@@ -32,9 +32,10 @@ class EditPostDialogFragment : DialogFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(post: Post, elementPosition: Int) = EditPostDialogFragment().apply {
+        fun newInstance(post: Post, elementPosition: Int, userId: String) = EditPostDialogFragment().apply {
             this.post = post
             this.elementPosition = elementPosition
+            this._userId = userId
         }
     }
 
