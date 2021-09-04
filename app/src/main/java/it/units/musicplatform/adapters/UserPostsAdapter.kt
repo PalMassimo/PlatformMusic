@@ -9,9 +9,11 @@ import it.units.musicplatform.fragments.BottomSheetFragment
 import it.units.musicplatform.fragments.ProfileFragment
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
+import it.units.musicplatform.utilities.PictureLoader
 
 
-class UserPostsAdapter(private val profileFragment: ProfileFragment, var postsIds: List<String>, var posts: ArrayList<Post>) : RecyclerView.Adapter<UserPostsAdapter.PostHolder>() {
+class UserPostsAdapter(private val profileFragment: ProfileFragment, var postsIds: List<String>, var posts: ArrayList<Post>) :
+    RecyclerView.Adapter<UserPostsAdapter.PostHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
@@ -23,10 +25,7 @@ class UserPostsAdapter(private val profileFragment: ProfileFragment, var postsId
 
         val post = posts[position]
         holder.binding.post = post
-        GlideApp.with(profileFragment.requireContext())
-            .load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
-            .into(holder.binding.songPictureImageView)
-
+        PictureLoader.loadCover(profileFragment.requireContext(), holder.binding.songPictureImageView, post.uploaderId, post.id)
 
         holder.itemView.setOnLongClickListener {
             BottomSheetFragment.newInstance(position).run { show(profileFragment.parentFragmentManager, tag) }

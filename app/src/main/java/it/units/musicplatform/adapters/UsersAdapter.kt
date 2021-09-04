@@ -8,8 +8,10 @@ import it.units.musicplatform.entities.User
 import it.units.musicplatform.fragments.SearchFragment
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
+import it.units.musicplatform.utilities.PictureLoader
 
-class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val searchFragment: SearchFragment) : RecyclerView.Adapter<UsersAdapter.UserHolder>() {
+class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val searchFragment: SearchFragment) :
+    RecyclerView.Adapter<UsersAdapter.UserHolder>() {
 
     var following: Set<String> = setOf()
     var users: ArrayList<User> = arrayListOf()
@@ -33,7 +35,7 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val
         val user = users[position]
 
         holder.binding.fullNameTextView.text = user.fullName
-        GlideApp.with(searchFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(user.id)).into(holder.binding.profileImageView)
+        PictureLoader.loadProfilePicture(searchFragment.requireContext(), holder.binding.profileImageView, user.id)
 
         holder.binding.followToggleButton.isChecked = following.contains(user.id)
         holder.binding.followToggleButton.setOnCheckedChangeListener { _, isChecked ->

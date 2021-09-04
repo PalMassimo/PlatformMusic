@@ -88,6 +88,8 @@ class UserRepository(private val userId: String) {
         StorageReferenceRetriever.coverReference(userId, postId).delete()
     }
 
+    fun updateProfilePicture(uri: Uri) = StorageReferenceRetriever.userImageReference(userId).putFile(uri)
+
 
 }
 

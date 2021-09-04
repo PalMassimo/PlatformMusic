@@ -84,6 +84,8 @@ class UserViewModel(val userId: String) : ViewModel() {
         posts.value!!.removeIf { post -> post.id == id }
     }
 
+    fun updateProfilePicture(uri: Uri) = userRepository.updateProfilePicture(uri)
+
 
 }
 

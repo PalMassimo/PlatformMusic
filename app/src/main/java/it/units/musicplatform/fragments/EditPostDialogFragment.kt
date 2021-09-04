@@ -13,6 +13,7 @@ import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
+import it.units.musicplatform.utilities.PictureLoader
 
 class EditPostDialogFragment : DialogFragment() {
 
@@ -41,7 +42,7 @@ class EditPostDialogFragment : DialogFragment() {
         binding.coverImageView.setOnClickListener { uriLauncherActivity.launch("image/*") }
         binding.songNameEditText.setText(post.songName)
         binding.artistNameEditText.setText(post.artistName)
-        GlideApp.with(requireContext()).load(StorageReferenceRetriever.coverReference(userId, post.id)).into(binding.coverImageView)
+        PictureLoader.loadCover(requireContext(), binding.coverImageView, userId, post.id)
 
         val builder = AlertDialog.Builder(requireContext()).apply {
             setView(binding.root)

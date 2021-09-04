@@ -2,8 +2,6 @@ package it.units.musicplatform.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import it.units.musicplatform.R
@@ -11,11 +9,12 @@ import it.units.musicplatform.databinding.PostCardBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.enumerations.Preference
-import it.units.musicplatform.enumerations.PreferenceOperation.*
 import it.units.musicplatform.fragments.HomeFragment
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.*
+import it.units.musicplatform.utilities.MediaPlayerManager
+import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.utilities.SongDownloader
+import it.units.musicplatform.utilities.SongTime
 
 class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
     RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
@@ -85,10 +84,8 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         binding.post = post
 
-        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.coverReference(post.uploaderId, post.id))
-            .into(binding.songPictureImageView)
-        GlideApp.with(homeFragment.requireContext()).load(StorageReferenceRetriever.userImageReference(post.uploaderId))
-            .into(binding.uploaderPictureImageView)
+        PictureLoader.loadCover(homeFragment.requireContext(), binding.songPictureImageView, post.uploaderId, post.id)
+        PictureLoader.loadProfilePicture(homeFragment.requireContext(), binding.uploaderPictureImageView, post.uploaderId)
 
         binding.likeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.likes.containsKey(post.id)) R.color.white else R.color.black)
         binding.dislikeImageButton.setColorFilter(if (homeFragment.userViewModel.user.value!!.dislikes.containsKey(post.id)) R.color.white else R.color.black)

@@ -4,7 +4,7 @@ data class User(
     val id: String = "",
     val email: String = "",
     val fullName: String = "",
-    val imageUrl: String = "",
+//    val imageUrl: String = "",
     val posts: HashMap<String, Boolean> = HashMap(),
     val likes: HashMap<String, Boolean> = HashMap(),
     val dislikes: HashMap<String, Boolean> = HashMap(),
@@ -12,6 +12,6 @@ data class User(
     val following: HashMap<String, Boolean> = HashMap(),
 ) {
 
-    constructor(id: String, email: String, fullName: String) : this(id = id, email = email, fullName = fullName, "")
+    constructor(id: String, email: String, fullName: String) : this(id = id, email = email, fullName = fullName, HashMap<String, Boolean>())
 
 }
