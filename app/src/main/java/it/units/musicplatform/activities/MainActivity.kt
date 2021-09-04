@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onNewIntent(intent: Intent?) {
+
         super.onNewIntent(intent)
 
         if (intent?.action.equals(Intent.ACTION_SEARCH))
@@ -82,12 +83,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if (activityResult.resultCode == RESULT_OK /*&& it.data?.extras?.get("post") != null*/) {
+        if (activityResult.resultCode == RESULT_OK) {
             activityResult.data?.extras?.let { bundle ->
                 val post = bundle.get("post") as Post
-                val localUriCover = bundle.get("localUriCover") as String?
-                val localUriSong = bundle.get("localUriSong") as String
-                userViewModel.addPost(post, Uri.parse(localUriSong), Uri.parse(localUriCover))
+                val localUriCover = bundle.getString("localUriCover")
+                val localUriSong = bundle.getString("localUriSong")
+                userViewModel.addPost(post, Uri.parse(localUriSong), if(localUriCover == null) null else Uri.parse(localUriCover))
             }
         } else if (activityResult.resultCode == RESULT_CANCELED) {
             activityResult.data?.extras?.getString("message")?.let { message ->

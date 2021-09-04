@@ -63,7 +63,7 @@ class UserViewModel(val userId: String) : ViewModel() {
         userRepository.removeDislike(postId)
     }
 
-    fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri) {
+    fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri?) {
         viewModelScope.launch {
             userRepository.addPost(post, localUriSong, localUriCover)
             posts.value!!.add(post)

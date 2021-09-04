@@ -1,6 +1,7 @@
 package it.units.musicplatform.repositories
 
 import android.net.Uri
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
@@ -16,7 +17,7 @@ class UserRepository(private val userId: String) {
 
     suspend fun getPosts(): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        DatabaseReferenceRetriever.postsReference().get().continueWith {postsSnapshotTask->
+        DatabaseReferenceRetriever.postsReference().get().continueWith { postsSnapshotTask ->
             StreamSupport.stream(postsSnapshotTask.result!!.children.spliterator(), false)
                 .map { it.getValue(Post::class.java) }
                 .filter { it!!.uploaderId == userId }
@@ -25,17 +26,24 @@ class UserRepository(private val userId: String) {
         return posts
     }
 
-    suspend fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri): Post {
+    suspend fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri?): Post {
 
-        val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(localUriCover).continueWithTask {
-            it.result!!.storage.downloadUrl
-        }.continueWith { uriTask -> post.songFileDownloadString = uriTask.result.toString() }
+        val tasks = HashSet<Task<Unit>>()
+
+        localUriCover?.let { uri ->
+            val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(uri).continueWithTask {
+                it.result!!.storage.downloadUrl
+            }.continueWith { uriTask -> post.songFileDownloadString = uriTask.result.toString() }
+            tasks.add(addCoverTask)
+        }
 
         val addSongTask = StorageReferenceRetriever.songReference(userId, post.id).putFile(localUriSong).continueWithTask {
             it.result!!.storage.downloadUrl
         }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.result.toString() }
 
-        Tasks.whenAllComplete(addCoverTask, addSongTask).continueWith {
+        tasks.add(addSongTask)
+
+        Tasks.whenAllComplete(tasks).continueWith {
             DatabaseReferenceRetriever.postReference(post.id).setValue(post)
             DatabaseReferenceRetriever.userPostReference(post.uploaderId, post.id).setValue(true)
         }.await()
