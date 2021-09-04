@@ -89,19 +89,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun addDislike(post: Post, position: Int) {
-        userViewModel.addDislike(post.id, post.numberOfDislikes + 1)
+        userViewModel.addDislike(post.id)
         followersPostsViewModel.addDislike(position)
         adapter.setDislike(true, position)
     }
 
     private fun removeLike(post: Post, position: Int) {
-        userViewModel.removeLike(post.id, post.numberOfLikes - 1)
+        userViewModel.removeLike(post.id)
         followersPostsViewModel.removeLike(position)
         adapter.setLike(false, position)
     }
 
     private fun removeDislike(post: Post, position: Int) {
-        userViewModel.removeDislike(post.id, post.numberOfDislikes - 1)
+        userViewModel.removeDislike(post.id)
         followersPostsViewModel.removeDislike(position)
         adapter.setDislike(false, position)
     }

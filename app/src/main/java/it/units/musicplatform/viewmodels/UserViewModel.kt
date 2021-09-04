@@ -48,19 +48,19 @@ class UserViewModel(val userId: String) : ViewModel() {
         userRepository.addLike(postId)
     }
 
-    fun addDislike(postId: String, numberOfDislikes: Int) {
+    fun addDislike(postId: String) {
         _user.value!!.dislikes[postId] = true
-        userRepository.addDislike(postId, numberOfDislikes)
+        userRepository.addDislike(postId)
     }
 
-    fun removeLike(postId: String, numberOfLikes: Int) {
+    fun removeLike(postId: String) {
         _user.value!!.likes.remove(postId)
-        userRepository.removeLike(postId, numberOfLikes)
+        userRepository.removeLike(postId)
     }
 
-    fun removeDislike(postId: String, numberOfDislikes: Int) {
+    fun removeDislike(postId: String) {
         _user.value!!.dislikes.remove(postId)
-        userRepository.removeDislike(postId, numberOfDislikes)
+        userRepository.removeDislike(postId)
     }
 
     fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri) {
