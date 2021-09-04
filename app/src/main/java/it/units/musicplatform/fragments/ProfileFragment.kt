@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
@@ -16,9 +17,10 @@ import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.utilities.GlideApp
-import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -47,10 +49,10 @@ class ProfileFragment : Fragment() {
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
-                PictureLoader.loadProfilePicture(requireContext(), binding.profileImageView, userId)
+                binding.profileImageView.setImageURI(uri)
                 userViewModel.updateProfilePicture(it)
+                requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
             }
-//            requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
         }
 
         binding.profileImageView.setOnClickListener { newProfileImageLauncher.launch("image/*") }
@@ -81,7 +83,6 @@ class ProfileFragment : Fragment() {
         setFragmentResultListener("updated_post") { _, bundle ->
             val postPosition = bundle.getInt("element_position")
             userViewModel.updatePost(postPosition, bundle.getString("songName"), bundle.getString("artistName"), bundle.getString("localUriCover"))
-            adapter.notifyItemChanged(postPosition) //useless?
         }
     }
 

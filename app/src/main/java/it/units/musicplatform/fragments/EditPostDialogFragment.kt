@@ -23,9 +23,11 @@ class EditPostDialogFragment : DialogFragment() {
     private var _binding: FragmentEditpostDialogBinding? = null
     private val binding get() = _binding!!
     private val userId = FirebaseAuth.getInstance().currentUser!!.uid
-    private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        binding.coverImageView.setImageURI(it)
-        localImageUri = it
+    private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) {uri->
+        uri?.let {
+            binding.coverImageView.setImageURI(uri)
+            localImageUri = uri
+        }
     }
 
     companion object {

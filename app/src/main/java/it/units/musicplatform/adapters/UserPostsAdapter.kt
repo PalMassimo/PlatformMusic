@@ -7,8 +7,6 @@ import it.units.musicplatform.databinding.PostItemBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.fragments.BottomSheetFragment
 import it.units.musicplatform.fragments.ProfileFragment
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.utilities.PictureLoader
 
 

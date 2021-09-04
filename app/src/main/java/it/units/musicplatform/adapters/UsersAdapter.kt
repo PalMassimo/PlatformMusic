@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import it.units.musicplatform.databinding.UserListItemBinding
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.fragments.SearchFragment
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.utilities.PictureLoader
 
 class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val searchFragment: SearchFragment) :
