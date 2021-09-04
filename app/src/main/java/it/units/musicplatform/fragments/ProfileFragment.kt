@@ -48,10 +48,9 @@ class ProfileFragment : Fragment() {
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
-                //TODO: maybe one line of code?
                 binding.profileImageView.setImageURI(uri)
                 userViewModel.updateProfilePicture(it)
-                requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
+//                requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
             }
         }
 
