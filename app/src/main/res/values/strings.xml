@@ -36,5 +36,8 @@
     <string name="edit_icon">edit</string>
     <string name="unfollow">Unfollow</string>
     <string name="follow">Follow</string>
+    <string name="email_hint">email</string>
+    <string name="sign_up">sign up</string>
+    <string name="app_slogan">My awesome app</string>
 
 </resources>

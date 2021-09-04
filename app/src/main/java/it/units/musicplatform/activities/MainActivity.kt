@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 

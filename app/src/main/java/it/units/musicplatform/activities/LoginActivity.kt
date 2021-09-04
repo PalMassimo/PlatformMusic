@@ -17,11 +17,13 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.registerUserTextView.setOnClickListener { startActivity(Intent(this, AddUserActivity::class.java)) }
+
         val email = binding.emailEditText.text.toString().trim()
         val password = binding.passwordEditText.text.toString()
 
         binding.loginButton.setOnClickListener {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Intent(this, MainActivity::class.java)
                         .apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), FirebaseAuth.getInstance().currentUser!!.uid) }) }
