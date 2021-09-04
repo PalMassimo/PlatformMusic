@@ -19,22 +19,22 @@ class LoginActivity : AppCompatActivity() {
 
         binding.registerUserTextView.setOnClickListener { startActivity(Intent(this, AddUserActivity::class.java)) }
 
-        val email = binding.emailEditText.text.toString().trim()
-        val password = binding.passwordEditText.text.toString()
-
         binding.loginButton.setOnClickListener {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Intent(this, MainActivity::class.java)
-                        .apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), FirebaseAuth.getInstance().currentUser!!.uid) }) }
-                        .run { startActivity(this) }
-                } else {
-                    Toast.makeText(this, "Login failed, check credentials", Toast.LENGTH_SHORT).show()
-                }
-            }
+            login(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString())
         }
 
+    }
 
+    private fun login(email: String, password: String) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Intent(this, MainActivity::class.java)
+                    .apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), FirebaseAuth.getInstance().currentUser!!.uid) }) }
+                    .run { startActivity(this) }
+            } else {
+                Toast.makeText(this, "Login failed, check credentials", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
