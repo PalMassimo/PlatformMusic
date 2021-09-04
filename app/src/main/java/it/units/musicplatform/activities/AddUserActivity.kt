@@ -21,9 +21,9 @@ class AddUserActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_user)
         binding = ActivityAddUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.signUpButton.setOnClickListener {
             when {
                 binding.usernameEditText.text.isBlank() -> showWrongField(binding.usernameEditText, "please insert a username")
@@ -44,24 +44,14 @@ class AddUserActivity : AppCompatActivity() {
     private fun registerUser(username: String, email: String, password: String) {
 
         binding.progressBar.visibility = View.VISIBLE
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener { task: Task<AuthResult?> ->
-            if (task.isSuccessful) {
-                val user = User(id = task.result!!.user!!.uid, email = email, fullName = username)
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener { task ->
 
-                DatabaseReferenceRetriever.user(user.id).setValue(user).addOnCompleteListener { registerUserTask ->
-                    if (registerUserTask.isSuccessful) {
-                        Toast.makeText(this@AddUserActivity, "User has been registered successfully", Toast.LENGTH_SHORT).show()
-                        binding.progressBar.visibility = View.GONE
-                        val intent = Intent(this, MainActivity::class.java).apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), user.id) }) }
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this@AddUserActivity, "Failed to register the user, please try again", Toast.LENGTH_SHORT).show()
-                        binding.progressBar.visibility = View.GONE
-                    }
-                }
-            } else {
-                Toast.makeText(this@AddUserActivity, "Failed to register, try again", Toast.LENGTH_SHORT).show()
+            val user = User(id = task.user!!.uid, email = email, fullName = username)
+
+            DatabaseReferenceRetriever.user(user.id).setValue(user).addOnSuccessListener {
                 binding.progressBar.visibility = View.GONE
+                val intent = Intent(this, MainActivity::class.java).apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), user.id) }) }
+                startActivity(intent)
             }
         }
     }
