@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityMainBinding
 import it.units.musicplatform.entities.Post
+import it.units.musicplatform.fragments.AboutDialogFragment
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.factories.UserViewModelFactory
 
@@ -59,7 +60,8 @@ class MainActivity : AppCompatActivity() {
                 return@setOnMenuItemClickListener true
             }
             it.findItem(R.id.aboutMenuItem).setOnMenuItemClickListener {
-                Toast.makeText(this, "About window not implemented yet", Toast.LENGTH_SHORT).show()
+                val aboutDialogFragment = AboutDialogFragment()
+                aboutDialogFragment.show(supportFragmentManager, aboutDialogFragment.tag)
                 return@setOnMenuItemClickListener true
             }
         }

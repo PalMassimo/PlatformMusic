@@ -42,5 +42,6 @@
     <string name="artist_name_label">Artist Name:</string>
     <string name="song_name">song name</string>
     <string name="artist_name">artist name</string>
+    <string name="github_logo">github logo</string>
 
 </resources>
