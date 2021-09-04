@@ -13,7 +13,7 @@ class UsersSearchedRepository(val userId: String) {
 
     suspend fun loadPopularUsers(): ArrayList<User> {
         val popularUsers = ArrayList<User>()
-        DatabaseReferenceRetriever.users().orderByChild("numberOfLikes").limitToLast(5).get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
+        DatabaseReferenceRetriever.users().orderByChild("numberOfFollowers").limitToLast(5).get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
             val usersDataSnapshot = usersDataSnapshotTask.result
             StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), false)
                 .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }

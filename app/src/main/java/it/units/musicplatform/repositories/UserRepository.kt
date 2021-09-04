@@ -68,11 +68,23 @@ class UserRepository(private val userId: String) {
     fun addFollowing(followingId: String) {
         DatabaseReferenceRetriever.userFollowing(userId).child(followingId).setValue(true)
         DatabaseReferenceRetriever.userFollowers(followingId).child(userId).setValue(true)
+        changeNumberOfFollowers(followingId, increase = true)
     }
 
     fun removeFollowing(followingId: String) {
         DatabaseReferenceRetriever.userFollowing(userId).child(followingId).removeValue()
         DatabaseReferenceRetriever.userFollowers(followingId).child(userId).removeValue()
+        changeNumberOfFollowers(followingId, increase = false)
+    }
+
+    private fun changeNumberOfFollowers(followingId: String, increase: Boolean) {
+
+        DatabaseReferenceRetriever.userNumberOfFollowers(followingId).get().continueWith {
+            it.result!!.getValue(Int::class.java)
+        }.addOnSuccessListener { numberOfFollowers ->
+            val updatedNumberOfFollowers = if (increase) numberOfFollowers!! + 1 else numberOfFollowers!! - 1
+            DatabaseReferenceRetriever.userNumberOfFollowers(followingId).setValue(updatedNumberOfFollowers)
+        }
     }
 
     fun addLike(postId: String) = DatabaseReferenceRetriever.userLike(userId, postId).setValue(true)

@@ -21,7 +21,7 @@ class UsersSearchedViewModel : ViewModel() {
         getPopularUsers()
     }
 
-    fun getPopularUsers(){
+    private fun getPopularUsers(){
         GlobalScope.launch {
             _popularUsers.postValue(usersSearchRepository.loadPopularUsers())
         }

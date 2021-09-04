@@ -12,8 +12,6 @@ class StorageReferenceRetriever {
 
     companion object{
 
-        fun githubLogoReference() = STORAGE_REFERENCE.child("github_logo.png")
-
         fun userImageReference(userId: String) = userDirectoryReference(userId).child(PROFILE_PICTURE_CHILD)
         fun coverReference(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
         fun songReference(userId: String, postId: String) = userSongsFolderReference(userId).child(postId)
