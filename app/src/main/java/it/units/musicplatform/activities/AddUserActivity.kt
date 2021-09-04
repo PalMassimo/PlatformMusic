@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
@@ -23,44 +24,29 @@ class AddUserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_user)
         binding = ActivityAddUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.signUpButton.setOnClickListener { registerUser() }
+        binding.signUpButton.setOnClickListener {
+            when {
+                binding.usernameEditText.text.isBlank() -> showWrongField(binding.usernameEditText, "please insert a username")
+                binding.emailEditText.text.isBlank() -> showWrongField(binding.emailEditText, "please insert an email address")
+                !Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches() -> showWrongField(binding.emailEditText, "please provide a valid email address")
+                binding.passwordEditText.text.isBlank() -> showWrongField(binding.passwordEditText, "please insert a password")
+                binding.passwordEditText.text.toString().length < 6 -> showWrongField(binding.passwordEditText, "a password must have at least six characters")
+                else -> registerUser(binding.usernameEditText.text.toString(), binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+            }
+        }
     }
 
-    private fun registerUser() {
-        val fullName: String = binding.fullNameEditText.text.toString().trim()
-        val email: String = binding.emailEditText.text.toString().trim()
-        val password: String = binding.passwordEditText.text.toString().trim()
+    private fun showWrongField(editText: EditText, errorMessage: String) {
+        editText.requestFocus()
+        editText.error = errorMessage
+    }
 
-        if (fullName.isEmpty()) {
-            binding.fullNameEditText.error = "Provide your full name"
-            binding.fullNameEditText.requestFocus()
-            return
-        }
+    private fun registerUser(username: String, email: String, password: String) {
 
-        if (email.isEmpty()) {
-            binding.emailEditText.error = "Provide an email"
-            binding.emailEditText.requestFocus()
-            return
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.emailEditText.error = "Please provide valid email"
-            binding.emailEditText.requestFocus()
-            return
-        }
-        if (password.isEmpty()) {
-            binding.passwordEditText.error = "Provide a password"
-            binding.passwordEditText.requestFocus()
-            return
-        }
-        if (password.length < 6) {
-            binding.passwordEditText.error = "Password length must be at least 6 characters"
-            binding.passwordEditText.requestFocus()
-            return
-        }
         binding.progressBar.visibility = View.VISIBLE
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener { task: Task<AuthResult?> ->
             if (task.isSuccessful) {
-                val user = User(id = task.result!!.user!!.uid, email = email, fullName = fullName)
+                val user = User(id = task.result!!.user!!.uid, email = email, fullName = username)
 
                 DatabaseReferenceRetriever.userReference(user.id).setValue(user).addOnCompleteListener { registerUserTask ->
                     if (registerUserTask.isSuccessful) {
