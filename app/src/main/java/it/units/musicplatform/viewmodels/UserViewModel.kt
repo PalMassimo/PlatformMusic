@@ -87,7 +87,6 @@ class UserViewModel(val userId: String) : ViewModel() {
 
     fun updateProfilePicture(uri: Uri) = userRepository.updateProfilePicture(uri)
 
-
 }
 
 

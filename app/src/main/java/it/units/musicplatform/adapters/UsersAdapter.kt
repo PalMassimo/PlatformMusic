@@ -32,7 +32,7 @@ class UsersAdapter(users: ArrayList<User>?, following: Set<String>?, private val
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         val user = users[position]
 
-        holder.binding.fullNameTextView.text = user.fullName
+        holder.binding.fullNameTextView.text = user.username
         PictureLoader.loadProfilePicture(searchFragment.requireContext(), holder.binding.profileImageView, user.id)
 
         holder.binding.followToggleButton.isChecked = following.contains(user.id)

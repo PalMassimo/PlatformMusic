@@ -43,7 +43,7 @@ class AddUserActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnSuccessListener { task ->
 
-            val user = User(id = task.user!!.uid, email = email, fullName = username)
+            val user = User(id = task.user!!.uid, email = email, username = username)
 
             DatabaseReferenceRetriever.user(user.id).setValue(user).addOnSuccessListener {
                 binding.progressBar.visibility = View.GONE

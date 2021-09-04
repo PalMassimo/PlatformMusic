@@ -79,7 +79,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         //TODO: questo non dovrebbe stare qui...
         DatabaseReferenceRetriever.user(post.uploaderId).get().addOnSuccessListener {
-            binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.fullName
+            binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.username
         }
 
         binding.post = post
