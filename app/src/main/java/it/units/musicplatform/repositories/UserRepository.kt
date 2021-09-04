@@ -32,13 +32,13 @@ class UserRepository(private val userId: String) {
         localUriCover?.let { uri ->
             val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(uri).continueWithTask {
                 it.result!!.storage.downloadUrl
-            }.continueWith { uriTask -> post.songDownloadString = uriTask.result.toString() }
+            }.continueWith { uriTask -> post.coverDownloadString = uriTask.result.toString() }
             tasks.add(addCoverTask)
         }
 
         val addSongTask = StorageReferenceRetriever.songReference(userId, post.id).putFile(localUriSong).continueWithTask {
             it.result!!.storage.downloadUrl
-        }.continueWith { uriTask -> post.coverDownloadString = uriTask.result.toString() }
+        }.continueWith { uriTask -> post.songDownloadString = uriTask.result.toString() }
 
         tasks.add(addSongTask)
 

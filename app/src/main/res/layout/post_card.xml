@@ -107,8 +107,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:text="@{SongTime.toString(post.numberOfSeconds)}"
                     android:gravity="center_horizontal"
+                    android:text="@{SongTime.format(post.numberOfSeconds)}"
                     app:layout_constraintEnd_toEndOf="@+id/seekBar"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar"
                     app:layout_constraintVertical_bias="0.093" />
@@ -158,11 +158,10 @@
                 <TextView
                     android:id="@+id/numberOfLikesTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@{Integer.toString(post.numberOfLikes)}"
-                    android:textAlignment="textStart" />
+                    android:text="@{Integer.toString(post.numberOfLikes)}" />
 
                 <ImageButton
                     android:id="@+id/dislikeImageButton"
@@ -175,11 +174,11 @@
                 <TextView
                     android:id="@+id/numberOfDislikesTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="@{Integer.toString(post.numberOfDislikes)}"
-                    android:textAlignment="textStart" />
+                    />
 
                 <ImageButton
                     android:id="@+id/downloadImageButton"
@@ -192,11 +191,11 @@
                 <TextView
                     android:id="@+id/numberOfDownloadsTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
                     android:text="@{Integer.toString(post.numberOfDownloads)}"
-                    android:textAlignment="textStart" />
+                    />
 
             </LinearLayout>
 

@@ -11,10 +11,7 @@ import it.units.musicplatform.entities.User
 import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.fragments.HomeFragment
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.utilities.MediaPlayerManager
-import it.units.musicplatform.utilities.PictureLoader
-import it.units.musicplatform.utilities.SongDownloader
-import it.units.musicplatform.utilities.SongTime
+import it.units.musicplatform.utilities.*
 
 class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
     RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
@@ -42,7 +39,9 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         binding.likeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.LIKE) }
         binding.dislikeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.DISLIKE) }
-        binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
+        binding.playPauseImageButton.setOnClickListener {
+            mediaPlayerManager.doAction(position)
+        }
 
         binding.downloadImageButton.setOnClickListener { downloadView ->
             val songDownloader = SongDownloader(downloadView.context, post)
@@ -99,7 +98,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
     inner class PostHolder(val binding: PostCardBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val songTime = SongTime()
+//        fun formatSongTime(seconds: Int) = String.format("%02d:%02d", seconds / 60, seconds % 60)
 
         init {
             binding.seekBar.setOnSeekBarChangeListener(object :
@@ -109,11 +108,9 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                     if (fromUser) {
                         mediaPlayerManager.mediaPlayer.seekTo(progress * 1000)
-                        songTime.setSongTime(progress)
-                        binding.songTimeTextView.text = songTime.toString()
+                        binding.songTimeTextView.text = SongTime.format(progress)
                     }
                 }
-
             })
         }
 
@@ -123,13 +120,12 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         fun songResumed() = binding.playPauseImageButton.setImageResource(R.drawable.ic_pause)
         fun songStopped() {
             songPaused()
-            binding.songTimeTextView.text = SongTime.toString(0, 0)
+            binding.songTimeTextView.text = SongTime.format( 0)
             binding.seekBar.progress = 0
         }
 
         fun updateSeekBar(progress: Int) {
-            songTime.setSongTime(progress)
-            binding.songTimeTextView.text = songTime.toString()
+            binding.songTimeTextView.text = SongTime.format(progress)
             binding.seekBar.progress = progress
         }
     }
