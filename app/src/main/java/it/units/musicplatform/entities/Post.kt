@@ -14,6 +14,6 @@ data class Post (
     var numberOfSeconds: Int = 0,
     var numberOfDislikes: Int = 0,
     var numberOfDownloads: Int = 0,
-    var songFileDownloadString: String = "",
-    var songPictureDownloadString: String = "",
+    var songDownloadString: String = "",
+    var coverDownloadString: String = "",
 ) : Parcelable

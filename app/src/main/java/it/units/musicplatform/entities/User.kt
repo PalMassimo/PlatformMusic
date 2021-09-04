@@ -4,7 +4,6 @@ data class User(
     val id: String = "",
     val email: String = "",
     val fullName: String = "",
-//    val imageUrl: String = "",
     val posts: HashMap<String, Boolean> = HashMap(),
     val likes: HashMap<String, Boolean> = HashMap(),
     val dislikes: HashMap<String, Boolean> = HashMap(),

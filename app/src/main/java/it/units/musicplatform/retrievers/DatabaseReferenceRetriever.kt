@@ -4,7 +4,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 private const val DATABASE_URL = "https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app/"
-private const val USERS_CHILD = "Users"
+private const val USERS_CHILD = "users"
 private const val SONG_NAME_CHILD = "songName"
 private const val ARTIST_NAME_CHILD = "artistName"
 private const val FOLLOWERS_CHILD = "followers"

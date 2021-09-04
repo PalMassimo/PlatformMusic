@@ -73,9 +73,7 @@ class SearchFragment : Fragment() {
 
     fun addFollowing(followingId: String) = userViewModel.addFollowing(followingId)
 
-
     fun removeFollowing(followingId: String) = userViewModel.removeFollowing(followingId)
-
 
     override fun onDestroyView() {
         super.onDestroyView()

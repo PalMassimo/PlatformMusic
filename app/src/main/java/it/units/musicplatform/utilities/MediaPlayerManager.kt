@@ -44,7 +44,7 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
         if (currentSong != -1) mediaPlayer.reset()
 
         try {
-            mediaPlayer.setDataSource(adapter.followersPostsList[postIndex].songFileDownloadString)
+            mediaPlayer.setDataSource(adapter.followersPostsList[postIndex].songDownloadString)
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener {
                 it.start()

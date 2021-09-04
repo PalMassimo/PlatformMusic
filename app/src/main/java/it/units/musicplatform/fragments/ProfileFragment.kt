@@ -11,6 +11,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
@@ -48,9 +49,8 @@ class ProfileFragment : Fragment() {
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
-                binding.profileImageView.setImageURI(uri)
                 userViewModel.updateProfilePicture(it)
-//                requireActivity().lifecycleScope.launch(Dispatchers.Default) { GlideApp.get(requireContext()).clearDiskCache() }
+                Glide.with(requireContext()).load(it).into(binding.profileImageView)
             }
         }
 

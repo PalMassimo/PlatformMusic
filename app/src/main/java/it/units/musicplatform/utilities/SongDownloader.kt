@@ -12,7 +12,7 @@ class SongDownloader(val context: Context, private val post: Post) {
 
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
-        val uri = Uri.parse(post.songFileDownloadString)
+        val uri = Uri.parse(post.songDownloadString)
         val request = DownloadManager.Request(uri)
         request.setTitle("Download song " + post.songName)
         request.setMimeType("audio")

@@ -32,13 +32,13 @@ class UserRepository(private val userId: String) {
         localUriCover?.let { uri ->
             val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(uri).continueWithTask {
                 it.result!!.storage.downloadUrl
-            }.continueWith { uriTask -> post.songFileDownloadString = uriTask.result.toString() }
+            }.continueWith { uriTask -> post.songDownloadString = uriTask.result.toString() }
             tasks.add(addCoverTask)
         }
 
         val addSongTask = StorageReferenceRetriever.songReference(userId, post.id).putFile(localUriSong).continueWithTask {
             it.result!!.storage.downloadUrl
-        }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.result.toString() }
+        }.continueWith { uriTask -> post.coverDownloadString = uriTask.result.toString() }
 
         tasks.add(addSongTask)
 
@@ -55,7 +55,7 @@ class UserRepository(private val userId: String) {
         localUriCover?.let { localUri ->
             StorageReferenceRetriever.coverReference(post.uploaderId, post.id).putFile(Uri.parse(localUri)).continueWithTask {
                 it.result!!.storage.downloadUrl
-            }.continueWith { uriTask -> post.songPictureDownloadString = uriTask.toString() }.await()
+            }.continueWith { uriTask -> post.coverDownloadString = uriTask.toString() }.await()
         }
 
         songName?.let { DatabaseReferenceRetriever.postSongName(post.id).setValue(it) }
