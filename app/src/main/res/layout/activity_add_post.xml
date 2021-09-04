@@ -16,7 +16,6 @@
         android:contentDescription="@string/song_picture"
         android:src="@drawable/ic_music_note" />
 
-<!--        android:onClick="songPictureImageViewAction"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Song Name:"
+            android:text="@string/song_name_label"
             android:textSize="25sp" />
 
         <EditText
@@ -34,13 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:hint="@string/song_name"
             android:textSize="25sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_marginTop="40dp"
             android:layout_height="wrap_content"
-            android:text="Artist Name:"
+            android:text="@string/artist_name_label"
             android:textSize="25sp" />
 
         <EditText
@@ -48,11 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:hint="@string/artist_name"
             android:textSize="25sp" />
     </LinearLayout>
 
 
-<!--        android:onClick="shareButtonAction"-->
     <Button
         android:id="@+id/shareButton"
         android:layout_width="wrap_content"

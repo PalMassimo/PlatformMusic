@@ -18,7 +18,6 @@
     <string name="unknown_duration_time">--:--</string>
     <string name="song">song</string>
     <string name="artist">artist</string>
-    <string name="album">album</string>
     <string name="download">Download</string>
     <string name="likes">Likes</string>
     <string name="dislikes">Dislikes</string>
@@ -39,5 +38,9 @@
     <string name="email_hint">email</string>
     <string name="sign_up">sign up</string>
     <string name="app_slogan">My awesome app</string>
+    <string name="song_name_label">Song Name:</string>
+    <string name="artist_name_label">Artist Name:</string>
+    <string name="song_name">song name</string>
+    <string name="artist_name">artist name</string>
 
 </resources>
