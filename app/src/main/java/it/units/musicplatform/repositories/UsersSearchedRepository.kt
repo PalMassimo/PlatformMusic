@@ -13,9 +13,9 @@ class UsersSearchedRepository(val userId: String) {
 
     suspend fun loadPopularUsers(): ArrayList<User> {
         val popularUsers = ArrayList<User>()
-        DatabaseReferenceRetriever.users().orderByChild("numberOfFollowers").limitToLast(5).get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
+        DatabaseReferenceRetriever.users().orderByChild("numberOfFollowers").limitToLast(5).get().continueWith { usersDataSnapshotTask ->
             val usersDataSnapshot = usersDataSnapshotTask.result
-            StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), false)
+            StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), true)
                 .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
                 .filter { user: User? -> !user?.id.equals(userId) }
                 .forEach { user: User? -> popularUsers.add(user!!) }
@@ -30,7 +30,7 @@ class UsersSearchedRepository(val userId: String) {
         val resultUsers = ArrayList<User>()
 
         DatabaseReferenceRetriever.users().get().continueWith { usersDataSnapshotTask :Task<DataSnapshot> ->
-            StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), false)
+            StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), true)
                 .map{ userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
                 .filter { user: User? -> user?.username!!.toLowerCase(Locale.ROOT).contains(subName.toLowerCase(Locale.ROOT)) && user.id != userId }
                 .forEach { resultUsers.add(it!!) }

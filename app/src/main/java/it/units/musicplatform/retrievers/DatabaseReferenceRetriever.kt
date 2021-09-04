@@ -11,7 +11,7 @@ private const val FOLLOWERS_CHILD = "followers"
 private const val FOLLOWING_CHILD = "following"
 private const val LIKES_CHILD = "likes"
 private const val DISLIKES_CHILD = "dislikes"
-
+private const val NUMBER_OF_FOLLOWERS = "numberOfFollowers"
 
 private const val POSTS_CHILD = "posts"
 private const val NUMBER_OF_LIKES = "numberOfLikes"
@@ -29,7 +29,7 @@ class DatabaseReferenceRetriever {
 
         fun users() = USERS_REFERENCE
         fun user(userId: String) = users().child(userId)
-        fun userNumberOfFollowers(userId: String) = user(userId).child("numberOfFollowers")
+        fun userNumberOfFollowers(userId: String) = user(userId).child(NUMBER_OF_FOLLOWERS)
         fun userFollowers(userId: String) = user(userId).child(FOLLOWERS_CHILD)
         fun userFollowing(userId: String) = user(userId).child(FOLLOWING_CHILD)
         fun userLikes(userId: String) = user(userId).child(LIKES_CHILD)
