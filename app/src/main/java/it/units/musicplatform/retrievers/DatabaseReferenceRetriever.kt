@@ -4,6 +4,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 private const val DATABASE_URL = "https://sharemusic-99f8a-default-rtdb.europe-west1.firebasedatabase.app/"
+private const val USERS_CHILD = "Users"
 private const val SONG_NAME_CHILD = "songName"
 private const val ARTIST_NAME_CHILD = "artistName"
 private const val FOLLOWERS_CHILD = "followers"
@@ -18,8 +19,8 @@ private const val NUMBER_OF_DISLIKES = "numberOfDislikes"
 private const val NUMBER_OF_DOWNLOADS = "numberOfDownloads"
 
 private val DATABASE_REFERENCE = Firebase.database(DATABASE_URL).reference
-private val USERS_REFERENCE = DATABASE_REFERENCE.child("Users")
-private val POSTS_REFERENCE = DATABASE_REFERENCE.child("posts")
+private val USERS_REFERENCE = DATABASE_REFERENCE.child(USERS_CHILD)
+private val POSTS_REFERENCE = DATABASE_REFERENCE.child(POSTS_CHILD)
 
 
 class DatabaseReferenceRetriever {
