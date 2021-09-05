@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.units.musicplatform.adapters.UsersAdapter
 import it.units.musicplatform.databinding.FragmentSearchBinding
+import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
 import it.units.musicplatform.viewmodels.UsersSearchedViewModel
 import it.units.musicplatform.viewmodels.factories.UsersSearchedViewModelFactory
@@ -23,8 +24,10 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: UsersAdapter
-    private lateinit var usersSearchedViewModel: UsersSearchedViewModel
     private lateinit var userViewModel: UserViewModel
+    private lateinit var usersSearchedViewModel: UsersSearchedViewModel
+    private lateinit var followersPostsViewModel: FollowersPostsViewModel
+
 
     private lateinit var userId: String
 
@@ -34,7 +37,9 @@ class SearchFragment : Fragment() {
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
 
+        followersPostsViewModel = ViewModelProviders.of(requireActivity()).get(FollowersPostsViewModel::class.java)
         usersSearchedViewModel = ViewModelProviders.of(requireActivity(), UsersSearchedViewModelFactory(userId)).get(UsersSearchedViewModel::class.java)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -80,11 +85,13 @@ class SearchFragment : Fragment() {
 
     fun addFollowing(followingId: String, position: Int) {
         userViewModel.addFollowing(followingId)
+        followersPostsViewModel.addFollowing(followingId)
         adapter.notifyItemChanged(position)
     }
 
     fun removeFollowing(followingId: String, position: Int) {
         userViewModel.removeFollowing(followingId)
+        followersPostsViewModel.removeFollowing(followingId)
         adapter.notifyItemChanged(position)
     }
 

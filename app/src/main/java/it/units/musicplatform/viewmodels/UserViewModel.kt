@@ -14,15 +14,15 @@ import kotlin.collections.set
 
 class UserViewModel : ViewModel() {
     val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
     private val userRepository = UserRepository(userId)
+
     private val _user = MutableLiveData<User>()
     private val _posts = MutableLiveData<ArrayList<Post>>()
-//    private val _following = MutableLiveData<Set<String>>()
 
 
     val user: LiveData<User> = _user
     val posts: LiveData<ArrayList<Post>> = _posts
-//    val following:LiveData<Set<String>> = _following
 
 
     init {
@@ -31,9 +31,9 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch {
             _user.postValue(userRepository.getUser())
             _posts.postValue(userRepository.getPosts())
-//            _following.postValue(userRepository.getFollowing())
         }
     }
+
 
     fun addFollowing(followingId: String) {
         userRepository.addFollowing(followingId)

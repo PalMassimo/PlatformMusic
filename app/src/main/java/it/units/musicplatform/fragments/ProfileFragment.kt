@@ -9,11 +9,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
 import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
 
 class ProfileFragment : Fragment() {
@@ -41,7 +43,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
-
         binding.userviewmodel = userViewModel
 
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->

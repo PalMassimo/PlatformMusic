@@ -3,16 +3,18 @@ package it.units.musicplatform.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.PostsRepository
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import kotlinx.coroutines.launch
 import java.util.stream.StreamSupport
 
 class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
-    private val postsList = ArrayList<Post>()
+    private var postsList = ArrayList<Post>()
     private val _followersPosts = MutableLiveData<List<Post>>()
     val followersPosts: LiveData<List<Post>> = _followersPosts
     private val postsRepository = PostsRepository()
@@ -74,6 +76,19 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         val post = followersPosts.value!![position]
         post.numberOfDislikes--
         postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
+    }
+
+    fun removeFollowing(followingId: String) {
+        viewModelScope.launch {
+            postsList.removeIf { post -> post.uploaderId == followingId }
+            _followersPosts.postValue(postsList)
+        }
+    }
+
+    fun addFollowing(followingId: String) {
+        viewModelScope.launch {
+            _followersPosts.postValue(postsRepository.getUserPost(followingId))
+        }
     }
 
 }
