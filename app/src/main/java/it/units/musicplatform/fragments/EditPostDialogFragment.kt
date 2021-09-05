@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import it.units.musicplatform.R
 import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.utilities.PictureLoader
@@ -49,6 +50,7 @@ class EditPostDialogFragment : DialogFragment() {
 
         val builder = AlertDialog.Builder(requireContext()).apply {
             setView(binding.root)
+            setIcon(R.mipmap.ic_launcher_round)
             setTitle("Edit your post")
             setNegativeButton("Cancel") { _, _ -> }
             setPositiveButton("Confirm") { _, _ ->

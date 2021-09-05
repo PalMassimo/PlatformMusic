@@ -21,8 +21,8 @@ class AboutDialogFragment : DialogFragment() {
 
         val builder = AlertDialog.Builder(requireContext()).apply {
             setView(binding.root)
+            setIcon(R.mipmap.ic_launcher_round)
             setTitle("About Window")
-            setIcon(R.drawable.ic_github)
             setMessage("The application is completely developed and maintained by Massimo Palmisano. You can find the open source code at github")
             setNeutralButton("Back") { _, _ -> }
             setPositiveButton("Go on github") { _, _ ->
