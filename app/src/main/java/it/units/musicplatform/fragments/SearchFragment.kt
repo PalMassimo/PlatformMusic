@@ -70,8 +70,8 @@ class SearchFragment : Fragment() {
     private fun performSearch() {
         adapter = UsersAdapter(ArrayList(), userViewModel.user.value?.following?.keys, this)
         usersSearchedViewModel.viewModelScope.launch(Dispatchers.Main) {
-            val resultUsers = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
-            adapter.users = resultUsers
+            adapter.users = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
+            adapter.notifyDataSetChanged()
         }
     }
 

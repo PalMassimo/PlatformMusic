@@ -13,16 +13,14 @@ class UsersSearchedViewModel(userId: String) : ViewModel() {
 
     private val usersSearchRepository = UsersSearchedRepository(userId)
     private val _popularUsers = MutableLiveData<ArrayList<User>>()
-    val popularUsers : LiveData<ArrayList<User>> = _popularUsers
+    val popularUsers: LiveData<ArrayList<User>> = _popularUsers
 
-    init{
+    init {
         viewModelScope.launch {
             _popularUsers.postValue(usersSearchRepository.loadPopularUsers())
         }
     }
 
-    suspend fun searchUsers(subName: String): ArrayList<User>{
-        return usersSearchRepository.searchUser(subName)
-    }
+    suspend fun searchUsers(subName: String) = usersSearchRepository.searchUser(subName)
 
 }

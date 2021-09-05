@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
         menu?.let {
             it.findItem(R.id.addPostMenuItem).setOnMenuItemClickListener {
-                val intent = Intent(this, AddPostActivity::class.java)
+                val intent = Intent(this, AddPostActivity::class.java).apply { putExtra("user_id", userId) }
                 addPostLauncher.launch(intent)
                 return@setOnMenuItemClickListener true
             }
