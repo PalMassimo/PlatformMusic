@@ -25,17 +25,17 @@ class UsersSearchedRepository(val userId: String) {
 
     }
 
-    suspend fun searchUser(subName: String): ArrayList<User>{
+    suspend fun searchUser(subName: String): ArrayList<User> {
 
         val resultUsers = ArrayList<User>()
 
-        DatabaseReferenceRetriever.users().get().continueWith { usersDataSnapshotTask :Task<DataSnapshot> ->
-            StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), true)
-                .map{ userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
+        DatabaseReferenceRetriever.users().get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
+            StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), false)
+                .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
                 .filter { user: User? -> user?.username!!.toLowerCase(Locale.ROOT).contains(subName.toLowerCase(Locale.ROOT)) && user.id != userId }
                 .forEach { resultUsers.add(it!!) }
         }.await()
 
         return resultUsers
-        }
     }
+}

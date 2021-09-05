@@ -3,6 +3,7 @@ package it.units.musicplatform.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UsersSearchedRepository
 import kotlinx.coroutines.GlobalScope
@@ -15,11 +16,7 @@ class UsersSearchedViewModel(userId: String) : ViewModel() {
     val popularUsers : LiveData<ArrayList<User>> = _popularUsers
 
     init{
-        getPopularUsers()
-    }
-
-    private fun getPopularUsers(){
-        GlobalScope.launch {
+        viewModelScope.launch {
             _popularUsers.postValue(usersSearchRepository.loadPopularUsers())
         }
     }

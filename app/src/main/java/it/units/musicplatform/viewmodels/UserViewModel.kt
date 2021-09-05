@@ -37,11 +37,13 @@ class UserViewModel : ViewModel() {
 
     fun addFollowing(followingId: String) {
         userRepository.addFollowing(followingId)
+        user.value!!.following.put(followingId, true)
         _user.value = _user.value
     }
 
     fun removeFollowing(followingId: String) {
         userRepository.removeFollowing(followingId)
+        user.value!!.following.remove(followingId)
         _user.value = _user.value
     }
 

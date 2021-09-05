@@ -35,7 +35,11 @@ class HomeFragment : Fragment() {
 
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
-        followersPostsViewModel = ViewModelProviders.of(requireActivity(), FollowersPostsViewModelFactory(userId)).get(FollowersPostsViewModel::class.java)
+        followersPostsViewModel = ViewModelProviders.of(this, FollowersPostsViewModelFactory(userId)).get(FollowersPostsViewModel::class.java)
+
+//        userViewModel.user.observe(requireActivity(), {
+//            followersPostsViewModel.refresh()
+//        })
 
     }
 

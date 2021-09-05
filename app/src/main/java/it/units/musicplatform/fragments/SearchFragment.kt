@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
         userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
 
-        usersSearchedViewModel = ViewModelProviders.of(this, UsersSearchedViewModelFactory(userId)).get(UsersSearchedViewModel::class.java)
+        usersSearchedViewModel = ViewModelProviders.of(requireActivity(), UsersSearchedViewModelFactory(userId)).get(UsersSearchedViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -72,12 +72,21 @@ class SearchFragment : Fragment() {
 
     private fun showMostPopular() {
         adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.user.value?.following?.keys, this)
-        usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, { adapter.users = usersSearchedViewModel.popularUsers.value!! })
+        usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
+            adapter.users = usersSearchedViewModel.popularUsers.value!!
+            adapter.notifyDataSetChanged()
+        })
     }
 
-    fun addFollowing(followingId: String) = userViewModel.addFollowing(followingId)
+    fun addFollowing(followingId: String, position: Int) {
+        userViewModel.addFollowing(followingId)
+        adapter.notifyItemChanged(position)
+    }
 
-    fun removeFollowing(followingId: String) = userViewModel.removeFollowing(followingId)
+    fun removeFollowing(followingId: String, position: Int) {
+        userViewModel.removeFollowing(followingId)
+        adapter.notifyItemChanged(position)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

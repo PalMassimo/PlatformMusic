@@ -76,5 +76,4 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
     }
 
-
 }
