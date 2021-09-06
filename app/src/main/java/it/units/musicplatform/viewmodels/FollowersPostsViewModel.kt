@@ -87,7 +87,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
     fun addFollowing(followingId: String) {
         viewModelScope.launch {
-            _followersPosts.postValue(postsRepository.getUserPost(followingId))
+            _followersPosts.postValue(postsRepository.getUserPosts(followingId))
         }
     }
 

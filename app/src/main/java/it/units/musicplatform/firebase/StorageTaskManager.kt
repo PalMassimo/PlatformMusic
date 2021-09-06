@@ -2,10 +2,8 @@ package it.units.musicplatform.firebase
 
 import android.net.Uri
 import com.google.android.gms.tasks.Task
-import com.google.firebase.storage.StorageReference
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
-import kotlinx.coroutines.tasks.await
 
 class StorageTaskManager {
 
@@ -24,6 +22,15 @@ class StorageTaskManager {
                 .continueWithTask { it.result!!.storage.downloadUrl }
                 .continueWith { uriTask -> post.songDownloadString = uriTask.result.toString() }
         }
+
+        @JvmStatic
+        fun deleteSong(userId: String, postId: String){
+            StorageReferenceRetriever.song(userId, postId).delete()
+            StorageReferenceRetriever.cover(userId, postId).delete()
+        }
+
+        @JvmStatic
+        fun updateProfilePicture(userId: String, uri: Uri) = StorageReferenceRetriever.userImageReference(userId).putFile(uri)
 
     }
 
