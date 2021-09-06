@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
-import it.units.musicplatform.firebase.DatabaseTaskManager
 import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.repositories.FollowersPostsRepository
 import kotlinx.coroutines.launch

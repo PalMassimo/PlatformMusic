@@ -4,7 +4,6 @@ import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.firebase.DatabaseTaskManager
 import kotlinx.coroutines.tasks.await
-import java.util.HashMap
 
 class FollowersPostsRepository {
 
