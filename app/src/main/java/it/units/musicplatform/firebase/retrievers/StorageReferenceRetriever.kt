@@ -1,4 +1,4 @@
-package it.units.musicplatform.retrievers
+package it.units.musicplatform.firebase.retrievers
 
 import com.google.firebase.storage.FirebaseStorage
 

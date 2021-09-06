@@ -4,32 +4,65 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
+import it.units.musicplatform.firebase.DatabaseTaskManager
 import it.units.musicplatform.repositories.PostsRepository
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
 class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
     private var postsList = ArrayList<Post>()
     private val _followersPosts = MutableLiveData<List<Post>>()
+
     val followersPosts: LiveData<List<Post>> = _followersPosts
     private val postsRepository = PostsRepository()
 
+    private val _followingUsernames = MutableLiveData<HashMap<String, String>>()
+    val followersUsernames: LiveData<HashMap<String, String>> = _followingUsernames
+
     init {
-        _followersPosts.value = ArrayList()
-        loadPosts()
+        viewModelScope.launch {
+            _followersPosts.value = ArrayList()
+            _followingUsernames.value = HashMap()
+            loadPosts()
+            loadFollowersUsernames()
+        }
+    }
+
+    private suspend fun loadFollowersUsernames() {
+
+        val getFollowingUsernameTaskSet = HashSet<Task<DataSnapshot>>()
+
+        DatabaseTaskManager.getUserTask(userId).continueWith {
+            it.result!!.getValue(User::class.java)!!.following.keys.stream()
+                .map { followingId -> DatabaseTaskManager.getUserTask(followingId) }
+                .forEach(getFollowingUsernameTaskSet::add)
+        }.await()
+
+        val followingUsernamesMap = HashMap<String, String>()
+
+        Tasks.whenAllComplete(getFollowingUsernameTaskSet).continueWith {
+            getFollowingUsernameTaskSet.stream().forEach {
+                val followingUser = it.result!!.getValue(User::class.java)!!
+                followingUsernamesMap[followingUser.id] = followingUser.username
+            }
+        }.await()
+
+        _followingUsernames.postValue(followingUsernamesMap)
     }
 
     private fun loadPosts() {
 
-        //TODO: replace addOnSuccessListener with continueWith
         DatabaseReferenceRetriever.user(userId).get().addOnSuccessListener {
-            it.getValue(User::class.java)?.following?.keys?.stream()
-                ?.map { followingId -> DatabaseReferenceRetriever.userPosts(followingId).get() }
+            it.getValue(User::class.java)!!.following.keys.stream()
+                .map { followingId -> DatabaseReferenceRetriever.userPosts(followingId).get() }
                 ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
         }
     }
@@ -82,12 +115,20 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         viewModelScope.launch {
             postsList.removeIf { post -> post.uploaderId == followingId }
             _followersPosts.postValue(postsList)
+
+            followersUsernames.value!!.remove(followingId)
+            _followingUsernames.value = _followingUsernames.value
         }
     }
 
     fun addFollowing(followingId: String) {
         viewModelScope.launch {
-            _followersPosts.postValue(postsRepository.getUserPosts(followingId))
+            val followerPostsList = postsRepository.getUserPosts(followingId)
+            postsList = ArrayList(followerPostsList + postsList)
+            _followersPosts.postValue(postsList)
+
+            followersUsernames.value!![followingId] = DatabaseReferenceRetriever.user(followingId).get().await().getValue(User::class.java)!!.username
+            _followingUsernames.value = _followingUsernames.value
         }
     }
 

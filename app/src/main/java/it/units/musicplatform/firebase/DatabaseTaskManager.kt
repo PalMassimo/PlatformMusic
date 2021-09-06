@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 import java.util.*
 import java.util.stream.StreamSupport
 import kotlin.collections.ArrayList

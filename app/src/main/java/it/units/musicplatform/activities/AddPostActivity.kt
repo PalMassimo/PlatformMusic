@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import it.units.musicplatform.databinding.ActivityAddPostBinding
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 
 
 class AddPostActivity : AppCompatActivity() {

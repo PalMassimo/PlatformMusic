@@ -3,7 +3,7 @@ package it.units.musicplatform.firebase
 import android.net.Uri
 import com.google.android.gms.tasks.Task
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
 
 class StorageTaskManager {
 

@@ -10,11 +10,15 @@ import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.fragments.HomeFragment
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.utilities.*
 
-class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val recyclerView: RecyclerView, var followersPostsList: List<Post>) :
-    RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
+class FollowersPostsAdapter(
+    private val homeFragment: HomeFragment,
+    private val recyclerView: RecyclerView,
+    var followersPostsList: List<Post>,
+    var followersUsernames: HashMap<String, String>,
+) : RecyclerView.Adapter<FollowersPostsAdapter.PostHolder>() {
 
     val mediaPlayerManager = MediaPlayerManager(this)
 
@@ -76,10 +80,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
 
         val post = followersPostsList[position]
 
-        //TODO: questo non dovrebbe stare qui...
-        DatabaseReferenceRetriever.user(post.uploaderId).get().addOnSuccessListener {
-            binding.uploaderFullNameTextView.text = it.getValue(User::class.java)!!.username
-        }
+        binding.uploaderFullNameTextView.text = followersUsernames[post.uploaderId]
 
         binding.post = post
 
@@ -118,7 +119,7 @@ class FollowersPostsAdapter(private val homeFragment: HomeFragment, private val 
         fun songResumed() = binding.playPauseImageButton.setImageResource(R.drawable.ic_pause)
         fun songStopped() {
             songPaused()
-            binding.songTimeTextView.text = SongTime.format( 0)
+            binding.songTimeTextView.text = SongTime.format(0)
             binding.seekBar.progress = 0
         }
 

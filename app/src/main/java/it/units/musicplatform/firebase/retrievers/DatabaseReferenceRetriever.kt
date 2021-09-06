@@ -1,4 +1,4 @@
-package it.units.musicplatform.retrievers
+package it.units.musicplatform.firebase.retrievers
 
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase

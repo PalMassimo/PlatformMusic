@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import it.units.musicplatform.R
-import it.units.musicplatform.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
 
 class PictureLoader {
 

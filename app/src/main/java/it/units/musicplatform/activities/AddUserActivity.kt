@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityAddUserBinding
 import it.units.musicplatform.entities.User
-import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 
 class AddUserActivity : AppCompatActivity() {
 
