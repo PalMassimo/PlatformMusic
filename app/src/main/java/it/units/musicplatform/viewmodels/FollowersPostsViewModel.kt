@@ -9,9 +9,8 @@ import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.firebase.DatabaseTaskManager
 import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.repositories.PostsRepository
+import it.units.musicplatform.repositories.FollowersPostsRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
 
 class FollowersPostsViewModel(private val userId: String) : ViewModel() {
@@ -20,10 +19,10 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     private val _followersPosts = MutableLiveData<List<Post>>()
 
     val followersPosts: LiveData<List<Post>> = _followersPosts
-    private val postsRepository = PostsRepository()
+    private val followersPostsRepository = FollowersPostsRepository()
 
     private val _followingUsernames = MutableLiveData<HashMap<String, String>>()
-    val followersUsernames: LiveData<HashMap<String, String>> = _followingUsernames
+    val followingUsernames: LiveData<HashMap<String, String>> = _followingUsernames
 
     init {
         viewModelScope.launch {
@@ -34,9 +33,8 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         }
     }
 
-    private suspend fun loadFollowersUsernames() {
-        _followingUsernames.postValue(DatabaseTaskManager.getFollowingUsernames(userId))
-    }
+    private suspend fun loadFollowersUsernames() = _followingUsernames.postValue(followersPostsRepository.getFollowingUsernames(userId))
+
 
     private fun loadPosts() {
 
@@ -64,31 +62,31 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     fun incrementNumberOfDownloads(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfDownloads++
-        postsRepository.setNumberOfDownloads(post.id, post.numberOfDownloads)
+        followersPostsRepository.setNumberOfDownloads(post.id, post.numberOfDownloads)
     }
 
     fun addLike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfLikes++
-        postsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
+        followersPostsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
     }
 
     fun addDislike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfDislikes++
-        postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
+        followersPostsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
     }
 
     fun removeLike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfLikes--
-        postsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
+        followersPostsRepository.setNumberOfLikes(post.id, post.numberOfLikes)
     }
 
     fun removeDislike(position: Int) {
         val post = followersPosts.value!![position]
         post.numberOfDislikes--
-        postsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
+        followersPostsRepository.setNumberOfDislikes(post.id, post.numberOfDislikes)
     }
 
     fun removeFollowing(followingId: String) {
@@ -96,18 +94,18 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
             postsList.removeIf { post -> post.uploaderId == followingId }
             _followersPosts.postValue(postsList)
 
-            followersUsernames.value!!.remove(followingId)
+            followingUsernames.value!!.remove(followingId)
             _followingUsernames.value = _followingUsernames.value
         }
     }
 
     fun addFollowing(followingId: String) {
         viewModelScope.launch {
-            val followerPostsList = postsRepository.getUserPosts(followingId)
+            val followerPostsList = followersPostsRepository.getUserPosts(followingId)
             postsList = ArrayList(followerPostsList + postsList)
             _followersPosts.postValue(postsList)
 
-            followersUsernames.value!![followingId] = DatabaseTaskManager.getUserTask(followingId).await().getValue(User::class.java)!!.username
+            followingUsernames.value!![followingId] = followersPostsRepository.getFollowingUsername(followingId)
             _followingUsernames.value = _followingUsernames.value
         }
     }

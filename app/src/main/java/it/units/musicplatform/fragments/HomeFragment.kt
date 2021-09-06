@@ -55,11 +55,11 @@ class HomeFragment : Fragment() {
     private fun setUpRecyclerView() {
 
         adapter = FollowersPostsAdapter(this, binding.followersPostsRecyclerView,
-            followersPostsViewModel.followersPosts.value!!, followersPostsViewModel.followersUsernames.value!!)
+            followersPostsViewModel.followersPosts.value!!, followersPostsViewModel.followingUsernames.value!!)
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
         followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(followersPostsViewModel.followersPosts.value!!) })
-        followersPostsViewModel.followersUsernames.observe(viewLifecycleOwner, {adapter.followersUsernames = followersPostsViewModel.followersUsernames.value!!})
+        followersPostsViewModel.followingUsernames.observe(viewLifecycleOwner, {adapter.followersUsernames = followersPostsViewModel.followingUsernames.value!!})
     }
 
     override fun onDestroyView() {
