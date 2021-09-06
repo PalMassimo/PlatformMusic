@@ -23,6 +23,10 @@ class LoginActivity : AppCompatActivity() {
             login(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString())
         }
 
+        binding.forgotPasswordTextView.setOnClickListener {
+            startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
+
     }
 
     private fun login(email: String, password: String) {

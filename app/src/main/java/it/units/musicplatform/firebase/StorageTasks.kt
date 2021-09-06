@@ -5,7 +5,7 @@ import com.google.android.gms.tasks.Task
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
 
-class StorageTaskManager {
+class StorageTasks {
 
     companion object {
 

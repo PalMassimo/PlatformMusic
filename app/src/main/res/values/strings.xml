@@ -27,8 +27,6 @@
     <string name="title_activity_add_post">AddPostActivity</string>
     <string name="share">SHARE</string>
     <string name="hint_searchable">search user…</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_post">edit post</string>
     <string name="bin_icon">bin</string>
     <string name="delete_post">delete post</string>
@@ -43,5 +41,10 @@
     <string name="song_name">song name</string>
     <string name="artist_name">artist name</string>
     <string name="github_logo">github logo</string>
+    <string name="register">Register</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="headphones">headphones</string>
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="reset_password_instruction">Forgot your password? Tap the button to receive an email to reset your password</string>
 
 </resources>

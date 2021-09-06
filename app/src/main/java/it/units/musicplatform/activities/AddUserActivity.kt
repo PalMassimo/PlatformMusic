@@ -23,20 +23,24 @@ class AddUserActivity : AppCompatActivity() {
 
         binding.signUpButton.setOnClickListener {
             when {
-                binding.usernameEditText.text.isBlank() -> showWrongField(binding.usernameEditText, "please insert a username")
-                binding.emailEditText.text.isBlank() -> showWrongField(binding.emailEditText, "please insert an email address")
-                !Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches() -> showWrongField(binding.emailEditText, "please provide a valid email address")
-                binding.passwordEditText.text.isBlank() -> showWrongField(binding.passwordEditText, "please insert a password")
-                binding.passwordEditText.text.toString().length < 6 -> showWrongField(binding.passwordEditText, "a password must have at least six characters")
+                binding.usernameEditText.text.isBlank() -> showError(binding.usernameEditText, "please insert a username")
+                binding.emailEditText.text.isBlank() -> showError(binding.emailEditText, "please insert an email address")
+                isEmailAddressValid() -> showError(binding.emailEditText, "please provide a valid email address")
+                binding.passwordEditText.text.isBlank() -> showError(binding.passwordEditText, "please insert a password")
+                isPasswordValid() -> showError(binding.passwordEditText, "a password must have at least six characters")
                 else -> registerUser(binding.usernameEditText.text.toString(), binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
             }
         }
     }
 
-    private fun showWrongField(editText: EditText, errorMessage: String) {
+    private fun showError(editText: EditText, errorMessage: String) {
         editText.requestFocus()
         editText.error = errorMessage
     }
+
+    private fun isPasswordValid() = binding.passwordEditText.text.toString().length < 6
+
+    private fun isEmailAddressValid() = !Patterns.EMAIL_ADDRESS.matcher(binding.emailEditText.text.toString()).matches()
 
     private fun registerUser(username: String, email: String, password: String) {
 

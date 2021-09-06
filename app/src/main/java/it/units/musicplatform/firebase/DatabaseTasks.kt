@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class DatabaseTaskManager {
+class DatabaseTasks {
 
     companion object {
 
@@ -59,7 +59,7 @@ class DatabaseTaskManager {
             return DatabaseReferenceRetriever.posts().orderByChild("uploaderId").equalTo(userId).get().addOnSuccessListener {
                 StreamSupport.stream(it.children.spliterator(), true)
                     .map { postSnapshot -> postSnapshot.getValue(Post::class.java)!! }
-                    .forEach { post -> posts.add(post) }
+                    .forEach (posts::add)
             }
         }
 
@@ -70,9 +70,9 @@ class DatabaseTaskManager {
                 .continueWith { usersDataSnapshotTask ->
                     val usersDataSnapshot = usersDataSnapshotTask.result
                     StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), true)
-                        .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
-                        .filter { user: User? -> !user?.id.equals(userId) }
-                        .forEach { user: User? -> popularUsers.add(user!!) }
+                        .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java)!! }
+                        .filter { user -> user.id != userId }
+                        .forEach (popularUsers::add)
 
                 }
         }
@@ -84,9 +84,9 @@ class DatabaseTaskManager {
 
             return DatabaseReferenceRetriever.users().get().continueWith { usersDataSnapshotTask: Task<DataSnapshot> ->
                 StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), false)
-                    .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java) }
-                    .filter { user: User? -> user?.username!!.toLowerCase(Locale.ROOT).contains(pattern.toLowerCase(Locale.ROOT)) && user.id != userId }
-                    .forEach { resultUsers.add(it!!) }
+                    .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java)!! }
+                    .filter { user -> user.username.toLowerCase(Locale.ROOT).contains(pattern.toLowerCase(Locale.ROOT)) && user.id != userId }
+                    .forEach (resultUsers::add)
             }
         }
 
