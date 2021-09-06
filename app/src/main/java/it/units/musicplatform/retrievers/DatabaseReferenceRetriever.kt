@@ -27,25 +27,25 @@ class DatabaseReferenceRetriever {
 
     companion object {
 
-        fun users() = USERS_REFERENCE
-        fun user(userId: String) = users().child(userId)
-        fun userNumberOfFollowers(userId: String) = user(userId).child(NUMBER_OF_FOLLOWERS)
-        fun userFollowers(userId: String) = user(userId).child(FOLLOWERS_CHILD)
-        fun userFollowing(userId: String) = user(userId).child(FOLLOWING_CHILD)
-        fun userLikes(userId: String) = user(userId).child(LIKES_CHILD)
-        fun userLike(userId: String, postId: String) = userLikes(userId).child(postId)
-        fun userDislikes(userId: String) = user(userId).child(DISLIKES_CHILD)
-        fun userDislike(userId: String, postId: String) = userDislikes(userId).child(postId)
-        fun userPosts(userId: String) = user(userId).child(POSTS_CHILD)
-        fun userPost(userId: String, postId: String) = userPosts(userId).child(postId)
+        @JvmStatic fun users() = USERS_REFERENCE
+        @JvmStatic fun user(userId: String) = users().child(userId)
+        @JvmStatic fun userNumberOfFollowers(userId: String) = user(userId).child(NUMBER_OF_FOLLOWERS)
+        @JvmStatic fun userFollowers(userId: String) = user(userId).child(FOLLOWERS_CHILD)
+        @JvmStatic fun userFollowing(userId: String) = user(userId).child(FOLLOWING_CHILD)
+        @JvmStatic fun userLikes(userId: String) = user(userId).child(LIKES_CHILD)
+        @JvmStatic fun userLike(userId: String, postId: String) = userLikes(userId).child(postId)
+        @JvmStatic fun userDislikes(userId: String) = user(userId).child(DISLIKES_CHILD)
+        @JvmStatic fun userDislike(userId: String, postId: String) = userDislikes(userId).child(postId)
+        @JvmStatic fun userPosts(userId: String) = user(userId).child(POSTS_CHILD)
+        @JvmStatic fun userPost(userId: String, postId: String) = userPosts(userId).child(postId)
 
-        fun posts() = POSTS_REFERENCE
-        fun post(postId: String) = posts().child(postId)
-        fun postSongName(postId: String) = post(postId).child(SONG_NAME_CHILD)
-        fun postArtistName(postId: String) = post(postId).child(ARTIST_NAME_CHILD)
-        fun postNumberOfLikes(postId: String) = post(postId).child(NUMBER_OF_LIKES)
-        fun postNumberOfDislikes(postId: String) = post(postId).child(NUMBER_OF_DISLIKES)
-        fun postNumberOfDownloads(postId: String) = post(postId).child(NUMBER_OF_DOWNLOADS)
+        @JvmStatic fun posts() = POSTS_REFERENCE
+        @JvmStatic fun post(postId: String) = posts().child(postId)
+        @JvmStatic fun postSongName(postId: String) = post(postId).child(SONG_NAME_CHILD)
+        @JvmStatic fun postArtistName(postId: String) = post(postId).child(ARTIST_NAME_CHILD)
+        @JvmStatic fun postNumberOfLikes(postId: String) = post(postId).child(NUMBER_OF_LIKES)
+        @JvmStatic fun postNumberOfDislikes(postId: String) = post(postId).child(NUMBER_OF_DISLIKES)
+        @JvmStatic fun postNumberOfDownloads(postId: String) = post(postId).child(NUMBER_OF_DOWNLOADS)
 
 
     }

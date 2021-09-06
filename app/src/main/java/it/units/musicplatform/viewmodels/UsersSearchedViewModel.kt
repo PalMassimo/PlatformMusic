@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.repositories.UsersSearchedRepository
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class UsersSearchedViewModel(userId: String) : ViewModel() {

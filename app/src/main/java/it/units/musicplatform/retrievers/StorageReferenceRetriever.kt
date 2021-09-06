@@ -12,13 +12,13 @@ class StorageReferenceRetriever {
 
     companion object{
 
-        fun userImageReference(userId: String) = userDirectoryReference(userId).child(PROFILE_PICTURE_CHILD)
-        fun coverReference(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
-        fun songReference(userId: String, postId: String) = userSongsFolderReference(userId).child(postId)
+        @JvmStatic fun userImageReference(userId: String) = userDirectoryReference(userId).child(PROFILE_PICTURE_CHILD)
+        @JvmStatic fun coverReference(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
+        @JvmStatic fun songReference(userId: String, postId: String) = userSongsFolderReference(userId).child(postId)
 
-        private fun userDirectoryReference(userId: String) = STORAGE_REFERENCE.child(userId)
-        private fun userCoversFolderReference(userId: String) = userDirectoryReference(userId).child(SONGS_COVERS_CHILD)
-        private fun userSongsFolderReference(userId: String) = userDirectoryReference(userId).child(SONGS_CHILD)
+        @JvmStatic private fun userDirectoryReference(userId: String) = STORAGE_REFERENCE.child(userId)
+        @JvmStatic private fun userCoversFolderReference(userId: String) = userDirectoryReference(userId).child(SONGS_COVERS_CHILD)
+        @JvmStatic private fun userSongsFolderReference(userId: String) = userDirectoryReference(userId).child(SONGS_CHILD)
     }
 
 }
