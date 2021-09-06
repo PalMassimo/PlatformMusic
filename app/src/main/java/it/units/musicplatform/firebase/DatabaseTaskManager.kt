@@ -1,13 +1,16 @@
 package it.units.musicplatform.firebase
 
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
+import kotlinx.coroutines.tasks.await
 import java.util.*
 import java.util.stream.StreamSupport
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class DatabaseTaskManager {
 
@@ -24,6 +27,30 @@ class DatabaseTaskManager {
                     .filter { it!!.uploaderId == userId }
                     .forEach { posts.add(it!!) }
             }
+        }
+
+        @JvmStatic
+        suspend fun getFollowingUsernames(userId: String) : HashMap<String, String> {
+
+            val getFollowingUsernameTaskSet = HashSet<Task<DataSnapshot>>()
+
+            getUserTask(userId).continueWith {
+                it.result!!.getValue(User::class.java)!!.following.keys.stream()
+                    .map { followingId -> getUserTask(followingId) }
+                    .forEach(getFollowingUsernameTaskSet::add)
+            }.await()
+
+            val followingUsernamesMap = HashMap<String, String>()
+
+            Tasks.whenAllComplete(getFollowingUsernameTaskSet).continueWith {
+                getFollowingUsernameTaskSet.stream().forEach {
+                    val followingUser = it.result!!.getValue(User::class.java)!!
+                    followingUsernamesMap[followingUser.id] = followingUser.username
+                }
+            }.await()
+
+            return followingUsernamesMap
+
         }
 
         @JvmStatic

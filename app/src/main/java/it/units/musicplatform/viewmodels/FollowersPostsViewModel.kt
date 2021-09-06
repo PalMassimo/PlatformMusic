@@ -4,14 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.firebase.DatabaseTaskManager
-import it.units.musicplatform.repositories.PostsRepository
 import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
+import it.units.musicplatform.repositories.PostsRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.stream.StreamSupport
@@ -37,25 +35,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     }
 
     private suspend fun loadFollowersUsernames() {
-
-        val getFollowingUsernameTaskSet = HashSet<Task<DataSnapshot>>()
-
-        DatabaseTaskManager.getUserTask(userId).continueWith {
-            it.result!!.getValue(User::class.java)!!.following.keys.stream()
-                .map { followingId -> DatabaseTaskManager.getUserTask(followingId) }
-                .forEach(getFollowingUsernameTaskSet::add)
-        }.await()
-
-        val followingUsernamesMap = HashMap<String, String>()
-
-        Tasks.whenAllComplete(getFollowingUsernameTaskSet).continueWith {
-            getFollowingUsernameTaskSet.stream().forEach {
-                val followingUser = it.result!!.getValue(User::class.java)!!
-                followingUsernamesMap[followingUser.id] = followingUser.username
-            }
-        }.await()
-
-        _followingUsernames.postValue(followingUsernamesMap)
+        _followingUsernames.postValue(DatabaseTaskManager.getFollowingUsernames(userId))
     }
 
     private fun loadPosts() {
@@ -127,7 +107,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
             postsList = ArrayList(followerPostsList + postsList)
             _followersPosts.postValue(postsList)
 
-            followersUsernames.value!![followingId] = DatabaseReferenceRetriever.user(followingId).get().await().getValue(User::class.java)!!.username
+            followersUsernames.value!![followingId] = DatabaseTaskManager.getUserTask(followingId).await().getValue(User::class.java)!!.username
             _followingUsernames.value = _followingUsernames.value
         }
     }
