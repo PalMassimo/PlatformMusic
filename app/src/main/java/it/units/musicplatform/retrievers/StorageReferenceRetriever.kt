@@ -13,8 +13,8 @@ class StorageReferenceRetriever {
     companion object{
 
         @JvmStatic fun userImageReference(userId: String) = userDirectoryReference(userId).child(PROFILE_PICTURE_CHILD)
-        @JvmStatic fun coverReference(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
-        @JvmStatic fun songReference(userId: String, postId: String) = userSongsFolderReference(userId).child(postId)
+        @JvmStatic fun cover(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
+        @JvmStatic fun song(userId: String, postId: String) = userSongsFolderReference(userId).child(postId)
 
         @JvmStatic private fun userDirectoryReference(userId: String) = STORAGE_REFERENCE.child(userId)
         @JvmStatic private fun userCoversFolderReference(userId: String) = userDirectoryReference(userId).child(SONGS_COVERS_CHILD)

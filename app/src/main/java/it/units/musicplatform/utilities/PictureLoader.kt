@@ -12,7 +12,7 @@ class PictureLoader {
 
         fun loadCover(context: Context, imageView: ImageView, userId: String, postId: String) {
             GlideApp.with(context)
-                .load(StorageReferenceRetriever.coverReference(userId, postId))
+                .load(StorageReferenceRetriever.cover(userId, postId))
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(R.drawable.ic_music_note)

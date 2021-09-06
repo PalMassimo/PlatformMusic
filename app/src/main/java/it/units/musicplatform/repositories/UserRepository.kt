@@ -5,87 +5,68 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.entities.User
+import it.units.musicplatform.firebase.DatabaseTaskManager
+import it.units.musicplatform.firebase.StorageTaskManager
 import it.units.musicplatform.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.retrievers.StorageReferenceRetriever
 import kotlinx.coroutines.tasks.await
-import java.util.stream.StreamSupport
 
 class UserRepository(private val userId: String) {
 
-    suspend fun getUser() = DatabaseReferenceRetriever.user(userId).get().await().getValue(User::class.java)
+    suspend fun getUser() = DatabaseTaskManager.getUserTask(userId).await().getValue(User::class.java)
+
 
     suspend fun getPosts(): ArrayList<Post> {
         val posts = ArrayList<Post>()
-        DatabaseReferenceRetriever.posts().get().continueWith { postsSnapshotTask ->
-            StreamSupport.stream(postsSnapshotTask.result!!.children.spliterator(), false)
-                .map { it.getValue(Post::class.java) }
-                .filter { it!!.uploaderId == userId }
-                .forEach { posts.add(it!!) }
-        }.await()
+        DatabaseTaskManager.getUserPostsTask(userId, posts).await()
         return posts
     }
 
     suspend fun addPost(post: Post, localUriSong: Uri, localUriCover: Uri?): Post {
 
         val tasks = HashSet<Task<Unit>>()
+        tasks.add(StorageTaskManager.addSongTask(userId, post, localUriSong))
 
         localUriCover?.let { uri ->
-            val addCoverTask = StorageReferenceRetriever.coverReference(userId, post.id).putFile(uri).continueWithTask {
-                it.result!!.storage.downloadUrl
-            }.continueWith { uriTask -> post.coverDownloadString = uriTask.result.toString() }
-            tasks.add(addCoverTask)
+            tasks.add(StorageTaskManager.replaceCoverTask(userId, post, uri))
         }
 
-        val addSongTask = StorageReferenceRetriever.songReference(userId, post.id).putFile(localUriSong).continueWithTask {
-            it.result!!.storage.downloadUrl
-        }.continueWith { uriTask -> post.songDownloadString = uriTask.result.toString() }
-
-        tasks.add(addSongTask)
-
-        Tasks.whenAllComplete(tasks).continueWith {
-            DatabaseReferenceRetriever.post(post.id).setValue(post)
-            DatabaseReferenceRetriever.userPost(post.uploaderId, post.id).setValue(true)
-        }.await()
+        Tasks.whenAllComplete(tasks)
+            .continueWithTask { DatabaseTaskManager.addPostTask(post) }
+            .await()
 
         return post
     }
 
     suspend fun updatePost(post: Post, songName: String?, artistName: String?, localUriCover: String?): Post {
 
-        localUriCover?.let { localUri ->
-            StorageReferenceRetriever.coverReference(post.uploaderId, post.id).putFile(Uri.parse(localUri)).continueWithTask {
-                it.result!!.storage.downloadUrl
-            }.continueWith { uriTask -> post.coverDownloadString = uriTask.toString() }.await()
-        }
-
-        songName?.let { DatabaseReferenceRetriever.postSongName(post.id).setValue(it) }
-        artistName?.let { DatabaseReferenceRetriever.postArtistName(post.id).setValue(it) }
+        localUriCover?.let { StorageTaskManager.replaceCoverTask(userId, post, Uri.parse(it)).await() }
+        songName?.let { DatabaseTaskManager.updateSongNameTask(post.id, it) }
+        artistName?.let { DatabaseTaskManager.updateArtistNameTask(post.id, it) }
 
         return post
 
     }
 
     fun addFollowing(followingId: String) {
-        DatabaseReferenceRetriever.userFollowing(userId).child(followingId).setValue(true)
-        DatabaseReferenceRetriever.userFollowers(followingId).child(userId).setValue(true)
-        changeNumberOfFollowers(followingId, increase = true)
+        DatabaseTaskManager.addFollowing(userId, followingId)
+//        changeNumberOfFollowers(followingId, increase = true)
     }
 
     fun removeFollowing(followingId: String) {
-        DatabaseReferenceRetriever.userFollowing(userId).child(followingId).removeValue()
-        DatabaseReferenceRetriever.userFollowers(followingId).child(userId).removeValue()
-        changeNumberOfFollowers(followingId, increase = false)
+        DatabaseTaskManager.removeFollowing(userId, followingId)
+//        changeNumberOfFollowers(followingId, increase = false)
     }
 
-    private fun changeNumberOfFollowers(followingId: String, increase: Boolean) {
-
-        DatabaseReferenceRetriever.userNumberOfFollowers(followingId).get().continueWith {
-            it.result!!.getValue(Int::class.java)
-        }.addOnSuccessListener { numberOfFollowers ->
-            val updatedNumberOfFollowers = if (increase) numberOfFollowers!! + 1 else numberOfFollowers!! - 1
-            DatabaseReferenceRetriever.userNumberOfFollowers(followingId).setValue(updatedNumberOfFollowers)
-        }
-    }
+//    private fun changeNumberOfFollowers(followingId: String, increase: Boolean) {
+//
+//        DatabaseReferenceRetriever.userNumberOfFollowers(followingId).get()
+//            .continueWith { it.result!!.getValue(Int::class.java) }
+//            .addOnSuccessListener { numberOfFollowers ->
+//                val updatedNumberOfFollowers = if (increase) numberOfFollowers!! + 1 else numberOfFollowers!! - 1
+//                DatabaseReferenceRetriever.userNumberOfFollowers(followingId).setValue(updatedNumberOfFollowers)
+//            }
+//    }
 
     fun addLike(postId: String) = DatabaseReferenceRetriever.userLike(userId, postId).setValue(true)
     fun removeLike(postId: String) = DatabaseReferenceRetriever.userLike(userId, postId).removeValue()
@@ -96,8 +77,8 @@ class UserRepository(private val userId: String) {
         DatabaseReferenceRetriever.userPost(userId, postId).removeValue()
         DatabaseReferenceRetriever.post(postId).removeValue()
 
-        StorageReferenceRetriever.songReference(userId, postId).delete()
-        StorageReferenceRetriever.coverReference(userId, postId).delete()
+        StorageReferenceRetriever.song(userId, postId).delete()
+        StorageReferenceRetriever.cover(userId, postId).delete()
     }
 
     fun updateProfilePicture(uri: Uri) = StorageReferenceRetriever.userImageReference(userId).putFile(uri)
