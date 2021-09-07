@@ -27,7 +27,6 @@ class EditPostDialogFragment : DialogFragment() {
 
     private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-//            binding.coverImageView.setImageURI(uri)
             Glide.with(requireContext()).load(uri).into(binding.coverImageView)
             localImageUri = uri
         }

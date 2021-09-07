@@ -48,7 +48,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         StreamSupport.stream(postsSnapshot.children.spliterator(), true)
             .map { it.key }
             .map { DatabaseReferenceRetriever.post(it!!).get() }
-            .forEach { it.addOnSuccessListener { fromPostSnapshotToPost(it) } }
+            .forEach { it.addOnSuccessListener { postSnapshot -> fromPostSnapshotToPost(postSnapshot) } }
     }
 
     private fun fromPostSnapshotToPost(postsSnapshot: DataSnapshot) {
