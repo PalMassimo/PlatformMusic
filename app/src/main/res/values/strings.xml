@@ -46,5 +46,6 @@
     <string name="headphones">headphones</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="reset_password_instruction">Forgot your password? Tap the button to receive an email to reset your password</string>
+    <string name="send_email">Send email</string>
 
 </resources>
