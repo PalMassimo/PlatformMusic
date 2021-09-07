@@ -50,7 +50,7 @@ class AddUserActivity : AppCompatActivity() {
             val user = User(id = task.user!!.uid, email = email, username = username)
 
             DatabaseReferenceRetriever.user(user.id).setValue(user).addOnSuccessListener {
-                binding.progressBar.visibility = View.GONE
+                binding.progressBar.visibility = View.INVISIBLE
                 val intent = Intent(this, MainActivity::class.java).apply { putExtras(Bundle().apply { putString(getString(R.string.user_id), user.id) }) }
                 startActivity(intent)
             }

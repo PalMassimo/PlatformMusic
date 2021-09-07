@@ -65,11 +65,13 @@
         android:textSize="26sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
+    <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginTop="50dp"
+        android:layout_width="300dp"
+        android:indeterminate="true"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </LinearLayout>
