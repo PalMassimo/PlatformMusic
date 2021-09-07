@@ -1,7 +1,6 @@
 package it.units.musicplatform.entities
 
 import android.os.Parcelable
-import androidx.databinding.BaseObservable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
