@@ -13,12 +13,15 @@ class SongDownloader(val context: Context, private val post: Post) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
         val uri = Uri.parse(post.songDownloadString)
-        val request = DownloadManager.Request(uri)
-        request.setTitle("Download song " + post.songName)
-        request.setMimeType("audio")
-        request.setDescription("downloading song...")
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS, post.songName)
+
+        val request = DownloadManager.Request(uri).apply {
+            setTitle("Download song " + post.songName)
+            setMimeType("audio")
+            setDescription("downloading song...")
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS, post.songName)
+        }
+
         downloadManager.enqueue(request)
 
     }

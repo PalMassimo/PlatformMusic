@@ -40,7 +40,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         DatabaseReferenceRetriever.user(userId).get().addOnSuccessListener {
             it.getValue(User::class.java)!!.following.keys.stream()
                 .map { followingId -> DatabaseReferenceRetriever.userPosts(followingId).get() }
-                ?.forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
+                .forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
         }
     }
 

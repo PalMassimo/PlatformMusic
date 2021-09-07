@@ -56,7 +56,7 @@ class UserRepository(private val userId: String) {
         StorageTasks.deleteSong(userId, postId)
     }
 
-    fun updateProfilePicture(uri: Uri) = StorageTasks.updateProfilePicture(userId, uri)
+    fun updateProfilePicture(uri: Uri) = StorageTasks.updateProfilePictureTask(userId, uri)
 
 
 }

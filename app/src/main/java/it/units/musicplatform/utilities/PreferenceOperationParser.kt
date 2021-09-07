@@ -8,16 +8,19 @@ class PreferenceOperationParser {
 
     companion object {
 
+        @JvmStatic
         fun changePreference(preference: Preference, postId: String, likeMap: HashMap<String, Boolean>, dislikeMap: HashMap<String, Boolean>): PreferenceOperation {
             return if (preference == Preference.LIKE) changeLike(postId, likeMap, dislikeMap) else changeDislike(postId, likeMap, dislikeMap)
         }
 
+        @JvmStatic
         private fun changeLike(postId: String, likeMap: HashMap<String, Boolean>, dislikeMap: HashMap<String, Boolean>) = when {
             !likeMap.containsKey(postId) and !dislikeMap.containsKey(postId) -> ADD_LIKE
             likeMap.containsKey(postId) and !dislikeMap.containsKey(postId) -> REMOVE_LIKE
             else -> FROM_DISLIKE_TO_LIKE
         }
 
+        @JvmStatic
         private fun changeDislike(postId: String, likeMap: HashMap<String, Boolean>, dislikeMap: HashMap<String, Boolean>) = when {
             !likeMap.containsKey(postId) and !dislikeMap.containsKey(postId) -> ADD_DISLIKE
             !likeMap.containsKey(postId) and dislikeMap.containsKey(postId) -> REMOVE_DISLIKE

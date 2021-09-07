@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import it.units.musicplatform.databinding.FragmentBottomSheetBinding
+import it.units.musicplatform.enumerations.PostOperation
 
 private const val POST_OPERATION = "post_operation"
 private const val POSITION = "position"
@@ -36,8 +37,8 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.editLayout.setOnClickListener { postOperationListener("edit", elementPosition) }
-        binding.deleteLayout.setOnClickListener { postOperationListener("delete", elementPosition) }
+        binding.editLayout.setOnClickListener { postOperationListener(PostOperation.EDIT.name, elementPosition) }
+        binding.deleteLayout.setOnClickListener { postOperationListener(PostOperation.DELETE.name, elementPosition) }
     }
 
     override fun onDestroy() {

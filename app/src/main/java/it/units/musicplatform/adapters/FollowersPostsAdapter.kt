@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.PostCardBinding
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.entities.User
 import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.fragments.HomeFragment
-import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
-import it.units.musicplatform.utilities.*
+import it.units.musicplatform.utilities.MediaPlayerManager
+import it.units.musicplatform.utilities.PictureLoader
+import it.units.musicplatform.utilities.SongDownloader
+import it.units.musicplatform.utilities.SongTime
 
 class FollowersPostsAdapter(
     private val homeFragment: HomeFragment,
@@ -43,9 +44,7 @@ class FollowersPostsAdapter(
 
         binding.likeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.LIKE) }
         binding.dislikeImageButton.setOnClickListener { homeFragment.changePreference(position, Preference.DISLIKE) }
-        binding.playPauseImageButton.setOnClickListener {
-            mediaPlayerManager.doAction(position)
-        }
+        binding.playPauseImageButton.setOnClickListener { mediaPlayerManager.doAction(position) }
 
         binding.downloadImageButton.setOnClickListener { downloadView ->
             val songDownloader = SongDownloader(downloadView.context, post)

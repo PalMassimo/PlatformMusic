@@ -80,7 +80,6 @@ class UserViewModel : ViewModel() {
         var post = posts.value!!.get(position)
         viewModelScope.launch {
             post = userRepository.updatePost(post, songName, artistName, localUriCover)
-            _posts.value = _posts.value
         }
     }
 

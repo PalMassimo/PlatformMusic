@@ -58,8 +58,10 @@ class HomeFragment : Fragment() {
             this, binding.followersPostsRecyclerView,
             followersPostsViewModel.followersPosts.value!!, followersPostsViewModel.followingUsernames.value!!
         )
+
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
+
         followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(followersPostsViewModel.followersPosts.value!!) })
         followersPostsViewModel.followingUsernames.observe(viewLifecycleOwner, { adapter.followersUsernames = followersPostsViewModel.followingUsernames.value!! })
     }

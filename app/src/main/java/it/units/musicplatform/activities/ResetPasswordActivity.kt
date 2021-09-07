@@ -19,11 +19,9 @@ class ResetPasswordActivity : AppCompatActivity() {
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.instructionTextView.text = getString(R.string.reset_password_instruction)
-
         binding.sendEmailButton.setOnClickListener {
             when {
-                binding.resetEmailEditText.text.isBlank() -> showErrorMessage("please insert your email address")
+                isEmailAddressBlank() -> showErrorMessage("please insert your email address")
                 isEmailAddressValid() -> showErrorMessage("please insert a valid email address")
                 else -> sendResetPasswordEmail()
             }
@@ -46,4 +44,5 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun isEmailAddressValid() = !Patterns.EMAIL_ADDRESS.matcher(binding.resetEmailEditText.text.toString()).matches()
+    private fun isEmailAddressBlank() = binding.resetEmailEditText.text.isBlank()
 }

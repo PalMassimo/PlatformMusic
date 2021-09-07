@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.bumptech.glide.Glide
 import it.units.musicplatform.R
 import it.units.musicplatform.databinding.FragmentEditpostDialogBinding
 import it.units.musicplatform.entities.Post
@@ -26,7 +27,8 @@ class EditPostDialogFragment : DialogFragment() {
 
     private val uriLauncherActivity = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            binding.coverImageView.setImageURI(uri)
+//            binding.coverImageView.setImageURI(uri)
+            Glide.with(requireContext()).load(uri).into(binding.coverImageView)
             localImageUri = uri
         }
     }

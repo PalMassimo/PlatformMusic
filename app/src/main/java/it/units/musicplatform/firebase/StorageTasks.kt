@@ -30,7 +30,7 @@ class StorageTasks {
         }
 
         @JvmStatic
-        fun updateProfilePicture(userId: String, uri: Uri) = StorageReferenceRetriever.userImageReference(userId).putFile(uri)
+        fun updateProfilePictureTask(userId: String, uri: Uri) = StorageReferenceRetriever.userImageReference(userId).putFile(uri)
 
     }
 

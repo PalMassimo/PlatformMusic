@@ -13,18 +13,21 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUpListeners()
+
+    }
+
+    private fun setUpListeners() {
+
         binding.registerUserTextView.setOnClickListener { startActivity(Intent(this, AddUserActivity::class.java)) }
 
-        binding.loginButton.setOnClickListener {
-            login(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString())
-        }
+        binding.loginButton.setOnClickListener { login(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString()) }
 
-        binding.forgotPasswordTextView.setOnClickListener {
-            startActivity(Intent(this, ResetPasswordActivity::class.java))
-        }
+        binding.forgotPasswordTextView.setOnClickListener { startActivity(Intent(this, ResetPasswordActivity::class.java)) }
 
     }
 

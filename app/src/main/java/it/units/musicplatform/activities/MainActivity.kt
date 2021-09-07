@@ -83,19 +83,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerAddPostLauncher() = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-        if (activityResult.resultCode == RESULT_OK) {
-            Toast.makeText(this, "The song is uploading correctly", Toast.LENGTH_SHORT).show()
-            activityResult.data?.extras?.let {
-                val post = it.get("post") as Post
-                val localUriCover = it.getString("localUriCover")
-                val localUriSong = it.getString("localUriSong")
-                userViewModel.addPost(post, Uri.parse(localUriSong), if (localUriCover == null) null else Uri.parse(localUriCover))
-            }
-        } else if (activityResult.resultCode == RESULT_CANCELED) {
-            activityResult.data?.extras?.getString("message")?.let { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+        when (activityResult.resultCode) {
+
+            RESULT_CANCELED -> activityResult.data?.extras?.getString("message")?.let { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+
+            RESULT_OK -> {
+                Toast.makeText(this, "Uploading started", Toast.LENGTH_SHORT).show()
+                activityResult.data?.extras?.let {
+                    val post = it.get("post") as Post
+                    val localUriCover = it.getString("localUriCover")
+                    val localUriSong = it.getString("localUriSong")
+                    userViewModel.addPost(post, Uri.parse(localUriSong), if (localUriCover == null) null else Uri.parse(localUriCover))
+                }
             }
         }
+
     }
 
 

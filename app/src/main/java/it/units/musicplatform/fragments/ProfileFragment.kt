@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import it.units.musicplatform.adapters.UserPostsAdapter
 import it.units.musicplatform.databinding.FragmentProfileBinding
+import it.units.musicplatform.enumerations.PostOperation
 import it.units.musicplatform.utilities.PictureLoader
 import it.units.musicplatform.viewmodels.UserViewModel
 
@@ -29,7 +30,6 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListeners()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -64,22 +64,29 @@ class ProfileFragment : Fragment() {
             val position = bundle.getInt("position")
 
             when (bundle.get("operation")) {
-                "edit" -> EditPostDialogFragment.newInstance(userViewModel.posts.value!![position], position, userId).run { show(this@ProfileFragment.parentFragmentManager, tag) }
-                "delete" -> deletePost(position)
+                PostOperation.EDIT.name -> EditPostDialogFragment.newInstance(userViewModel.posts.value!![position], position, userId).run { show(this@ProfileFragment.parentFragmentManager, tag) }
+                PostOperation.DELETE.name -> deletePost(position)
                 else -> Toast.makeText(context, "Asked for unknown operation", Toast.LENGTH_LONG).show()
             }
 
         }
 
         setFragmentResultListener("updated_post") { _, bundle ->
-            bundle.let {
-                val postPosition = it.getInt("element_position")
-                it.getString("localUriCover")?.let {uri ->
+            bundle.apply {
+                val postPosition = getInt("element_position")
+                val localUriCover = getString("localUriCover")
+                val artistName = getString("artistName")
+                val songName = getString("songName")
+                val userPostHolder = binding.userPostsRecyclerView.findViewHolderForAdapterPosition(postPosition) as UserPostsAdapter.PostHolder
+
+                songName?.let { userPostHolder.binding.songTextView.text = it }
+                artistName?.let { userPostHolder.binding.artistTextView.text = it }
+                localUriCover?.let { uri ->
                     PictureLoader.cleanDisk(requireContext())
-                    val userPostHolder = binding.userPostsRecyclerView.findViewHolderForAdapterPosition(postPosition) as UserPostsAdapter.PostHolder
                     Glide.with(requireContext()).load(uri).into(userPostHolder.binding.songPictureImageView)
                 }
-                userViewModel.updatePost(postPosition, it.getString("songName"), it.getString("artistName"), it.getString("localUriCover"))
+
+                userViewModel.updatePost(postPosition, songName, artistName, localUriCover)
             }
         }
     }
@@ -100,6 +107,7 @@ class ProfileFragment : Fragment() {
     private fun deletePost(position: Int) {
         userViewModel.deletePost(adapter.posts[position].id)
         adapter.notifyItemRemoved(position)
+        Toast.makeText(context, "Post deleted", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

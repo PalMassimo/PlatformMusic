@@ -16,6 +16,7 @@ class UsersSearchedViewModel(userId: String) : ViewModel() {
 
     init {
         viewModelScope.launch {
+            _popularUsers.value = ArrayList()
             _popularUsers.postValue(usersSearchRepository.loadPopularUsers())
         }
     }

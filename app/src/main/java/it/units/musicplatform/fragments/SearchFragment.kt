@@ -28,7 +28,6 @@ class SearchFragment : Fragment() {
     private lateinit var usersSearchedViewModel: UsersSearchedViewModel
     private lateinit var followersPostsViewModel: FollowersPostsViewModel
 
-
     private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +67,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun performSearch() {
-        adapter = UsersAdapter(ArrayList(), userViewModel.user.value?.following?.keys, this)
+        adapter = UsersAdapter(ArrayList(), userViewModel.user.value!!.following.keys, this)
         usersSearchedViewModel.viewModelScope.launch(Dispatchers.Main) {
             adapter.users = usersSearchedViewModel.searchUsers(requireArguments().get("query") as String)
             adapter.notifyDataSetChanged()
@@ -76,7 +75,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showMostPopular() {
-        adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value, userViewModel.user.value?.following?.keys, this)
+        adapter = UsersAdapter(usersSearchedViewModel.popularUsers.value!!, userViewModel.user.value!!.following.keys, this)
         usersSearchedViewModel.popularUsers.observe(viewLifecycleOwner, {
             adapter.users = usersSearchedViewModel.popularUsers.value!!
             adapter.notifyDataSetChanged()
