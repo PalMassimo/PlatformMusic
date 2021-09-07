@@ -82,16 +82,14 @@ class SearchFragment : Fragment() {
         })
     }
 
-    fun addFollowing(followingId: String, position: Int) {
+    fun addFollowing(followingId: String) {
         userViewModel.addFollowing(followingId)
         followersPostsViewModel.addFollowing(followingId)
-        adapter.notifyItemChanged(position)
     }
 
-    fun removeFollowing(followingId: String, position: Int) {
+    fun removeFollowing(followingId: String) {
         userViewModel.removeFollowing(followingId)
         followersPostsViewModel.removeFollowing(followingId)
-        adapter.notifyItemChanged(position)
     }
 
     override fun onDestroyView() {

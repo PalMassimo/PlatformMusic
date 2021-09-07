@@ -32,18 +32,18 @@
         app:layout_constraintStart_toEndOf="@+id/profileImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <androidx.appcompat.widget.SwitchCompat-->
-    <!--        android:id="@+id/switchElement"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        />-->
-
-    <ToggleButton
-        android:id="@+id/followToggleButton"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/followUnfollowButton"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textOff="@string/follow"
-        android:textOn="@string/unfollow" />
+        />
+<!--    <ToggleButton-->
+<!--        android:id="@+id/followToggleButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:textOff="@string/follow"-->
+<!--        android:textOn="@string/unfollow" />-->
 
 </LinearLayout>
