@@ -46,6 +46,7 @@ class ProfileFragment : Fragment() {
         val newProfileImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
                 userViewModel.updateProfilePicture(it)
+                PictureLoader.cleanDisk(requireContext())
                 Glide.with(requireContext()).load(it).into(binding.profileImageView)
             }
         }
@@ -73,6 +74,11 @@ class ProfileFragment : Fragment() {
         setFragmentResultListener("updated_post") { _, bundle ->
             bundle.let {
                 val postPosition = it.getInt("element_position")
+                it.getString("localUriCover")?.let {uri ->
+                    PictureLoader.cleanDisk(requireContext())
+                    val userPostHolder = binding.userPostsRecyclerView.findViewHolderForAdapterPosition(postPosition) as UserPostsAdapter.PostHolder
+                    Glide.with(requireContext()).load(uri).into(userPostHolder.binding.songPictureImageView)
+                }
                 userViewModel.updatePost(postPosition, it.getString("songName"), it.getString("artistName"), it.getString("localUriCover"))
             }
         }

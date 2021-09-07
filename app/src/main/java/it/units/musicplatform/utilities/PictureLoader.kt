@@ -2,9 +2,12 @@ package it.units.musicplatform.utilities
 
 import android.content.Context
 import android.widget.ImageView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.Glide
 import it.units.musicplatform.R
 import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PictureLoader {
 
@@ -14,18 +17,20 @@ class PictureLoader {
             GlideApp.with(context)
                 .load(StorageReferenceRetriever.cover(userId, postId))
                 .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(R.drawable.ic_music_note)
                 .into(imageView)
         }
 
-        fun loadProfilePicture(context: Context, imageView: ImageView, userId: String){
+        fun loadProfilePicture(context: Context, imageView: ImageView, userId: String) {
             GlideApp.with(context)
                 .load(StorageReferenceRetriever.userImageReference(userId))
                 .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .error(R.drawable.ic_profile)
                 .into(imageView)
+        }
+
+        fun cleanDisk(context: Context) {
+            GlobalScope.launch(Dispatchers.Default) { Glide.get(context).clearDiskCache() }
         }
     }
 

@@ -52,7 +52,7 @@ class EditPostDialogFragment : DialogFragment() {
             setView(binding.root)
             setIcon(R.mipmap.ic_launcher_round)
             setTitle("Edit your post")
-            setNegativeButton("Cancel") { _, _ -> }
+            setNeutralButton("Cancel") { _, _ -> }
             setPositiveButton("Confirm") { _, _ ->
                 editPost(binding.songNameEditText.text.toString(), binding.artistNameEditText.text.toString())
             }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
