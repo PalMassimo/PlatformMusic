@@ -24,6 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:text="@string/uploader"
@@ -34,16 +35,11 @@
 
     <Button
         android:id="@+id/followUnfollowButton"
-        android:layout_width="120dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:textAllCaps="false"
         />
-<!--    <ToggleButton-->
-<!--        android:id="@+id/followToggleButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center_vertical"-->
-<!--        android:textOff="@string/follow"-->
-<!--        android:textOn="@string/unfollow" />-->
+
 
 </LinearLayout>
