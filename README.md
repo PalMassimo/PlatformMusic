@@ -43,7 +43,7 @@ The music posts can be played from the home page of the application and the user
 ---
 
 ### Author
-The whole code is developed and manteined by Massimo Palmisano
+The whole code is developed and maintained by Massimo Palmisano
 
 ---
 
