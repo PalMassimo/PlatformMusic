@@ -31,6 +31,13 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
         }
     }
 
+    fun release() {
+        if (currentSong != -1) {
+            stopSong(currentSong)
+            mediaPlayer.release()
+        }
+    }
+
     fun doAction(songIndex: Int) {
         if (currentSong == songIndex) {
             if (mediaPlayer.isPlaying) pauseSong(songIndex) else resumeSong(songIndex)
@@ -47,10 +54,10 @@ class MediaPlayerManager(private val adapter: FollowersPostsAdapter) {
             mediaPlayer.setDataSource(adapter.followersPostsList[postIndex].songDownloadString)
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener {
-                it.start()
+                handler.sendEmptyMessageAtTime(1, 1000)
                 adapter.songStarted(currentSong, postIndex)
                 currentSong = postIndex
-                handler.sendEmptyMessageAtTime(1, 1000)
+                it.start()
             }
         } catch (ioException: IOException) {
             ioException.printStackTrace()
