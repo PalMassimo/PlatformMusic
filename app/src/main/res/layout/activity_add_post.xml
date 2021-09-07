@@ -60,6 +60,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:padding="15dp"
+        android:textAllCaps="false"
         android:text="@string/share"
         android:clickable="false"
         android:textSize="30sp" />

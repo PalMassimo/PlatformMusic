@@ -13,7 +13,6 @@
 
         <activity
             android:name=".activities.ResetPasswordActivity"
-            android:label="@string/title_activity_reset_password"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AddUserActivity"
