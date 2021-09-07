@@ -44,7 +44,7 @@
     <string name="register">Register</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="app_logo">application logo</string>
-    <string name="reset_password_instruction">Enter below your email address. You will receive an email with the instructions to reset your password </string>
+    <string name="reset_password_instruction">Enter below your email address. You will receive an email with the instructions to reset your password.</string>
     <string name="send_email">Send Email</string>
 
 </resources>

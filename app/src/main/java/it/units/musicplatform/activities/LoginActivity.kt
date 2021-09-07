@@ -3,8 +3,10 @@ package it.units.musicplatform.activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import it.units.musicplatform.R
 import it.units.musicplatform.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         setUpListeners()
 
