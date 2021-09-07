@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicPlatform</string>
+    <string name="app_name">Music Platform</string>
     <string name="music_platform_title">Music Platform</string>
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
@@ -35,7 +35,7 @@
     <string name="follow">Follow</string>
     <string name="email_hint">email</string>
     <string name="sign_up">sign up</string>
-    <string name="app_slogan">My awesome app</string>
+    <string name="app_slogan">Just share your music</string>
     <string name="song_name_label">Song Name:</string>
     <string name="artist_name_label">Artist Name:</string>
     <string name="song_name">song name</string>
