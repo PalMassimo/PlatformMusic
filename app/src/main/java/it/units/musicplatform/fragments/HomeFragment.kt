@@ -12,8 +12,6 @@ import it.units.musicplatform.databinding.FragmentHomeBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.enumerations.PreferenceOperation
-import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
-import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.utilities.PreferenceOperationParser
 import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
@@ -65,7 +63,7 @@ class HomeFragment : Fragment() {
                 binding.notFoundImageView.visibility = View.VISIBLE
                 binding.tryFollowingSomeoneTextView.visibility = View.VISIBLE
                 binding.followersPostsRecyclerView.visibility = View.GONE
-                GlideApp.with(requireContext()).load(StorageReferenceRetriever.placeHolder()).into(binding.notFoundImageView)
+//                GlideApp.with(requireContext()).load(StorageReferenceRetriever.placeHolder()).into(binding.notFoundImageView)
             } else {
                 binding.notFoundImageView.visibility = View.GONE
                 binding.tryFollowingSomeoneTextView.visibility = View.GONE

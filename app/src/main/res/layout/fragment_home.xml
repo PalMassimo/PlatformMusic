@@ -17,6 +17,7 @@
 
     <ImageView
         android:id="@+id/notFoundImageView"
+        android:src="@drawable/no_posts"
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:contentDescription="@string/sad_pet"

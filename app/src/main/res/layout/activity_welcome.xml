@@ -30,7 +30,7 @@
         android:layout_height="150dp"
         android:layout_margin="20dp"
         android:contentDescription="@string/app_logo"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/welcome" />
 
         <FrameLayout
             android:id="@+id/welcomefragmentContainer"

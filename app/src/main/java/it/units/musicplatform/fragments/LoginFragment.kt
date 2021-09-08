@@ -24,14 +24,11 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener { login(binding.emailEditText.text.toString().trim(), binding.passwordEditText.text.toString()) }
 
         binding.registerUserTextView.setOnClickListener {
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.welcomefragmentContainer, AddUserFragment()).addToBackStack("tag").commit()
-
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.welcomefragmentContainer, AddUserFragment()).addToBackStack("tag").commit()
         }
 
         binding.forgotPasswordTextView.setOnClickListener {
-            val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.welcomefragmentContainer, ResetPasswordFragment()).addToBackStack("tag").commit()
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.welcomefragmentContainer, ResetPasswordFragment()).addToBackStack("tag").commit()
         }
 
         return binding.root

@@ -11,10 +11,6 @@ data class User(
     val followers: HashMap<String, Boolean> = HashMap(),
     val following: HashMap<String, Boolean> = HashMap(),
 )
-
-
 {
-
     constructor(id: String, email: String, username: String) : this(id = id, email = email, username = username, 0)
-
 }
