@@ -12,7 +12,7 @@ class StorageReferenceRetriever {
 
     companion object{
 
-        @JvmStatic fun placeHolder() = STORAGE_REFERENCE.child("not_found_placeholder.jpeg")
+        @JvmStatic fun placeHolder() = STORAGE_REFERENCE.child("posts_not_found.png")
 
         @JvmStatic fun userImageReference(userId: String) = userDirectoryReference(userId).child(PROFILE_PICTURE_CHILD)
         @JvmStatic fun cover(userId: String, postId: String) = userCoversFolderReference(userId).child(postId)
