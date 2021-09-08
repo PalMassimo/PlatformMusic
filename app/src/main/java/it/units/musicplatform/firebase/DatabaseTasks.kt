@@ -20,17 +20,47 @@ class DatabaseTasks {
         fun getUserTask(userId: String) = DatabaseReferenceRetriever.user(userId).get()
 
         @JvmStatic
-        fun getUserPostsTask(userId: String, posts: ArrayList<Post>): Task<Unit> {
-            return DatabaseReferenceRetriever.posts().get().continueWith { postsSnapshotTask ->
-                StreamSupport.stream(postsSnapshotTask.result!!.children.spliterator(), true)
-                    .map { it.getValue(Post::class.java) }
-                    .filter { it!!.uploaderId == userId }
-                    .forEach { posts.add(it!!) }
+        fun getUserPostsTask(userId: String, postsList: ArrayList<Post>): Task<Unit> {
+            return DatabaseReferenceRetriever.posts().orderByChild("uploaderId").equalTo(userId).get().continueWith {
+                StreamSupport.stream(it.result!!.children.spliterator(), true)
+                    .forEach { postDataSnapshot ->
+                        postsList.add(postDataSnapshot.getValue(Post::class.java)!!)
+                    }
             }
         }
 
         @JvmStatic
-        suspend fun getFollowingUsernames(userId: String) : HashMap<String, String> {
+        suspend fun loadUserPosts(userId: String): ArrayList<Post> {
+            val postsList = ArrayList<Post>()
+            val followingIds = ArrayList<String>()
+
+            DatabaseReferenceRetriever.user(userId).get().continueWith {
+                it.result!!.getValue(User::class.java)!!.following.keys.stream().forEach {
+                    followingIds.add(it)
+                }
+            }.await()
+
+            val getFollowingPostsTaskSet = HashSet<Task<Unit>>()
+
+            followingIds.stream().forEach { followingId -> getFollowingPostsTaskSet.add(getUserPostsTask(followingId, postsList)) }
+
+            Tasks.whenAllComplete(getFollowingPostsTaskSet).await()
+
+            return postsList
+        }
+
+//        @JvmStatic
+//        fun getUserPostsTask(userId: String, posts: ArrayList<Post>): Task<Unit> {
+//            return DatabaseReferenceRetriever.posts().get().continueWith { postsSnapshotTask ->
+//                StreamSupport.stream(postsSnapshotTask.result!!.children.spliterator(), true)
+//                    .map { it.getValue(Post::class.java) }
+//                    .filter { it!!.uploaderId == userId }
+//                    .forEach { posts.add(it!!) }
+//            }
+//        }
+
+        @JvmStatic
+        suspend fun getFollowingUsernames(userId: String): HashMap<String, String> {
 
             val getFollowingUsernameTaskSet = HashSet<Task<DataSnapshot>>()
 
@@ -59,7 +89,7 @@ class DatabaseTasks {
             return DatabaseReferenceRetriever.posts().orderByChild("uploaderId").equalTo(userId).get().addOnSuccessListener {
                 StreamSupport.stream(it.children.spliterator(), true)
                     .map { postSnapshot -> postSnapshot.getValue(Post::class.java)!! }
-                    .forEach (posts::add)
+                    .forEach(posts::add)
             }
         }
 
@@ -72,7 +102,7 @@ class DatabaseTasks {
                     StreamSupport.stream(usersDataSnapshot?.children!!.spliterator(), true)
                         .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java)!! }
                         .filter { user -> user.id != userId }
-                        .forEach (popularUsers::add)
+                        .forEach(popularUsers::add)
 
                 }
         }
@@ -86,7 +116,7 @@ class DatabaseTasks {
                 StreamSupport.stream(usersDataSnapshotTask.result?.children?.spliterator(), false)
                     .map { userSnapshot: DataSnapshot -> userSnapshot.getValue(User::class.java)!! }
                     .filter { user -> user.username.toLowerCase(Locale.ROOT).contains(pattern.toLowerCase(Locale.ROOT)) && user.id != userId }
-                    .forEach (resultUsers::add)
+                    .forEach(resultUsers::add)
             }
         }
 

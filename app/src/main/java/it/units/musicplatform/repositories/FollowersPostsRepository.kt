@@ -20,5 +20,7 @@ class FollowersPostsRepository {
     suspend fun getFollowingUsername(followingId: String) = DatabaseTasks.getUserTask(followingId).await().getValue(User::class.java)!!.username
     suspend fun getFollowingUsernames(userId: String) = DatabaseTasks.getFollowingUsernames(userId)
 
+    suspend fun loadPosts(userId: String) = DatabaseTasks.loadUserPosts(userId)
+
 
 }

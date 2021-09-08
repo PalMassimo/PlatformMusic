@@ -33,8 +33,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO: ViewModelProviders.of()?
-        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        userViewModel = ViewModelProviders.of(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
 
         followersPostsViewModel = ViewModelProviders.of(requireActivity(), FollowersPostsViewModelFactory(userId)).get(FollowersPostsViewModel::class.java)
@@ -55,16 +54,16 @@ class HomeFragment : Fragment() {
 
     private fun setUpRecyclerView() {
 
-        adapter = FollowersPostsAdapter(
-            this, binding.followersPostsRecyclerView,
-            followersPostsViewModel.followersPosts.value!!, followersPostsViewModel.followingUsernames.value!!
-        )
+        adapter = FollowersPostsAdapter(this, binding.followersPostsRecyclerView, followersPostsViewModel.followersPosts.value!!, followersPostsViewModel.followingUsernames.value!!)
 
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(followersPostsViewModel.followersPosts.value!!) })
-        followersPostsViewModel.followingUsernames.observe(viewLifecycleOwner, { adapter.followersUsernames = followersPostsViewModel.followingUsernames.value!! })
+        followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(it) })
+        followersPostsViewModel.followingUsernames.observe(viewLifecycleOwner, {
+            adapter.followersUsernames = it
+            adapter.notifyDataSetChanged()
+        })
     }
 
     override fun onDestroyView() {

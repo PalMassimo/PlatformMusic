@@ -4,20 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.database.DataSnapshot
 import it.units.musicplatform.entities.Post
-import it.units.musicplatform.entities.User
-import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 import it.units.musicplatform.repositories.FollowersPostsRepository
 import kotlinx.coroutines.launch
-import java.util.stream.StreamSupport
 
 class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
-    private var postsList = ArrayList<Post>()
-    private val _followersPosts = MutableLiveData<List<Post>>()
+    private val _followersPosts = MutableLiveData<ArrayList<Post>>()
 
-    val followersPosts: LiveData<List<Post>> = _followersPosts
+    val followersPosts: LiveData<ArrayList<Post>> = _followersPosts
     private val followersPostsRepository = FollowersPostsRepository()
 
     private val _followingUsernames = MutableLiveData<HashMap<String, String>>()
@@ -27,36 +22,14 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
         viewModelScope.launch {
             _followersPosts.value = ArrayList()
             _followingUsernames.value = HashMap()
+            loadFollowingUsernames()
             loadPosts()
-            loadFollowersUsernames()
         }
     }
 
-    private suspend fun loadFollowersUsernames() = _followingUsernames.postValue(followersPostsRepository.getFollowingUsernames(userId))
+    private suspend fun loadFollowingUsernames() = _followingUsernames.postValue(followersPostsRepository.getFollowingUsernames(userId))
 
-
-    private fun loadPosts() {
-
-        DatabaseReferenceRetriever.user(userId).get().addOnSuccessListener {
-            it.getValue(User::class.java)!!.following.keys.stream()
-                .map { followingId -> DatabaseReferenceRetriever.userPosts(followingId).get() }
-                .forEach { followingUserTask -> followingUserTask.addOnSuccessListener { followingUser -> fromFollowersPostsToPost(followingUser) } }
-        }
-    }
-
-    private fun fromFollowersPostsToPost(postsSnapshot: DataSnapshot) {
-        StreamSupport.stream(postsSnapshot.children.spliterator(), true)
-            .map { it.key }
-            .map { DatabaseReferenceRetriever.post(it!!).get() }
-            .forEach { it.addOnSuccessListener { postSnapshot -> fromPostSnapshotToPost(postSnapshot) } }
-    }
-
-    private fun fromPostSnapshotToPost(postsSnapshot: DataSnapshot) {
-        postsSnapshot.getValue(Post::class.java)?.let { post ->
-            postsList.add(post)
-            _followersPosts.value = postsList
-        }
-    }
+    suspend fun loadPosts() = _followersPosts.postValue(followersPostsRepository.loadPosts(userId))
 
     fun incrementNumberOfDownloads(position: Int) {
         val post = followersPosts.value!![position]
@@ -90,8 +63,8 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
     fun removeFollowing(followingId: String) {
         viewModelScope.launch {
-            postsList.removeIf { post -> post.uploaderId == followingId }
-            _followersPosts.postValue(postsList)
+            followersPosts.value!!.removeIf{post -> post.uploaderId == followingId}
+            _followersPosts.value = followersPosts.value
 
             followingUsernames.value!!.remove(followingId)
             _followingUsernames.value = _followingUsernames.value
@@ -101,8 +74,7 @@ class FollowersPostsViewModel(private val userId: String) : ViewModel() {
     fun addFollowing(followingId: String) {
         viewModelScope.launch {
             val followerPostsList = followersPostsRepository.getUserPosts(followingId)
-            postsList = ArrayList(followerPostsList + postsList)
-            _followersPosts.postValue(postsList)
+            _followersPosts.postValue(ArrayList(followerPostsList + followersPosts.value!!))
 
             followingUsernames.value!![followingId] = followersPostsRepository.getFollowingUsername(followingId)
             _followingUsernames.value = _followingUsernames.value
