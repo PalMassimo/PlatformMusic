@@ -3,17 +3,15 @@ package it.units.musicplatform.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import it.units.musicplatform.R
 import it.units.musicplatform.activities.MainActivity
 import it.units.musicplatform.databinding.FragmentAddUserBinding
-import it.units.musicplatform.databinding.FragmentLoginBinding
 import it.units.musicplatform.entities.User
 import it.units.musicplatform.firebase.retrievers.DatabaseReferenceRetriever
 

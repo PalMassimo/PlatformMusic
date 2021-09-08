@@ -19,18 +19,6 @@ class WelcomeActivity : AppCompatActivity() {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.welcomefragmentContainer, LoginFragment()).commit()
 
-        setUpListeners()
-
     }
-
-    private fun setUpListeners() {
-
-//        binding.registerUserTextView.setOnClickListener { startActivity(Intent(this, AddUserActivity::class.java)) }
-
-
-//        binding.forgotPasswordTextView.setOnClickListener { startActivity(Intent(this, ResetPasswordActivity::class.java)) }
-
-    }
-
 
 }
