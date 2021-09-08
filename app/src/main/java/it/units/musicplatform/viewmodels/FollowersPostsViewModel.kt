@@ -10,18 +10,16 @@ import kotlinx.coroutines.launch
 
 class FollowersPostsViewModel(private val userId: String) : ViewModel() {
 
-    private val _followersPosts = MutableLiveData<ArrayList<Post>>()
+    private val _followersPosts = MutableLiveData(ArrayList<Post>())
 
     val followersPosts: LiveData<ArrayList<Post>> = _followersPosts
     private val followersPostsRepository = FollowersPostsRepository()
 
-    private val _followingUsernames = MutableLiveData<HashMap<String, String>>()
+    private val _followingUsernames = MutableLiveData(HashMap<String, String>())
     val followingUsernames: LiveData<HashMap<String, String>> = _followingUsernames
 
     init {
         viewModelScope.launch {
-            _followersPosts.value = ArrayList()
-            _followingUsernames.value = HashMap()
             loadFollowingUsernames()
             loadPosts()
         }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.units.musicplatform.adapters.FollowersPostsAdapter
@@ -13,6 +12,8 @@ import it.units.musicplatform.databinding.FragmentHomeBinding
 import it.units.musicplatform.entities.Post
 import it.units.musicplatform.enumerations.Preference
 import it.units.musicplatform.enumerations.PreferenceOperation
+import it.units.musicplatform.firebase.retrievers.StorageReferenceRetriever
+import it.units.musicplatform.utilities.GlideApp
 import it.units.musicplatform.utilities.PreferenceOperationParser
 import it.units.musicplatform.viewmodels.FollowersPostsViewModel
 import it.units.musicplatform.viewmodels.UserViewModel
@@ -59,7 +60,20 @@ class HomeFragment : Fragment() {
         binding.followersPostsRecyclerView.adapter = adapter
         binding.followersPostsRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, { adapter.setFollowersPosts(it) })
+        followersPostsViewModel.followersPosts.observe(viewLifecycleOwner, {
+            if (it.isEmpty()) {
+                binding.notFoundImageView.visibility = View.VISIBLE
+                binding.tryFollowingSomeoneTextView.visibility = View.VISIBLE
+                binding.followersPostsRecyclerView.visibility = View.GONE
+                GlideApp.with(requireContext()).load(StorageReferenceRetriever.placeHolder()).into(binding.notFoundImageView)
+            } else {
+                binding.notFoundImageView.visibility = View.GONE
+                binding.tryFollowingSomeoneTextView.visibility = View.GONE
+                binding.followersPostsRecyclerView.visibility = View.VISIBLE
+                adapter.setFollowersPosts(it)
+            }
+        })
+
         followersPostsViewModel.followingUsernames.observe(viewLifecycleOwner, {
             adapter.followersUsernames = it
             adapter.notifyDataSetChanged()

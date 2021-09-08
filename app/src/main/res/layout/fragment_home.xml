@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".fragments.HomeFragment">
 
@@ -10,5 +11,25 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/followersPostsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:listitem="@layout/post_card" />
+
+    <ImageView
+        android:id="@+id/notFoundImageView"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:contentDescription="@string/sad_pet"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tryFollowingSomeoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_margin="20sp"
+        android:layout_height="wrap_content"
+        android:text="@string/try_following_someone"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
 </LinearLayout>

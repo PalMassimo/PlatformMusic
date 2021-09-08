@@ -55,5 +55,7 @@
     <string name="number_of_likes_label">Number of Likes:&#160;</string>
     <string name="number_of_dislikes_label">Number of Dislikes:&#160;</string>
     <string name="account">Account</string>
+    <string name="try_following_someone">Ooops! It seems you don\'t have post to see. Try following someone!</string>
+    <string name="sad_pet">sad pet</string>
 
 </resources>
