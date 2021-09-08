@@ -18,10 +18,9 @@
         android:hint="@string/username_hint"
         android:inputType="textEmailAddress"
         android:padding="10dp"
-        android:text="massimo.palmisano02@gmail.com"
         android:textColor="@android:color/black"
         android:textColorHint="@color/light_gray"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -34,10 +33,9 @@
         android:hint="@string/password_hint"
         android:inputType="textPassword"
         android:padding="10dp"
-        android:text="password"
         android:textColor="@android:color/black"
         android:textColorHint="@color/light_gray"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -68,9 +66,12 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
+        android:textStyle="bold"
         android:text="@string/sign_in"
         android:textAllCaps="false"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 </LinearLayout>

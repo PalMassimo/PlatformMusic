@@ -63,7 +63,6 @@ class HomeFragment : Fragment() {
                 binding.notFoundImageView.visibility = View.VISIBLE
                 binding.tryFollowingSomeoneTextView.visibility = View.VISIBLE
                 binding.followersPostsRecyclerView.visibility = View.GONE
-//                GlideApp.with(requireContext()).load(StorageReferenceRetriever.placeHolder()).into(binding.notFoundImageView)
             } else {
                 binding.notFoundImageView.visibility = View.GONE
                 binding.tryFollowingSomeoneTextView.visibility = View.GONE
