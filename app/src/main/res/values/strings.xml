@@ -46,5 +46,14 @@
     <string name="app_logo">application logo</string>
     <string name="reset_password_instruction">Enter below your email address. You will receive an email with the instructions to reset your password.</string>
     <string name="send_email">Send Email</string>
+    <string name="settings">Settings</string>
+    <string name="username">username</string>
+    <string name="email">email</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="number_of_following_label">Number of Following:&#160;</string>
+    <string name="number_of_followers_label">Number of Followers:&#160;</string>
+    <string name="number_of_likes_label">Number of Likes:&#160;</string>
+    <string name="number_of_dislikes_label">Number of Dislikes:&#160;</string>
+    <string name="account">Account</string>
 
 </resources>

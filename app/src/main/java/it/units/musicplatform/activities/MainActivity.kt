@@ -52,6 +52,10 @@ class MainActivity : AppCompatActivity() {
                 addPostLauncher.launch(intent)
                 return@setOnMenuItemClickListener true
             }
+            it.findItem(R.id.settingsMenuItem).setOnMenuItemClickListener {
+                navigationController.navigate(R.id.settingsFragment)
+                return@setOnMenuItemClickListener true
+            }
             it.findItem(R.id.logoutMenuItem).setOnMenuItemClickListener {
                 FirebaseAuth.getInstance().signOut()
                 finish()

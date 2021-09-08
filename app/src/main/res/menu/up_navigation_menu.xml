@@ -4,28 +4,37 @@
 
     <item
         android:id="@+id/addPostMenuItem"
-        android:title="@string/add_post_menu_item_title"
         android:icon="@drawable/ic_add"
         android:orderInCategory="1"
-        app:showAsAction="ifRoom"
-        />
+        android:title="@string/add_post_menu_item_title"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/searchMenuItem"
         android:icon="@drawable/ic_search"
-        android:title="@string/search_menu_item_title"
         android:orderInCategory="2"
-        app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.widget.SearchView" />
+        android:title="@string/search_menu_item_title"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:id="@+id/settingsMenuItem"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="3"
+        android:title="@string/account"
+        app:showAsAction="ifRoom" />
+
 
     <item
         android:id="@+id/logoutMenuItem"
+        android:orderInCategory="4"
         android:title="@string/logout_menu_item_title"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/aboutMenuItem"
+        android:orderInCategory="5"
         android:title="@string/about_menu_title"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //TODO: ViewModelProviders.of()?
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         userId = userViewModel.userId
 
