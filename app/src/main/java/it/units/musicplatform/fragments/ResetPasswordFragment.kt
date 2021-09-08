@@ -1,22 +1,25 @@
-package it.units.musicplatform.activities
+package it.units.musicplatform.fragments
 
 import android.os.Bundle
 import android.util.Patterns
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import it.units.musicplatform.databinding.ActivityResetPasswordBinding
+import it.units.musicplatform.R
+import it.units.musicplatform.databinding.FragmentHomeBinding
+import it.units.musicplatform.databinding.FragmentResetPasswordBinding
 
-class ResetPasswordActivity : AppCompatActivity() {
+class ResetPasswordFragment : Fragment() {
 
-    lateinit var binding: ActivityResetPasswordBinding
+    private var _binding: FragmentResetPasswordBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = ActivityResetPasswordBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentResetPasswordBinding.inflate(layoutInflater)
 
         binding.sendEmailButton.setOnClickListener {
             when {
@@ -26,14 +29,20 @@ class ResetPasswordActivity : AppCompatActivity() {
             }
         }
 
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun sendResetPasswordEmail() {
         binding.sendEmailProgressBar.visibility = View.VISIBLE
         FirebaseAuth.getInstance().sendPasswordResetEmail(binding.resetEmailEditText.text.toString()).addOnCompleteListener {
             binding.sendEmailProgressBar.visibility = View.GONE
-            val resultMessage = if(it.isSuccessful) "The email was sent correctly, please check your mailbox" else "Something went wrong. Please try again"
-            Toast.makeText(this, resultMessage, Toast.LENGTH_LONG).show()
+            val resultMessage = if (it.isSuccessful) "The email was sent correctly, please check your mailbox" else "Something went wrong. Please try again"
+            Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_LONG).show()
         }
     }
 

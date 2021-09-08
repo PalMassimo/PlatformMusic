@@ -57,5 +57,7 @@
     <string name="account">Account</string>
     <string name="try_following_someone">Ooops! It seems you don\'t have post to see. Try following someone!</string>
     <string name="sad_pet">sad pet</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
