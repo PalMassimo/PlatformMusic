@@ -3,7 +3,6 @@
 ## Table of Contents
 - [Introduction](#Introduction)
 - [Goal](#goal)
-- [How to use](#how-to-use)
 - [The Application](#the-application)
 - [What next?](#what-next)
 - [Author](#author)
@@ -26,11 +25,6 @@ The goal of the project is to provide a platform where users can share songs to 
 <img src= "https://thumbs.dreamstime.com/z/man-listening-to-music-earphone-headphone-cliparts-icons-set-human-pictogram-representing-people-song-various-45286175.jpg" height=350 width=350
 >
 </p>
-
----
-
-### How to use
-To use the application go [here](https://github.com/PalMassimo/PlatformMusic/tree/main/build/outputs/apk/debug) and download the `music_platform.apk`. Then, you just have to install it on your android device. 
 
 ---
 
